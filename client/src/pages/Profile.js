@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
-import Budget from "../components/budget";
-import Transaction from "../components/transaction";
-import Overview from "../components/overview";
-import Category from "../components/category";
+import Budget from "../components/Budget";
+import Transaction from "../components/Transaction";
+import Overview from "../components/Overview";
+import Category from "../components/Category";
 import "bootstrap/dist/css/bootstrap.css";
 
 const Profile = () => {
