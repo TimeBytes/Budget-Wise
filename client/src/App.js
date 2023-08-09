@@ -33,6 +33,11 @@ const client = new ApolloClient({
   cache: new InMemoryCache(),
 });
 
+
+
+
+
+
 function App() {
 
   const [transactions, setTransactions] = useState([]);
@@ -56,6 +61,19 @@ function App() {
           </Routes>
           <Footer />
         </>
+      <Router>
+        <div>
+          <Routes>
+            <Route
+              path="/login"
+              element={<LoginForm/>}
+            />
+            <Route
+              path="/signup"
+              element={<SignupForm/>}
+            />
+          </Routes>
+        </div>
       </Router>
     </ApolloProvider>
   );
