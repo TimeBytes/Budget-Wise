@@ -11,6 +11,7 @@ const typeDefs = gql`
         balance: [Balance]
         budget: [Budget]
         categories: [Category]
+        donations: [Donation]
     }
 
     type Budget {
@@ -54,8 +55,25 @@ const typeDefs = gql`
         isBudget: Boolean
     }
 
+    type Donation {
+        _id: ID
+        amount: Float
+        data: String
+    }
+
+    type Checkout{
+        session: ID
+    }
+
+    type Auth {
+        token: ID
+        user: User
+    }
+    
     type Query {
         User: [User]
+        Donation: [Donation]
+        checkout(amount: Float!): Checkout
 
     }
 `;
