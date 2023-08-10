@@ -1,8 +1,7 @@
 const { User, Donation } = require("../models");
 const { AuthenticationError } = require("apollo-server-express");
 
-const stripe = require("stripe")(
-  "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"
+const stripe = require("stripe")( process.env.STRIPE_SK
 );
 
 const resolvers = {
