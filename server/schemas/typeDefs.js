@@ -69,7 +69,7 @@ const typeDefs = gql`
         token: ID
         user: User
     }
-    
+
     type Query {
         User: [User]
         Donation: [Donation]
@@ -77,6 +77,7 @@ const typeDefs = gql`
 
     }
 `;
+
 
 module.exports = typeDefs;
 
