@@ -31,7 +31,7 @@ const typeDefs = gql`
     type Income {
         _id: ID
         name: String
-        category: String
+        category: ID
         amount: Float
         date: String
         isRecurring: Boolean
@@ -40,7 +40,7 @@ const typeDefs = gql`
     type Expense {
         _id: ID
         name: String
-        category: String
+        category: ID
         amount: Float
         date: String
         isRecurring: Boolean
@@ -52,6 +52,11 @@ const typeDefs = gql`
         isIncome: Boolean
         isExpense: Boolean
         isBudget: Boolean
+    }
+
+    type Query {
+        User: [User]
+
     }
 `;
 
