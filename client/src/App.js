@@ -10,7 +10,7 @@ import {
 import { setContext } from "@apollo/client/link/context";
 import LoginForm from "./pages/LoginForm";
 import SignupForm from "./pages/SignupForm";
-import Profile from "./components/Profile";
+import Profile from "./pages/Profile";
 // import Home from "./pages/Home";
 import Navbar from "./components/Navbar";
 // import Footer from "./components/Footer";
