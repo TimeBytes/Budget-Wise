@@ -1,5 +1,4 @@
 const {Schema, model} = require('mongoose');
-const bcrypt = require('bcrypt');
 const financeSchema = require('./Finance');
 const budgetSchema = require('./Budget');
 const categorySchema = require('./Category');

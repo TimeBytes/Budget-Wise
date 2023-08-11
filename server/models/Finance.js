@@ -1,4 +1,4 @@
-const {Schema} = require('mongoose');
+const {Schema, model} = require('mongoose');
 
 const financeSchema = new Schema({
     name: {
@@ -25,7 +25,7 @@ const financeSchema = new Schema({
         default: false
     },
     type: {
-        type: string,
+        type: String,
         required: true,
         default: 'expense'
     }
