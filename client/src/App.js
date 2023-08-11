@@ -1,5 +1,6 @@
+import "./App.css";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import React, { useState } from "react";
-import { HashRouter as Router, Routes, Route } from "react-router-dom";
 import {
   ApolloClient,
   ApolloProvider,
@@ -7,10 +8,13 @@ import {
   createHttpLink,
 } from "@apollo/client";
 import { setContext } from "@apollo/client/link/context";
-import Home from "./pages/Home";
+import LoginForm from "./pages/LoginForm";
+import SignupForm from "./pages/SignupForm";
+import Profile from "./pages/Profile";
+// import Home from "./pages/Home";
 import Navbar from "./components/Navbar";
-import Transactions from "./pages/Transactions";
-import Footer from "./components/Footer";
+// import Footer from "./components/Footer";
+import "bootstrap/dist/css/bootstrap.min.css";
 
 const httpLink = createHttpLink({
   uri: "/graphql",
@@ -34,28 +38,25 @@ const client = new ApolloClient({
 });
 
 function App() {
-
   const [transactions, setTransactions] = useState([]);
-  
+
   return (
     <ApolloProvider client={client}>
       <Router basename={process.env.PUBLIC_URL}>
-        <>
+        <div>
           <Navbar />
           <Routes>
-            <Route path="/" element={<Home />} />
-            <Route
-              path="/transactions"
-              element={<Transactions transactions={transactions} setTransactions={setTransactions} />}
-            />
-
+            {/* <Route path="/" element={<Home />} /> */}
+            <Route path="/login" element={<LoginForm />} />
+            <Route path="/signup" element={<SignupForm />} />
+            <Route path="/profile" element={<Profile />} />
             <Route
               path="*"
               element={<h1 className="display-2">Wrong page!</h1>}
             />
           </Routes>
-          <Footer />
-        </>
+          {/* <Footer /> */}
+        </div>
       </Router>
     </ApolloProvider>
   );
