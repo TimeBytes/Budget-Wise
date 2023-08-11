@@ -11,6 +11,7 @@ const typeDefs = gql`
         finance: [Finance]
         budget: [Budget]
         categories: [Category]
+        donations: [Donation]
     }
 
     type Budget {
@@ -37,6 +38,21 @@ const typeDefs = gql`
         isBudget: Boolean
     }
 
+    type Donation {
+        _id: ID
+        amount: Float
+        data: String
+    }
+
+    type Checkout{
+        session: ID
+    }
+
+    type Auth {
+        token: ID
+        user: User
+    }
+
     type Query {
         user: [User]
         transaction: [Finance]
@@ -44,10 +60,9 @@ const typeDefs = gql`
         expense: [Finance]
         budget: [Budget]
         categories: [Category]
-
-
     }
 `;
+
 
 module.exports = typeDefs;
 
