@@ -15,19 +15,24 @@ const Profile = () => {
   }, [transaction]);
 
   return (
-    <div className="d-flex justify-content-around">
+    <div className="d-flex flex-column justify-content-around">
       <Overview />
       <div>
-        <nav className="d-flex justify-content-between">
-          <button className="btn" onClick={handleTransactionTab}>
-            Income
-          </button>
-          <button className="btn" onClick={handleTransactionTab}>
-            Expense
-          </button>
-        </nav>
-        <Transaction type={transaction} />
+        <div className="w-25 m-auto">
+          <nav className="d-flex justify-content-between">
+            <h1 className="text-center display-1">Transactions</h1>
+            <button className="btn" onClick={handleTransactionTab}>
+              Income
+            </button>
+            <button className="btn" onClick={handleTransactionTab}>
+              Expense
+            </button>
+          </nav>
+
+          <Transaction type={transaction} />
+        </div>
       </div>
+      <h1 className="text-center display-1">Budgets</h1>
       <Budget />
     </div>
   );
