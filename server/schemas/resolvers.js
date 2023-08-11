@@ -4,13 +4,16 @@ const {AuthenticationError} = require('apollo-server-express');
 
 const resolvers = {
     Query: {
-        users: async (parents, args, context) => {
-            if(context.user) {
-                const users = await User.findOne({_id: context.user._id});
-                return users;
-            }
-            return User.find();
+        user: async (parents, args) => {
+            return await User.find({}).populate('finance').populate({
+                path: 'finance',
+                populate: 'category'
+            }).populate('budget').populate('categories');
+        },
+        income: async (parents, args) => {
+            return await Finance.find({where: args});
         }
+
     },
     Mutation: {
         addUser: async (parents, args) => {
