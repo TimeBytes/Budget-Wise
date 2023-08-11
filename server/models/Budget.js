@@ -1,4 +1,4 @@
-const {Schema} = require('mongoose');
+const {Schema, model} = require('mongoose');
 
 const budgetSchema = new Schema({
     name: {
@@ -18,6 +18,5 @@ const budgetSchema = new Schema({
     }
 });
 
-const Budget = model('Budget', budgetSchema);
 
-module.exports = Budget;
+module.exports = budgetSchema;

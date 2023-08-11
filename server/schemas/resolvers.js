@@ -5,13 +5,19 @@ const stripe = require("stripe")( process.env.STRIPE_SK
 );
 
 const resolvers = {
-  Query: {
-    users: async (parents, args, context) => {
-      if (context.user) {
-        const users = await User.findOne({ _id: context.user._id });
-        return users;
-      }
-      return User.find();
+    Query: {
+        user: async (parents, args) => {
+            return await User.find({}).populate('finance').populate({
+                path: 'finance',
+                populate: 'category'
+            }).populate('budget').populate('categories');
+        },
+        income: async (parents, args) => {
+            return await Finance.find({where: args});
+        },
+        transaction: async (parents, args) => {
+            return await Finance.find({where: args});
+        }
     },
     checkout: async (parents, args, context) => {
         const url = new URL(context.headers.referer).origin;
