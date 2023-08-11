@@ -8,7 +8,7 @@ const typeDefs = gql`
         password: String
         firstName: String
         lastName: String
-        balance: [Balance]
+        finance: [Finance]
         budget: [Budget]
         categories: [Category]
         donations: [Donation]
@@ -21,24 +21,7 @@ const typeDefs = gql`
         category: String
     }
 
-    type Balance {
-        _id: ID
-        name: String
-        amount: Float
-        income: [Income]
-        expense: [Expense]
-    }
-
-    type Income {
-        _id: ID
-        name: String
-        category: ID
-        amount: Float
-        date: String
-        isRecurring: Boolean
-    }
-
-    type Expense {
+    type Finance {
         _id: ID
         name: String
         category: ID
@@ -71,10 +54,12 @@ const typeDefs = gql`
     }
 
     type Query {
-        User: [User]
-        Donation: [Donation]
-        checkout(amount: Float!): Checkout
-
+        user: [User]
+        transaction: [Finance]
+        income: [Finance]
+        expense: [Finance]
+        budget: [Budget]
+        categories: [Category]
     }
 `;
 
