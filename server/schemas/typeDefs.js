@@ -27,7 +27,6 @@ const typeDefs = gql`
         amount: Float
         date: String
         isRecurring: Boolean
-        type: String
     }
 
     type Category {

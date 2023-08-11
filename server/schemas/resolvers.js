@@ -12,6 +12,9 @@ const resolvers = {
         },
         income: async (parents, args) => {
             return await Finance.find({where: args});
+        },
+        transaction: async (parents, args) => {
+            return await Finance.find({where: args});
         }
 
     },
