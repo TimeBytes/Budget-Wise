@@ -23,6 +23,11 @@ const financeSchema = new Schema({
         type: Boolean,
         required: true,
         default: false
+    },
+    type: {
+        type: String,
+        required: true,
+        default: 'expense'
     }
 });
 

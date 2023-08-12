@@ -1,58 +1,75 @@
 const { User, Donation } = require("../models");
 const { AuthenticationError } = require("apollo-server-express");
-
-const stripe = require("stripe")( process.env.STRIPE_SK
-);
+const { signToken } = require("../utils/auth");
 
 const resolvers = {
     Query: {
-        user: async (parents, args) => {
-            return await User.find({}).populate('finance').populate({
-                path: 'finance',
-                populate: 'category'
-            }).populate('budget').populate('categories');
+        users: async () => { 
+            return User.find({});
         },
-        income: async (parents, args) => {
-            return await Finance.find({where: args});
-        },
-        transaction: async (parents, args) => {
-            return await Finance.find({where: args});
+        user: async (parent, { _id }, context) => {
+            if (_id) {
+                return User.findById(_id);
+            }
+            if (context.user) {
+                return User.findById(context.user._id);
+            }
+            throw new AuthenticationError("User not found");
         }
+        
     },
-    checkout: async (parents, args, context) => {
-        const url = new URL(context.headers.referer).origin;
-        const donation = await Donation.create({
-            amount: args.amount,
-        });
-        const line_items = [];
-        const session = await stripe.checkout.sessions.create({
-            payment_method_types: ["card"],
-            line_items: [
-            {
-                price_data: {
-                currency: "cad",
-                product_data: {
-                    name: "Donation",
-                },
-                unit_amount: args.amount * 100,
-                },
-                quantity: 1,
-            },
-            ],
-            mode: "payment",
-            success_url: `${url}/success?session_id={CHECKOUT_SESSION_ID}`,
-            cancel_url: `${url}/`,
-        });
-        return { session: session.id };
-    },
-  },
-  Mutation: {
-    addUser: async (parents, args) => {
-      const user = await User.create(args);
-      return user;
-    },
-    addDonation: async (parents, args) => {
-        const donation = new Donation(args);
-    },
-  },
+    Mutation: {
+        addUser: async (parents, args) => {
+            const user = await User.create(args);
+            const token = signToken(user);
+            return { token, user };
+        },
+        login: async (parents, { email, password }) => {
+            const user = await User.findOne({ email });
+            if (!user) {
+                throw new AuthenticationError("Not Registered");
+            }
+            const correctPw = await user.isCorrectPassword(password);
+            if (!correctPw) {
+                throw new AuthenticationError("Incorrect Password");
+            }
+            const token = signToken(user);
+            return { token, user };
+        },
+        addcategory: async (parents, { category }, context) => {
+            if (context.user) {
+                const updateUser = await User.findByIdAndUpdate(
+                    { _id: context.user._id },
+                    { $addToSet: { categories: category } },
+                    { new: true }
+                );
+                return updateUser;
+            }
+            throw new AuthenticationError("You need to be logged in!");
+        },
+        saveCategory: async (parents, { category }, context) => {
+            if (context.user) {
+                const updateUser = await User.findByIdAndUpdate(
+                    { _id: context.user._id },
+                    { $addToSet: { savedCategories: category } },
+                    { new: true }
+                );
+                return updateUser;
+            }
+            throw new AuthenticationError("You need to be logged in!");
+        },
+        removeCategory: async (parents, { category }, context) => {
+            if (context.user) {
+                const updateUser = await User.findByIdAndUpdate(
+                    { _id: context.user._id },
+                    { $pull: { savedCategories: category } },
+                    { new: true }
+                );
+                return updateUser;
+            }
+            throw new AuthenticationError("You need to be logged in!");
+        }
+    }
 };
+
+module.exports = resolvers;

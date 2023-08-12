@@ -5,7 +5,6 @@ const typeDefs = gql`
         _id: ID
         username: String
         email: String
-        password: String
         firstName: String
         lastName: String
         finance: [Finance]
@@ -17,7 +16,7 @@ const typeDefs = gql`
     type Budget {
         _id: ID
         name: String
-        amount: Float
+        financeAmount: Float
         category: String
     }
 
@@ -25,7 +24,7 @@ const typeDefs = gql`
         _id: ID
         name: String
         category: ID
-        amount: Float
+        financeAmount: Float
         date: String
         isRecurring: Boolean
     }
@@ -44,7 +43,7 @@ const typeDefs = gql`
         data: String
     }
 
-    type Checkout{
+    type Checkout {
         session: ID
     }
 
@@ -54,15 +53,23 @@ const typeDefs = gql`
     }
 
     type Query {
-        user: [User]
+        users: [User]
+        user(_id: ID!): User
         transaction: [Finance]
         income: [Finance]
         expense: [Finance]
         budget: [Budget]
         categories: [Category]
     }
+
+    type Mutation {
+        addUser(username: String!, email: String!, password: String!, firstName: String!, lastName: String!): Auth
+        addDonation(amount: Float!, date: String!): Donation
+        login(email: String!, password: String!): Auth
+        addcategory(name: String!, isIncome: Boolean!, isExpense: Boolean!, isBudget: Boolean!): Category
+        saveCategory(category: ID!): User
+        removeCategory(category: ID!): User
+    }
 `;
 
-
 module.exports = typeDefs;
-
