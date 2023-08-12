@@ -44,6 +44,10 @@ const typeDefs = gql`
         data: String
     }
 
+    input DonationInput {
+        amount: Float
+    }
+
     type Checkout{
         session: ID
     }
