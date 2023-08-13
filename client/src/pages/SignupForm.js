@@ -14,16 +14,48 @@ import {
   Heading,
   Text,
   useColorModeValue,
-  Link,
+  
 } from '@chakra-ui/react'
-import { useState } from 'react'
 // import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons'
+import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
+import { useMutation } from '@apollo/client';
+import Auth from '../utils/auth';
+import { ADD_USER } from '../utils/mutations';
 
-const SignupForm = () => {
-  const [showPassword, setShowPassword] = useState(false)
+function SignupForm(props) {
+  const [formState, setFormState] = useState({ email: '', password: '' });
+  const [addUser] = useMutation(ADD_USER);
+
+  const handleFormSubmit = async (event) => {
+    event.preventDefault();
+    const mutationResponse = await addUser({
+      variables: {
+        email: formState.email,
+        password: formState.password,
+        firstName: formState.firstName,
+        lastName: formState.lastName,
+      },
+    });
+    const token = mutationResponse.data.addUser.token;
+    Auth.login(token);
+  };
+
+  const handleChange = (event) => {
+    const { name, value } = event.target;
+    setFormState({
+      ...formState,
+      [name]: value,
+    });
+  };
+
+
+  // const [showPassword, setShowPassword] = useState(false)
 
   return (
-    <Flex
+    <form onSubmit={handleFormSubmit}>
+
+<Flex
       minH={'100vh'}
       align={'center'}
       justify={'center'}
@@ -59,17 +91,25 @@ const SignupForm = () => {
             </HStack>
             <FormControl id="email" isRequired>
               <FormLabel>Email address</FormLabel>
-              <Input type="email" />
+              <Input  placeholder="youremail@test.com"
+            name="email"
+            type="email"
+            id="email"
+            onChange={handleChange} />
             </FormControl>
             <FormControl id="password" isRequired>
               <FormLabel>Password</FormLabel>
               <InputGroup>
-                <Input type={showPassword ? 'text' : 'password'} />
+                <Input 
+                placeholder="******"
+            name="password"
+            type="password"
+            id="pwd"
+            onChange={handleChange}/>
                 <InputRightElement h={'full'}>
                   <Button
                     variant={'ghost'}
-                    onClick={() => setShowPassword((showPassword) => !showPassword)}>
-                    {/* {showPassword ? <ViewIcon /> : <ViewOffIcon />} */}
+                    type='submit'>
                   </Button>
                 </InputRightElement>
               </InputGroup>
@@ -82,19 +122,22 @@ const SignupForm = () => {
                 color={'white'}
                 _hover={{
                   bg: 'blue.500',
-                }}>
+                }}
+                type='submit'>
                 Sign up
               </Button>
             </Stack>
             <Stack pt={6}>
               <Text align={'center'}>
-                Already a user? <Link color={'blue.400'}>Login</Link>
+                Already a user? <Link to="/login" color={'blue.400'}>Login</Link>
               </Text>
             </Stack>
           </Stack>
         </Box>
       </Stack>
     </Flex>
+    </form>
+    
   )
 }
 
