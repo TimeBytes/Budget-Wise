@@ -1,6 +1,13 @@
 const { User, Donation } = require("../models");
 const { AuthenticationError } = require("apollo-server-express");
+
+require("dotenv").config();
+
+const stripeSecretKey = process.env.STRIPE_SK;
+const stripe = require("stripe")(stripeSecretKey);
+
 const { signToken } = require("../utils/auth");
+
 
 const resolvers = {
     Query: {
@@ -16,37 +23,42 @@ const resolvers = {
             }
             throw new AuthenticationError("User not found");
         },
-        checkout: async (parent, args, context) => {
-        try {
-          // Extract the origin URL from the referer header.
-          const url = new URL(context.headers.referer).origin;
-    
-          // Create a new Donation object with the specified amount.
-          const donation = new Donation({ amount: args.amount });
-    
-          // Create an array of line items for the checkout session.
-          const line_items = [{ price: args.amount, quantity: 1 }];
-    
-          // Create a checkout session using the Stripe API.
-          const session = await stripe.checkout.sessions.create({
-            payment_method_types: ["card"], // Payment method types supported in the session
-            line_items, // Array of line items for the session
-            mode: "payment", // Payment mode
-            success_url: `${url}/success`, // URL to redirect to after successful payment
-            cancel_url: `${url}/cancel`, // URL to redirect to if the payment is canceled
-          });
-    
-          // Return the session ID to the client.
-          return {
-            sessionId: session.id,
-            amount: args.amount,
-          };
-        } catch (error) {
-          throw new Error("Failed to create checkout session: " + error.message);
-        }
-      }
-        
+
+
+    checkout: async (parent, args, context) => {
+      const amount = args.amount;
+      // console.log(shelterId, amount);
+      const url = new URL(context.headers.referer).origin;
+      // create a new donation
+      const donation = new Donation({ amount: args.amount });
+
+      // save the donation
+      await donation.save();
+      // create stripe checkout session
+      const session = await stripe.checkout.sessions.create({
+        payment_method_types: ["card"],
+        // success url will be the url of the client
+        success_url: `${url}/success?session_id={CHECKOUT_SESSION_ID}`,
+        cancel_url: `${url}/`,
+        // line_items is the donation not items in cart
+        line_items: [
+          {
+            price_data: {
+              currency: "cad",
+              product_data: {
+                description: "Complete youre donation via Stripe Checkout",
+              },
+              unit_amount: parseInt(amount * 100),
+            },
+            quantity: 1,
+          },
+        ],
+        mode: "payment",
+      });
+      return { session: session.id };
     },
+  },
+
     Mutation: {
         addUser: async (parents, args) => {
             const user = await User.create(args);
@@ -97,9 +109,13 @@ const resolvers = {
                 return updateUser;
             }
             throw new AuthenticationError("You need to be logged in!");
-        }
+        },
+          Donation: async (parents, args) => {
+      const donation = new Donation(args);
+    },
     }
 };
+
 
 
 module.exports = resolvers;

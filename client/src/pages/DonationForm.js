@@ -10,58 +10,32 @@ import {
   useColorModeValue,
 } from "@chakra-ui/react";
 
-import React, { useState } from "react"; // Update the import
+import React, { useEffect } from "react"; // Update the import
 import { loadStripe } from "@stripe/stripe-js";
-import { useLazyQuery } from "@apollo/client";
+import { useLazyQuery, useMutation } from "@apollo/client";
 import { QUERY_CHECKOUT } from "../utils/queries";
-
 const stripePromise = loadStripe(
 "pk_test_51NdeCcJJYT86npXC9P0eXGwM0LEojk6P7yMabT5rpFsACJ01ZiYQXY2OfqhYDEmP93DJyYkDbkHOuXTcnEHDklX400aBYioMbW"
   );
+  const DonationForm = () => {
 
-const DonationForm = () => {
-  const [amount, setAmount] = useState(""); // State to hold donation amount
+    const [Donation, { data }] = useLazyQuery(QUERY_CHECKOUT);
 
-  // handle click function for donation
-  const handleClick = async (e) => {
-    e.preventDefault();
-
-    if (!amount) {
-      alert("Please enter a donation amount.");
-      return;
-    }
-
-    const stripe = await stripePromise;
-
-    try {
-      // Create a new Checkout Session here and pass the amount
-      const url = ""
-      const response = await fetch(url, {
-        method: "POST",
-        headers: {
-          "Authorization": `Bearer ${process.env.STRIPE_SK}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ amount }),
-      });
-
-      const session = await response.json();
-
-      // Redirect to Stripe checkout
-      const result = await stripe.redirectToCheckout({
-        sessionId: session.id,
-      });
-
-      if (result.error) {
-        console.error(result.error);
-        // Handle Stripe error
+    useEffect(() => {
+      if (data) {
+        stripePromise.then((res) => {
+          res.redirectToCheckout({ sessionId: data.checkout.session });
+        });
       }
-    } catch (error) {
-      console.error("An error occurred:", error);
-      // Handle other errors
-    }
-  };
+    }, [data]);
 
+    const submitCheckout = async (event) => {
+      event.preventDefault();
+      const amount = document.querySelector("input").value;
+      Donation({
+        variables: { amount: parseFloat(amount) },
+      });
+    }
   return (
     <div>
       <Center>
@@ -93,8 +67,8 @@ const DonationForm = () => {
               placeholder="0.00"
               _placeholder={{ color: "gray.500" }}
               type="number"
-              value={amount} // Bind the input value to the state
-              onChange={(e) => setAmount(e.target.value)} // Update the state on input change
+              // value={amount} // Bind the input value to the state
+              // onChange={(e) => setAmount(e.target.value)} // Update the state on input change
             />
           </FormControl>
           <Stack spacing={6} direction={["column", "row"]}>
@@ -115,7 +89,7 @@ const DonationForm = () => {
               _hover={{
                 bg: "blue.500",
               }}
-              onClick={handleClick}
+              onClick={submitCheckout}
             >
               Submit
             </Button>
@@ -125,5 +99,8 @@ const DonationForm = () => {
     </div>
   );
 };
+
+
+
 
 export default DonationForm;

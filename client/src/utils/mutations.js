@@ -11,6 +11,11 @@ export const LOGIN = gql`
   }
 `;
 
+export const Donation = gql`
+  mutation donation($amount: Float!) {
+    donation(amount: $amount) {
+      session
+
 export const ADD_USER = gql`
   mutation addUser(
     $firstName: String!
@@ -28,6 +33,7 @@ export const ADD_USER = gql`
       user {
         _id
       }
+
     }
   }
 `;
