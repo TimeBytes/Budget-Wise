@@ -60,6 +60,13 @@ const typeDefs = gql`
         expense: [Finance]
         budget: [Budget]
         categories: [Category]
+        donation(_id:ID!):Donation
+        checkout(amount: Float!): Checkout
+    }
+
+    type Mutation {
+        addDonation(donation:[ID]!): Donation
+        addUser(username: String!, email: String!, password: String!, firstName: String!, lastName: String!): Auth
     }
 
     type Mutation {

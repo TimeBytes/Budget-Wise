@@ -12,7 +12,10 @@ import LoginForm from "./pages/LoginForm";
 import SignupForm from "./pages/SignupForm";
 import Profile from "./pages/Profile";
 // import Home from "./pages/Home";
-import Navbar from "./components/Navbar";
+import AppNavbar from "./components/Navbar";
+import DonationForm from "./pages/DonationForm";
+import Success from "./pages/Success";
+
 // import Footer from "./components/Footer";
 import "bootstrap/dist/css/bootstrap.min.css";
 
@@ -44,7 +47,7 @@ function App() {
     <ApolloProvider client={client}>
       <Router basename={process.env.PUBLIC_URL}>
         <div>
-          <Navbar />
+          <AppNavbar />
           <Routes>
             {/* <Route path="/" element={<Home />} /> */}
             <Route path="/login" element={<LoginForm />} />
@@ -54,6 +57,8 @@ function App() {
               path="*"
               element={<h1 className="display-2">Wrong page!</h1>}
             />
+            <Route path="/donate" element={<DonationForm />} />
+            <Route path="/success" element={<Success />} />
           </Routes>
           {/* <Footer /> */}
         </div>

@@ -12,7 +12,7 @@ const AppNavbar = () => {
 
   return (
     <>
-      <Navbar collapseOnSelect variant="dark" expand="lg" className="navbar">
+      <Navbar collapseOnSelect variant="light" expand="lg" className="navbar">
         <Container fluid>
           <Navbar.Brand as={Link} to="/">
             Expense Tracker
