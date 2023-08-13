@@ -12,9 +12,8 @@ import {
 
 import React, { useEffect } from "react"; // Update the import
 import { loadStripe } from "@stripe/stripe-js";
-import { useLazyQuery } from "@apollo/client";
+import { useLazyQuery, useMutation } from "@apollo/client";
 import { QUERY_CHECKOUT } from "../utils/queries";
-
 const stripePromise = loadStripe(
 "pk_test_51NdeCcJJYT86npXC9P0eXGwM0LEojk6P7yMabT5rpFsACJ01ZiYQXY2OfqhYDEmP93DJyYkDbkHOuXTcnEHDklX400aBYioMbW"
   );

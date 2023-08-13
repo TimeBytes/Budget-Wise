@@ -69,7 +69,7 @@ const typeDefs = gql`
     }
 
     type Mutation {
-        addDonation(donation:[ID]!): Donation
+        Donation(amount: Float): Donation
         addUser(username: String!, email: String!, password: String!, firstName: String!, lastName: String!): Auth
     }
 `;

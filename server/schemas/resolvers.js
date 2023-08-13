@@ -62,9 +62,10 @@ const resolvers = {
       const user = await User.create(args);
       return user;
     },
-    addDonation: async (parents, args) => {
+    Donation: async (parents, args) => {
       const donation = new Donation(args);
     },
+
   },
 };
 
