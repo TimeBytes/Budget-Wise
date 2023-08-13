@@ -27,7 +27,7 @@ const resolvers = {
 
     checkout: async (parent, args, context) => {
       const amount = args.amount;
-      // console.log(shelterId, amount);
+      
       const url = new URL(context.headers.referer).origin;
       // create a new donation
       const donation = new Donation({ amount: args.amount });
