@@ -1,79 +1,53 @@
 const db = require('../config/connection');
-const { User, Finance, Budget, Category } = require('../models');
+const { User } = require('../models');
+
+const userSeeds = require('./userSeeds.json');
+const categorySeeds = require('./categorySeeds.json');
 
 db.once('open', async () => {
     await User.deleteMany();
-    await Finance.deleteMany();
-    await Budget.deleteMany();
-    await Category.deleteMany();
 
-    const user = await User.create({
-        username: 'MMoradzadeh',
-        email: 'mahdiM@test.com',
-        password: 'password12345',
-        firstName: 'Mahdi',
-        lastName: 'Moradzadeh',
-        finance: [
-            {
-                name: 'Paycheck',
-                category: 'Income',
-                amount: 2000,
-                date: '2021-08-01',
+    const usersData = await User.insertMany(userSeeds);
+
+    for (let user of usersData) {
+        const { _id } = user;
+
+        await User.findByIdAndUpdate(
+            _id,
+            { $push: { categories: { $each: categorySeeds } } },
+            { new: true, runValidators: true }
+        );
+
+        for (let category of categorySeeds) {
+            const { isIncome, isExpense, isBudget, _id: categoryId } = category;
+
+            let financeAmount = 2000;  // Example amount for finance
+            let financeData = {
+                category: categoryId,
+                name: category.name,
+                amount: financeAmount,
+                date: new Date(),
                 isRecurring: true,
-                type: 'Income'
-            },
-            {
-                name: 'Rent',
-                category: 'Housing',
-                amount: 1000,
-                date: '2021-08-01',
-                isRecurring: true,
-                type: 'Expense'
-            },
-            {
-                name: 'Groceries',
-                category: 'Food',
-                amount: 200,
-                date: '2021-08-01',
-                isRecurring: true,
-                type: 'Expense'
+                type: 'expense'
+            };
+
+            let budgetAmount = 1000;  // Example amount for budget
+            if (isBudget) {
+                let budgetData = {
+                    ...category,
+                    amount: budgetAmount
+                };
+                await User.findByIdAndUpdate(_id, { $push: { budget: budgetData } });
             }
-        ],
-        budget: [
-            {
-                name: 'Rent',
-                amount: 1000,
-                category: 'Housing'
-            },
-            {
-                name: 'Groceries',
-                amount: 200,
-                category: 'Food'
+
+            if (isIncome || isExpense) {
+                await User.findByIdAndUpdate(_id, { $push: { finance: financeData } });
             }
-        ],
-        categories: [
-            {
-                name: 'Income',
-                isIncome: true,
-                isExpense: false,
-                isBudget: false
-            },
-            {
-                name: 'Housing',
-                isIncome: false,
-                isExpense: true,
-                isBudget: true
-            },
-            {
-                name: 'Food',
-                isIncome: false,
-                isExpense: true,
-                isBudget: true
-            }
-        ]
-    });
+        }
+    }
 
     console.log('users seeded');
-
     process.exit();
 });
+
+db.on('error', console.error.bind(console, 'MongoDB connection error:'));

@@ -1,6 +1,4 @@
 const {Schema, model} = require('mongoose');
-const financeSchema = require('./Finance');
-
 const categorySchema = new Schema({
     name: {
         type: String,
