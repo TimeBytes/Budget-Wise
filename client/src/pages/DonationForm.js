@@ -19,7 +19,7 @@ const stripePromise = loadStripe(
   );
   const DonationForm = () => {
 
-    const [getCheckout, { data, loading, error }] = useLazyQuery(QUERY_CHECKOUT);
+    const [getCheckout, { data, error }] = useLazyQuery(QUERY_CHECKOUT);
     const [amount, setAmount] = useState("");
 
 
@@ -30,7 +30,7 @@ const stripePromise = loadStripe(
     useEffect(() => {
       if (data) {
         stripePromise.then((res) => {
-          res.redirectToCheckout({ sessionId: data.checkout.session });
+          res.redirectToCheckout( { sessionId: data.checkout.session  });
         });
       }
     }, [data]);
@@ -49,13 +49,10 @@ const stripePromise = loadStripe(
       }
     };
 
-    
-    if (loading) {
-      console.log("loading");
-    }
+
     
     if (error) {
-      console.error("GraphQL error:", error);
+      console.error(error);
     }
 
   return (

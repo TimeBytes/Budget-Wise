@@ -23,13 +23,36 @@ const resolvers = {
             }
             throw new AuthenticationError("User not found");
         },
+        donations: async () => {
+            return Donation.find({});
+        },
+        singleDonation: async (parent, { _id }, context) => {
+            if (_id) {
+                return Donation.findById(_id);
+            } else {
+                throw new AuthenticationError("Donation not found");
+            }
+          },
+
 
     checkout: async (parent, args, context) => {
       const amount = args.amount;
       const url = new URL(context.headers.referer).origin;
       // const url = "http://localhost:3000";
       // create a new donation
-
+      const line_items = [];
+      
+      line_items.push({
+        price_data: {
+          currency: "cad",
+          product_data: {
+            name: "Donation",
+            description: "Complete your donation via Stripe Checkout",
+          },
+          unit_amount: (amount * 100)
+        },
+        quantity: 1,
+      });
       // create stripe checkout session
       const session = await stripe.checkout.sessions.create({
         payment_method_types: ["card"],
@@ -37,21 +60,22 @@ const resolvers = {
         success_url: `${url}/success?session_id={CHECKOUT_SESSION_ID}`,
         cancel_url: `${url}/`,
         // line_items is the donation not items in cart
-        line_items: [
-          {
+        line_items,
+
+          // {
             // price_data: {
             //   currency: "cad",
             //   product_data: {
             //     description: "Complete your donation via Stripe Checkout",
             //   },
-              unit_amount: parseInt(amount * 100),
-            },
+            //   unit_amount: (amount * 100),
+            // },
           
             // quantity: 1,
           // },
 
-        ],
-        mode: "payment",
+        
+        mode: "payment"
       });
       return { session: session.id };
     },

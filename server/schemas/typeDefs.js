@@ -61,8 +61,9 @@ const typeDefs = gql`
         expense: [Finance]
         budget: [Budget]
         categories: [Category]
-        donation(_id:ID):Donation
+        donations:[Donation]
         checkout(amount: Float): Checkout
+        singleDonation(_id: ID!): Donation
     }
 
 
