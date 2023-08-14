@@ -55,7 +55,7 @@ const typeDefs = gql`
 
     type Query {
         users: [User]
-        user(_id: ID!): User
+        user: User
         transaction: [Finance]
         income: [Finance]
         expense: [Finance]

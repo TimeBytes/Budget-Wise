@@ -35,6 +35,7 @@ function SignupForm(props) {
         password: formState.password,
         firstName: formState.firstName,
         lastName: formState.lastName,
+        username: formState.username,
       },
     });
     const token = mutationResponse.data.addUser.token;
@@ -77,19 +78,40 @@ function SignupForm(props) {
           <Stack spacing={4}>
             <HStack>
               <Box>
-                <FormControl id="firstName" isRequired>
+                <FormControl>
                   <FormLabel>First Name</FormLabel>
-                  <Input type="text" />
+                  <Input 
+                  placeholder="First"
+                  name="firstName"
+                  type="firstName"
+                  id="firstName"
+                  onChange={handleChange} />
                 </FormControl>
               </Box>
               <Box>
                 <FormControl id="lastName">
                   <FormLabel>Last Name</FormLabel>
-                  <Input type="text" />
+                  <Input 
+                  placeholder="Last"
+                  name="lastName"
+                  type="lastName"
+                  id="lastName"
+                  onChange={handleChange}
+                  />
                 </FormControl>
               </Box>
             </HStack>
-            <FormControl id="email" isRequired>
+            <Box>
+            <FormControl >
+              <FormLabel>Username</FormLabel>
+              <Input  placeholder="username"
+            name="username"
+            type="username"
+            id="username"
+            onChange={handleChange} />
+            </FormControl>
+            </Box>
+            <FormControl >
               <FormLabel>Email address</FormLabel>
               <Input  placeholder="youremail@test.com"
             name="email"
@@ -97,7 +119,7 @@ function SignupForm(props) {
             id="email"
             onChange={handleChange} />
             </FormControl>
-            <FormControl id="password" isRequired>
+            <FormControl >
               <FormLabel>Password</FormLabel>
               <InputGroup>
                 <Input 
@@ -129,7 +151,7 @@ function SignupForm(props) {
             </Stack>
             <Stack pt={6}>
               <Text align={'center'}>
-                Already a user? <Link to="/login" color={'blue.400'}>Login</Link>
+                Already a user? <Link  color={'blue.400'}to="/login">Login</Link>
               </Text>
             </Stack>
           </Stack>
