@@ -44,12 +44,7 @@ const typeDefs = gql`
     }
 
 
-    input DonationInput {
-        amount: Float
-    }
-
     type Checkout {
-
         session: ID
     }
 
@@ -66,18 +61,14 @@ const typeDefs = gql`
         expense: [Finance]
         budget: [Budget]
         categories: [Category]
-        donation(_id:ID!):Donation
-        checkout(amount: Float!): Checkout
+        donation(_id:ID):Donation
+        checkout(amount: Float): Checkout
     }
 
-    type Mutation {
-        Donation(amount: Float): Donation
-        addUser(username: String!, email: String!, password: String!, firstName: String!, lastName: String!): Auth
-    }
 
     type Mutation {
         addUser(username: String!, email: String!, password: String!, firstName: String!, lastName: String!): Auth
-        addDonation(amount: Float!, date: String!): Donation
+        addDonation(amount: Float): Donation
         login(email: String!, password: String!): Auth
         addcategory(name: String!, isIncome: Boolean!, isExpense: Boolean!, isBudget: Boolean!): Category
         saveCategory(category: ID!): User

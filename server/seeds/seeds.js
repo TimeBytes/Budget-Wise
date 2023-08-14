@@ -1,8 +1,9 @@
 const db = require('../config/connection');
-const { User } = require('../models');
+const { User, Donation } = require('../models');
 
 const userSeeds = require('./userSeeds.json');
 const categorySeeds = require('./categorySeeds.json');
+const donationSeeds = require('./donationSeeds.json');
 
 db.once('open', async () => {
     await User.deleteMany();

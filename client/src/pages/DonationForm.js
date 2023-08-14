@@ -10,16 +10,22 @@ import {
   useColorModeValue,
 } from "@chakra-ui/react";
 
-import React, { useEffect } from "react"; // Update the import
+import React, { useEffect, useState } from "react"; // Update the import
 import { loadStripe } from "@stripe/stripe-js";
-import { useLazyQuery, useMutation } from "@apollo/client";
+import { useLazyQuery } from "@apollo/client";
 import { QUERY_CHECKOUT } from "../utils/queries";
 const stripePromise = loadStripe(
-"pk_test_51NdeCcJJYT86npXC9P0eXGwM0LEojk6P7yMabT5rpFsACJ01ZiYQXY2OfqhYDEmP93DJyYkDbkHOuXTcnEHDklX400aBYioMbW"
+"pk_live_51NdeCcJJYT86npXCdLqIEuDDQhRPLSX0oX5hIpAdrJkwtnfKkugHjT7AmJytFZqeXGFfxKMirSti3Nz2M3M41En800gcn1YreZ"
   );
   const DonationForm = () => {
 
-    const [Donation, { data }] = useLazyQuery(QUERY_CHECKOUT);
+    const [getCheckout, { data, loading, error }] = useLazyQuery(QUERY_CHECKOUT);
+    const [amount, setAmount] = useState("");
+
+
+    function handleChange(event) {
+      setAmount(event.target.value);
+    };
 
     useEffect(() => {
       if (data) {
@@ -31,11 +37,27 @@ const stripePromise = loadStripe(
 
     const submitCheckout = async (event) => {
       event.preventDefault();
-      const amount = document.querySelector("input").value;
-      Donation({
-        variables: { amount: parseFloat(amount) },
-      });
+      // const amount = document.querySelector("input").value;
+
+
+      if (!amount) {
+        alert("Please enter an amount");
+      } else {
+        getCheckout({
+          variables: { amount:parseFloat (amount) },
+        });
+      }
+    };
+
+    
+    if (loading) {
+      console.log("loading");
     }
+    
+    if (error) {
+      console.error("GraphQL error:", error);
+    }
+
   return (
     <div>
       <Center>
@@ -67,8 +89,8 @@ const stripePromise = loadStripe(
               placeholder="0.00"
               _placeholder={{ color: "gray.500" }}
               type="number"
-              // value={amount} // Bind the input value to the state
-              // onChange={(e) => setAmount(e.target.value)} // Update the state on input change
+              value={amount} // Bind the input value to the state
+              onChange={handleChange} // Update the state on input change
             />
           </FormControl>
           <Stack spacing={6} direction={["column", "row"]}>

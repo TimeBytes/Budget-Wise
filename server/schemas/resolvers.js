@@ -3,8 +3,8 @@ const { AuthenticationError } = require("apollo-server-express");
 
 require("dotenv").config();
 
-const stripeSecretKey = process.env.STRIPE_SK;
-const stripe = require("stripe")(stripeSecretKey);
+// const stripeSecretKey = process.env.STRIPE_SK;
+const stripe = require("stripe")("sk_test_51NdeCcJJYT86npXC8Avw8l7TZLOZAcw07zfHSpQlECD9FMsyrv7d7u2b4kIHKzXpM0jz95vv8NBw1cXXKO41AHhZ009UuOCiP7");
 
 const { signToken } = require("../utils/auth");
 
@@ -24,16 +24,12 @@ const resolvers = {
             throw new AuthenticationError("User not found");
         },
 
-
     checkout: async (parent, args, context) => {
       const amount = args.amount;
-      
       const url = new URL(context.headers.referer).origin;
+      // const url = "http://localhost:3000";
       // create a new donation
-      const donation = new Donation({ amount: args.amount });
 
-      // save the donation
-      await donation.save();
       // create stripe checkout session
       const session = await stripe.checkout.sessions.create({
         payment_method_types: ["card"],
@@ -43,15 +39,17 @@ const resolvers = {
         // line_items is the donation not items in cart
         line_items: [
           {
-            price_data: {
-              currency: "cad",
-              product_data: {
-                description: "Complete youre donation via Stripe Checkout",
-              },
+            // price_data: {
+            //   currency: "cad",
+            //   product_data: {
+            //     description: "Complete your donation via Stripe Checkout",
+            //   },
               unit_amount: parseInt(amount * 100),
             },
-            quantity: 1,
-          },
+          
+            // quantity: 1,
+          // },
+
         ],
         mode: "payment",
       });
@@ -110,8 +108,11 @@ const resolvers = {
             }
             throw new AuthenticationError("You need to be logged in!");
         },
-          Donation: async (parents, args) => {
-      const donation = new Donation(args);
+          addDonation: async (parents, args, context) => {
+      const amount = args.amount;
+      const donation = new Donation({ amount });
+      await donation.save();
+      return donation;
     },
     }
 };

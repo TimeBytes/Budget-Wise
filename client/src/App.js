@@ -18,6 +18,7 @@ import Success from "./pages/Success";
 
 // import Footer from "./components/Footer";
 import "bootstrap/dist/css/bootstrap.min.css";
+// import { Donation } from "./utils/mutations";
 
 const httpLink = createHttpLink({
   uri: "/graphql",
