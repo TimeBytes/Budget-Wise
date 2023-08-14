@@ -1,6 +1,7 @@
 import React from 'react';
 import '../styles/Home.css';
 
+
 const Footer = () => {
   return (
     <div className="footer text-center mt-5 py-3 text-light">
