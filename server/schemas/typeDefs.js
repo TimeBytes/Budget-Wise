@@ -29,6 +29,9 @@ const typeDefs = gql`
         isRecurring: Boolean
     }
 
+    type SuccessMsg{
+        message: String
+    }
     type Category {
         _id: ID
         name: String
@@ -71,7 +74,7 @@ const typeDefs = gql`
         addUser(username: String!, email: String!, password: String!, firstName: String!, lastName: String!): Auth
         addDonation(amount: Float): Donation
         login(email: String!, password: String!): Auth
-        addcategory(name: String!, isIncome: Boolean!, isExpense: Boolean!, isBudget: Boolean!): Category
+        addcategory(name: String!, isIncome: Boolean!, isExpense: Boolean!, isBudget: Boolean!): SuccessMsg
         saveCategory(category: ID!): User
         removeCategory(category: ID!): User
     }

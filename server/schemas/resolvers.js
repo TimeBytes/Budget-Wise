@@ -99,14 +99,18 @@ const resolvers = {
             const token = signToken(user);
             return { token, user };
         },
-        addcategory: async (parents, { category }, context) => {
+        addcategory: async (parents, category, context) => {
             if (context.user) {
-                const updateUser = await User.findByIdAndUpdate(
-                    { _id: context.user._id },
-                    { $addToSet: { categories: category } },
-                    { new: true }
-                );
-                return updateUser;
+                try {
+                    const updateUser = await User.findByIdAndUpdate(
+                        { _id: context.user._id },
+                        { $addToSet: { categories: category } },
+                        { new: true }
+                    );
+                    return {message: "success"};
+                } catch(err) {
+                    throw new Error("try again");
+                }
             }
             throw new AuthenticationError("You need to be logged in!");
         },
