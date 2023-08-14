@@ -32,6 +32,9 @@ const AppNavbar = () => {
                   <Nav.Link eventKey="3" as={Link} to="/analysis">
                     Analysis
                   </Nav.Link>
+                  <Nav.Link eventKey="3" as={Link} to="/donate">
+                    Donate
+                  </Nav.Link>
                   <Nav.Link eventKey="4" onClick={Auth.logout}>
                     Logout
                   </Nav.Link>

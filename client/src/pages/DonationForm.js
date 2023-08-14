@@ -15,7 +15,7 @@ import { loadStripe } from "@stripe/stripe-js";
 import { useLazyQuery } from "@apollo/client";
 import { QUERY_CHECKOUT } from "../utils/queries";
 const stripePromise = loadStripe(
-"pk_live_51NdeCcJJYT86npXCdLqIEuDDQhRPLSX0oX5hIpAdrJkwtnfKkugHjT7AmJytFZqeXGFfxKMirSti3Nz2M3M41En800gcn1YreZ"
+"pk_test_51NdeCcJJYT86npXC9P0eXGwM0LEojk6P7yMabT5rpFsACJ01ZiYQXY2OfqhYDEmP93DJyYkDbkHOuXTcnEHDklX400aBYioMbW"
   );
   const DonationForm = () => {
 
@@ -30,6 +30,7 @@ const stripePromise = loadStripe(
     useEffect(() => {
       if (data) {
         stripePromise.then((res) => {
+          console.log(data);
           res.redirectToCheckout( { sessionId: data.checkout.session  });
         });
       }
