@@ -1,10 +1,25 @@
 const db = require('../config/connection');
-const { User } = require('../models');
+const { User, Donation } = require('../models');
 
 const userSeeds = require('./userSeeds.json');
 const categorySeeds = require('./categorySeeds.json');
+const donationSeeds = require('./donationSeeds.json');
 
 db.once('open', async () => {
+
+    await Donation.deleteMany();
+    const donationdata = await Donation.insertMany(donationSeeds);
+
+    for(let donation of donationdata) {
+        const { _id } = donation;
+        await User.findByIdAndUpdate(
+            _id,
+            { $push: { donations: { $each: donationSeeds } } },
+            { new: true, runValidators: true }
+        );
+    };
+
+
     await User.deleteMany();
 
     const usersData = await User.insertMany(userSeeds);
