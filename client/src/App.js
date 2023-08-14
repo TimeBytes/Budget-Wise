@@ -16,7 +16,7 @@ import AppNavbar from "./components/Navbar";
 import DonationForm from "./pages/DonationForm";
 import Success from "./pages/Success";
 
-// import Footer from "./components/Footer";
+import Footer from "./components/Footer";
 import "bootstrap/dist/css/bootstrap.min.css";
 // import { Donation } from "./utils/mutations";
 
@@ -61,7 +61,7 @@ function App() {
             <Route path="/donate" element={<DonationForm />} />
             <Route path="/success" element={<Success />} />
           </Routes>
-          {/* <Footer /> */}
+          { <Footer /> }
         </div>
       </Router>
     </ApolloProvider>
