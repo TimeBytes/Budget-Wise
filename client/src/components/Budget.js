@@ -1,4 +1,13 @@
 import React, { useState } from "react";
+import { useLazyQuery } from "@apollo/client";
+import {QUERY_ALL_CATEGORIES} from "../utils/queries";
+import {
+  Button,
+  InputGroup,
+  FormControl,
+  ListGroup,
+  Form,
+} from 'react-bootstrap';
 
 const BudgetComponent = () => {
   const sampleCategories = ["Groceries", "Utilities", "Entertainment", "Other"];
@@ -45,48 +54,66 @@ const BudgetComponent = () => {
       setNewBudgetAmount("");
     }
   };
-
   return (
-    <div className="m-auto border border-black border-2 p-3">
-      <div>
-        <select value={selectedCategory} onChange={handleCategoryChange}>
+    <div className="m-auto border border-dark border-2 p-3">
+      <div className="mb-3">
+        <Form.Select
+          value={selectedCategory}
+          onChange={handleCategoryChange}
+        >
           <option value="">Select a Category</option>
           {sampleCategories.map((category, index) => (
             <option key={index} value={category}>
               {category}
             </option>
           ))}
-        </select>
-        <input
-          type="number"
-          placeholder="Budget Amount"
-          value={newBudgetAmount}
-          onChange={handleNewBudgetAmountChange}
-        />
-        <button onClick={handleAddBudget}>Add Budget</button>
+        </Form.Select>
+        <InputGroup className="mb-3">
+          <FormControl
+            type="number"
+            placeholder="Budget Amount"
+            value={newBudgetAmount}
+            onChange={handleNewBudgetAmountChange}
+          />
+          <Button variant="primary" onClick={handleAddBudget}>
+            Add Budget
+          </Button>
+        </InputGroup>
       </div>
-      <ul className="list-unstyled mt-5">
+      <ListGroup className="mt-4">
         {budgets.map((budget, index) => (
-          <li key={index}>
+          <ListGroup.Item key={index} className="mb-3">
             {editingBudget === index ? (
-              <input
-                type="number"
-                value={budget.amount}
-                onChange={(event) => handleBudgetChange(index, event)}
-              />
+              <InputGroup>
+                <FormControl
+                  type="number"
+                  value={budget.amount}
+                  onChange={(event) => handleBudgetChange(index, event)}
+                />
+              </InputGroup>
             ) : (
-              <span>
+              <p>
                 Budget for {budget.category} is currently set to {budget.amount}
-              </span>
+              </p>
             )}
             {editingBudget !== index ? (
-              <button onClick={() => handleEditBudget(index)}>Edit</button>
+              <Button
+                variant="secondary"
+                onClick={() => handleEditBudget(index)}
+              >
+                Edit
+              </Button>
             ) : (
-              <button onClick={() => handleSaveBudget(index)}>Save</button>
+              <Button
+                variant="primary"
+                onClick={() => handleSaveBudget(index)}
+              >
+                Save
+              </Button>
             )}
-          </li>
+          </ListGroup.Item>
         ))}
-      </ul>
+      </ListGroup>
     </div>
   );
 };
