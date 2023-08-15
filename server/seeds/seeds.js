@@ -36,17 +36,17 @@ db.once('open', async () => {
         for (let category of categorySeeds) {
             const { isIncome, isExpense, isBudget, _id: categoryId } = category;
 
-            let financeAmount = 2000;  // Example amount for finance
-            let financeData = {
+            let transactionAmount = 2000;
+            let transactionData = {
                 category: categoryId,
                 name: category.name,
-                amount: financeAmount,
+                amount: transactionAmount,
                 date: new Date(),
                 isRecurring: true,
                 type: 'expense'
             };
 
-            let budgetAmount = 1000;  // Example amount for budget
+            let budgetAmount = 1000; 
             if (isBudget) {
                 let budgetData = {
                     ...category,
@@ -56,7 +56,7 @@ db.once('open', async () => {
             }
 
             if (isIncome || isExpense) {
-                await User.findByIdAndUpdate(_id, { $push: { finance: financeData } });
+                await User.findByIdAndUpdate(_id, { $push: { transaction: transactionData } });
             }
         }
     }
