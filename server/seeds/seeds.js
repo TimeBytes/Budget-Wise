@@ -1,25 +1,10 @@
 const db = require('../config/connection');
-const { User, Donation } = require('../models');
+const { User } = require('../models');
 
 const userSeeds = require('./userSeeds.json');
 const categorySeeds = require('./categorySeeds.json');
-const donationSeeds = require('./donationSeeds.json');
 
 db.once('open', async () => {
-
-    await Donation.deleteMany();
-    const donationdata = await Donation.insertMany(donationSeeds);
-
-    for(let donation of donationdata) {
-        const { _id } = donation;
-        await User.findByIdAndUpdate(
-            _id,
-            { $push: { donations: { $each: donationSeeds } } },
-            { new: true, runValidators: true }
-        );
-    };
-
-
     await User.deleteMany();
 
     const usersData = await User.insertMany(userSeeds);
@@ -42,8 +27,7 @@ db.once('open', async () => {
                 name: category.name,
                 amount: transactionAmount,
                 date: new Date(),
-                isRecurring: true,
-                type: 'expense'
+                isRecurring: true
             };
 
             let budgetAmount = 1000; 
@@ -55,8 +39,20 @@ db.once('open', async () => {
                 await User.findByIdAndUpdate(_id, { $push: { budget: budgetData } });
             }
 
-            if (isIncome || isExpense) {
-                await User.findByIdAndUpdate(_id, { $push: { transaction: transactionData } });
+            if (isIncome) {
+                let incomeData = {
+                    ...transactionData,
+                    type: 'income'
+                };
+                await User.findByIdAndUpdate(_id, { $push: { incomes: incomeData } });
+            }
+
+            if (isExpense) {
+                let expenseData = {
+                    ...transactionData,
+                    type: 'expense'
+                };
+                await User.findByIdAndUpdate(_id, { $push: { expenses: expenseData } });
             }
         }
     }

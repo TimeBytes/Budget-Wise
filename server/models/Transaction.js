@@ -16,18 +16,13 @@ const expenseSchema = new Schema({
         min: 0
     },
     date: {
-        type: Date,
+        type: String,
         required: true
     },
     isRecurring: {
         type: Boolean,
         required: true,
         default: false
-    },
-    type: {
-        type: String,
-        required: true,
-        default: 'expense'
     }
 });
 
@@ -47,7 +42,7 @@ const incomeSchema = new Schema({
         min: 0
     },
     date: {
-        type: Date,
+        type: String,
         required: true
     },
     isRecurring: {
@@ -55,11 +50,6 @@ const incomeSchema = new Schema({
         required: true,
         default: false
     },
-    type: {
-        type: String,
-        required: true,
-        default: 'expense'
-    }
 });
 
 module.exports = {expenseSchema, incomeSchema};

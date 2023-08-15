@@ -7,8 +7,8 @@ const typeDefs = gql`
         email: String
         firstName: String
         lastName: String
-        Income: [income]
-        Expense: [expense]
+        income: [Income]
+        expense: [Expense]
         budget: [Budget]
         categories: [Category]
         donations: [Donation]
@@ -25,7 +25,7 @@ const typeDefs = gql`
         description: String
         category: Category
         amount: Float
-        date: Date
+        date: String
         isRecurring: Boolean
     }
     type Expense {
@@ -33,7 +33,7 @@ const typeDefs = gql`
         description: String!
         category: Category
         amount: Float
-        date: Date
+        date: String
         isRecurring: Boolean
     }
 
@@ -65,35 +65,42 @@ const typeDefs = gql`
     }
 
     type Query {
-        user: User
-        allIncomes: [Income]
-        incomesByCategory (categoryID: ID!): [Income]
-        allExpenses: [Expense]
-        expensesByCategory (categoryID: ID!): [Expense]
-        budget: [Budget]
-        categories: [Category]
+        users: [User]
+        user(_id: ID!): User
+        allIncomes: [Income!]!
+        incomeByCategory: [Income!]!
+        allExpenses: [Expense!]!
+        expenseByCategory: [Expense!]!
+        allBudgets: [Budget!]!
+        allCategories: [Category!]!
         donations:[Donation]
         checkout(amount: Float): Checkout
         singleDonation(_id: ID!): Donation
     }
 
-
     type Mutation {
-        users: [User]
         addUser(username: String!, email: String!, password: String!, firstName: String!, lastName: String!): Auth
-        addDonation(amount: Float): Donation
         login(email: String!, password: String!): Auth
         addcategory(name: String!, isIncome: Boolean!, isExpense: Boolean!, isBudget: Boolean!): User
-        editCategory(category: ID!): User 
+        editCategory(id: ID!, categoryData: categoryInput!): User        
         removeCategory(category: ID!): User
         addBudget(name: String!, amount: Float!, category: String!): Budget
+        editBudget(budgetID: ID!, name: String!, amount: Float!, category: String!): User
         addIncome(name: String!, amount: Float!, category: ID!, date: String!, isRecurring: Boolean!): User
         addExpense(name: String!, amount: Float!, category: ID!, date: String!, isRecurring: Boolean!): User
         editIncome(incomeID: ID!, name: String!, amount: Float!, category: ID!, date: String!, isRecurring: Boolean!): User
         editExpense(expenseID: ID!, name: String!, amount: Float!, category: ID!, date: String!, isRecurring: Boolean!): User
         removeIncome(incomeID: ID!): User
         removeExpense(expenseID: ID!): User
+        addDonation(amount: Float): Donation
+    }
+    input categoryInput {
+        name: String!
+        isIncome: Boolean
+        isExpense: Boolean
+        isBudget: Boolean
     }
 `;
+
 
 module.exports = typeDefs;
