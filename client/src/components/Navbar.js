@@ -12,7 +12,7 @@ const AppNavbar = () => {
 
   return (
     <>
-      <Navbar collapseOnSelect variant="dark" expand="lg" className="navbar">
+      <Navbar collapseOnSelect variant="light" expand="lg" className="navbar">
         <Container fluid>
           <Navbar.Brand as={Link} to="/">
             Expense Tracker
@@ -31,6 +31,9 @@ const AppNavbar = () => {
                   </Nav.Link>
                   <Nav.Link eventKey="3" as={Link} to="/analysis">
                     Analysis
+                  </Nav.Link>
+                  <Nav.Link eventKey="3" as={Link} to="/donate">
+                    Donate
                   </Nav.Link>
                   <Nav.Link eventKey="4" onClick={Auth.logout}>
                     Logout
@@ -81,5 +84,4 @@ const AppNavbar = () => {
     </>
   );
 };
-
 export default AppNavbar;

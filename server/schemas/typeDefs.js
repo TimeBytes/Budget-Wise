@@ -5,10 +5,9 @@ const typeDefs = gql`
         _id: ID
         username: String
         email: String
-        password: String
         firstName: String
         lastName: String
-        finance: [Finance]
+        transaction: [Transaction]
         budget: [Budget]
         categories: [Category]
         donations: [Donation]
@@ -17,19 +16,22 @@ const typeDefs = gql`
     type Budget {
         _id: ID
         name: String
-        amount: Float
+        transactionAmount: Float
         category: String
     }
 
-    type Finance {
+    type Transaction {
         _id: ID
         name: String
         category: ID
-        amount: Float
+        transactionAmount: Float
         date: String
         isRecurring: Boolean
     }
 
+    type SuccessMsg{
+        message: String
+    }
     type Category {
         _id: ID
         name: String
@@ -44,7 +46,8 @@ const typeDefs = gql`
         data: String
     }
 
-    type Checkout{
+
+    type Checkout {
         session: ID
     }
 
@@ -54,15 +57,29 @@ const typeDefs = gql`
     }
 
     type Query {
-        user: [User]
-        transaction: [Finance]
-        income: [Finance]
-        expense: [Finance]
+        users: [User]
+        user: User
+        transaction: [Transaction]
+        income: [Transaction]
+        expense: [Transaction]
         budget: [Budget]
         categories: [Category]
+        donations:[Donation]
+        checkout(amount: Float): Checkout
+        singleDonation(_id: ID!): Donation
+    }
+
+
+    type Mutation {
+        addUser(username: String!, email: String!, password: String!, firstName: String!, lastName: String!): Auth
+        addDonation(amount: Float): Donation
+        login(email: String!, password: String!): Auth
+        addcategory(name: String!, isIncome: Boolean!, isExpense: Boolean!, isBudget: Boolean!): SuccessMsg
+        saveCategory(category: ID!): User
+        removeCategory(category: ID!): User
+        addBudget(name: String!, transactionAmount: Float!, category: String!): Budget
+        addTransaction(name: String!, transactionAmount: Float!, category: ID!, date: String!, isRecurring: Boolean!): User
     }
 `;
 
-
 module.exports = typeDefs;
-

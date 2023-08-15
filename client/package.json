@@ -1,4 +1,5 @@
 {
+  "proxy": "http://localhost:3001",
   "name": "budget-wise",
   "version": "0.1.0",
   "private": true,
@@ -20,7 +21,8 @@
     "react-chartjs-2": "^5.2.0",
     "react-dom": "^16.13.1",
     "react-router-dom": "^6.2.1",
-    "react-scripts": "^5.0.1"
+    "react-scripts": "^5.0.1",
+    "@stripe/stripe-js": "^1.3.1"
   },
   "scripts": {
     "start": "react-scripts start",
