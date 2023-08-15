@@ -1,7 +1,7 @@
-const {Schema, model} = require('mongoose');
+const {Schema} = require('mongoose');
 
-const transactionSchema = new Schema({
-    name: {
+const expenseSchema = new Schema({
+    description: {
         type: String,
         required: true,
         trim: true
@@ -16,7 +16,33 @@ const transactionSchema = new Schema({
         min: 0
     },
     date: {
-        type: Date,
+        type: String,
+        required: true
+    },
+    isRecurring: {
+        type: Boolean,
+        required: true,
+        default: false
+    }
+});
+
+const incomeSchema = new Schema({
+    description: {
+        type: String,
+        required: true,
+        trim: true
+    },
+    category: {
+        type: Schema.Types.ObjectId,
+        ref: 'Category'
+    },
+    amount: {
+        type: Number,
+        required: true,
+        min: 0
+    },
+    date: {
+        type: String,
         required: true
     },
     isRecurring: {
@@ -24,11 +50,6 @@ const transactionSchema = new Schema({
         required: true,
         default: false
     },
-    type: {
-        type: String,
-        required: true,
-        default: 'expense'
-    }
 });
 
-module.exports = transactionSchema;
+module.exports = {expenseSchema, incomeSchema};
