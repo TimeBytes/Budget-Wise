@@ -72,6 +72,7 @@ const typeDefs = gql`
         allExpenses: [Expense!]!
         expenseByCategory: [Expense!]!
         allBudgets: [Budget!]!
+        budgetByCategory: [Budget!]!
         allCategories: [Category!]!
         donations:[Donation]
         checkout(amount: Float): Checkout

@@ -29,6 +29,7 @@ const resolvers = {
             }
             throw new AuthenticationError("User not found");
         },
+
         allIncomes: async () => {
             try {
                 return await Income.find({});
@@ -43,6 +44,7 @@ const resolvers = {
                 throw new Error(error);
             }
         },
+
         allExpenses: async () => {
             try {
                 return await Expense.find({});
@@ -57,6 +59,7 @@ const resolvers = {
               throw new Error(error);
             }
         },
+
         allBudgets: async () => {
             try {
                 return await Budget.find({});
@@ -64,6 +67,14 @@ const resolvers = {
                 throw new Error(error);
             }
         },
+        budgetByCategory: async () => {
+            try {
+                return await Category.find({ isBudget: true });
+            } catch (error) {
+                throw new Error(error);
+            }
+        },
+
         allCategories: async () => {
             try {
                 return await Category.find({});
@@ -71,6 +82,7 @@ const resolvers = {
                 throw new Error(error);
             }
         },
+        
         donations: async () => {
             return Donation.find({});
         },
