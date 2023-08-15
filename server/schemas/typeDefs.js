@@ -7,7 +7,7 @@ const typeDefs = gql`
         email: String
         firstName: String
         lastName: String
-        finance: [Finance]
+        transaction: [Transaction]
         budget: [Budget]
         categories: [Category]
         donations: [Donation]
@@ -16,15 +16,15 @@ const typeDefs = gql`
     type Budget {
         _id: ID
         name: String
-        financeAmount: Float
+        transactionAmount: Float
         category: String
     }
 
-    type Finance {
+    type Transaction {
         _id: ID
         name: String
         category: ID
-        financeAmount: Float
+        transactionAmount: Float
         date: String
         isRecurring: Boolean
     }
@@ -56,9 +56,9 @@ const typeDefs = gql`
     type Query {
         users: [User]
         user: User
-        transaction: [Finance]
-        income: [Finance]
-        expense: [Finance]
+        transaction: [Transaction]
+        income: [Transaction]
+        expense: [Transaction]
         budget: [Budget]
         categories: [Category]
         donations:[Donation]
@@ -71,9 +71,11 @@ const typeDefs = gql`
         addUser(username: String!, email: String!, password: String!, firstName: String!, lastName: String!): Auth
         addDonation(amount: Float): Donation
         login(email: String!, password: String!): Auth
-        addcategory(name: String!, isIncome: Boolean!, isExpense: Boolean!, isBudget: Boolean!): Category
-        saveCategory(category: ID!): User
+        addcategory(name: String!, isIncome: Boolean!, isExpense: Boolean!, isBudget: Boolean!): User
+        saveCategory(category: ID!): User 
         removeCategory(category: ID!): User
+        addBudget(name: String!, transactionAmount: Float!, category: String!): Budget
+        addTransaction(name: String!, transactionAmount: Float!, category: ID!, date: String!, isRecurring: Boolean!): User
     }
 `;
 
