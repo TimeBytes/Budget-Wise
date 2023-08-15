@@ -24,7 +24,7 @@ const Footer = () => {
             </div>
             <div className="mt-1">
               <h2 className="footer-text">
-                &copy; 2023. Created by Andy, Gurveer, Mahdi, Mehdi, Kaijan
+                &copy; 2023. Created by Andy, Gurveer, Mahdi, Mehdi, Kajian
               </h2>
             </div>
           </div>
