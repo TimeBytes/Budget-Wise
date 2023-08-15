@@ -1,4 +1,4 @@
-import { gql } from '@apollo/client';
+import { gql } from "@apollo/client";
 
 export const QUERY_CHECKOUT = gql`
   query getCheckout($amount: Float) {
@@ -79,7 +79,7 @@ export const QUERY_ALL_INCOME = gql`
       isRecurring
     }
   }
-`;  
+`;
 
 export const QUERY_INCOME_BY_CATEGORY = gql`
   query incomeByCategory($category: ID!) {
@@ -171,13 +171,15 @@ export const QUERY_BUDGET_BY_CATEGORY = gql`
 `;
 
 export const QUERY_ALL_CATEGORIES = gql`
-  query allCategories {
-    allCategories {
-      _id
-      name
-      isIncome
-      isExpense
-      isBudget
+  query GetUserCategories($id: ID!) {
+    user(_id: $id) {
+      categories {
+        _id
+        isBudget
+        isExpense
+        isIncome
+        name
+      }
     }
   }
 `;

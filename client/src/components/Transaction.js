@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import { useLazyQuery } from "@apollo/client";
-import { QUERY_ALL_CATEGORIES } from "../utils/queries";
+import { useLazyQuery, useQuery, useMutation } from "@apollo/client";
+import { QUERY_ALL_CATEGORIES, QUERY_USER } from "../utils/queries";
 import "bootstrap/dist/css/bootstrap.min.css"; // Import Bootstrap CSS
 import { FormGroup, FormLabel, FormSelect, FormCheck } from "react-bootstrap"; // Import Bootstrap components
 
@@ -45,11 +45,29 @@ const TransactionComponent = ({ type }) => {
     // Implement API call to submit the transaction data to the backend
   };
 
-  const [categoryList, { error }] = useLazyQuery(QUERY_ALL_CATEGORIES);
-  console.log(categoryList);
+  const { data: userData } = useQuery(QUERY_USER); // Replace with the actual user ID
+  console.log(userData);
+
+  // const { loading, error, data } = useQuery(QUERY_ALL_CATEGORIES, {
+  //   variables: { id: userId },
+  // });
+
+  // if (loading) {
+  //   return <div>Loading...</div>;
+  // }
+
+  // if (error) {
+  //   console.error("Error:", error);
+  //   return <div>Error fetching data</div>;
+  // }
+
+  // const categories = data.user.categories;
+
   return (
-    <div className="d-flex flex-column">
-      <h2>Add New {type === "Income" ? "Income" : "Expense"}</h2>
+    <div className="d-flex flex-column mt-4">
+      <h2 className="my-2 display-5 text-center">
+        Add New {type === "Income" ? "Income" : "Expense"}
+      </h2>
       {showWarning && (
         <p style={{ color: "red" }}>Please fill in all required fields.</p>
       )}
@@ -96,7 +114,7 @@ const TransactionComponent = ({ type }) => {
         />
       </FormGroup>
 
-      <FormGroup>
+      <FormGroup className="my-3">
         <FormCheck
           type="checkbox"
           label="Recurring"

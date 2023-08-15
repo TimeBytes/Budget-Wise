@@ -26,11 +26,14 @@ const AppNavbar = () => {
               {/* if user is logged in show and Enter Transactions and Logout */}
               {Auth.loggedIn() ? (
                 <>
-                  <Nav.Link eventKey="2" as={Link} to="/transactions">
-                    Transactions
+                  <Nav.Link eventKey="2" as={Link} to="/dashboard">
+                    Dashboard
                   </Nav.Link>
-                  <Nav.Link eventKey="3" as={Link} to="/analysis">
-                    Analysis
+                  <Nav.Link eventKey="3" as={Link} to="/categories">
+                    Categories
+                  </Nav.Link>
+                  <Nav.Link eventKey="3" as={Link} to="/appendix">
+                    Appendix
                   </Nav.Link>
                   <Nav.Link eventKey="3" as={Link} to="/donate">
                     Donate

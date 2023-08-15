@@ -1,4 +1,11 @@
 import React, { useState } from "react";
+import {
+  Button,
+  FormGroup,
+  FormLabel,
+  FormSelect,
+  FormCheck,
+} from "react-bootstrap";
 
 const BudgetComponent = () => {
   const sampleCategories = ["Groceries", "Utilities", "Entertainment", "Other"];
@@ -47,27 +54,35 @@ const BudgetComponent = () => {
   };
 
   return (
-    <div className="m-auto border border-black border-2 p-3">
+    <div className="m-auto">
       <div>
-        <select value={selectedCategory} onChange={handleCategoryChange}>
-          <option value="">Select a Category</option>
-          {sampleCategories.map((category, index) => (
-            <option key={index} value={category}>
-              {category}
-            </option>
-          ))}
-        </select>
-        <input
-          type="number"
-          placeholder="Budget Amount"
-          value={newBudgetAmount}
-          onChange={handleNewBudgetAmountChange}
-        />
-        <button onClick={handleAddBudget}>Add Budget</button>
+        <FormGroup className="d-flex flex-wrap justify-content-center border border-info rounded-2 p-3 bg-info">
+          <FormSelect
+            value={selectedCategory}
+            onChange={handleCategoryChange}
+            className="my-2"
+          >
+            <option value="">Select a Category</option>
+            {sampleCategories.map((category, index) => (
+              <option key={index} value={category}>
+                {category}
+              </option>
+            ))}
+          </FormSelect>
+          <input
+            type="number"
+            placeholder="Budget Amount"
+            value={newBudgetAmount}
+            onChange={handleNewBudgetAmountChange}
+          />
+          <Button onClick={handleAddBudget} className="mx-3">
+            Add Budget
+          </Button>
+        </FormGroup>
       </div>
-      <ul className="list-unstyled mt-5">
+      <ul className="list-unstyled bg-info rounded-2 px-2 my-2 py-2">
         {budgets.map((budget, index) => (
-          <li key={index}>
+          <li key={index} className="my-4 d-flex justify-content-between">
             {editingBudget === index ? (
               <input
                 type="number"
@@ -75,14 +90,14 @@ const BudgetComponent = () => {
                 onChange={(event) => handleBudgetChange(index, event)}
               />
             ) : (
-              <span>
+              <span className="m-2">
                 Budget for {budget.category} is currently set to {budget.amount}
               </span>
             )}
             {editingBudget !== index ? (
-              <button onClick={() => handleEditBudget(index)}>Edit</button>
+              <Button onClick={() => handleEditBudget(index)}>Edit</Button>
             ) : (
-              <button onClick={() => handleSaveBudget(index)}>Save</button>
+              <Button onClick={() => handleSaveBudget(index)}>Save</Button>
             )}
           </li>
         ))}
