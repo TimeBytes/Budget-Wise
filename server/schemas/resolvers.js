@@ -146,6 +146,106 @@ const resolvers = {
             const token = signToken(user);
             return { token, user };
         },
+
+        addIncome: async (parent, { name, amount, category, date, isRecurring }, context) => {
+            if (!context.user) throw new AuthenticationError('You need to be logged in!');
+            
+            const newIncome = {
+                description: name,
+                category,
+                amount,
+                date,
+                isRecurring
+            };
+            
+            const updatedUser = await User.findByIdAndUpdate(
+                context.user._id,
+                { $push: { income: newIncome } },
+                { new: true }
+            );
+            return updatedUser;
+        },
+        editIncome: async (parent, { incomeID, name, amount, category, date, isRecurring }, context) => {
+            if (!context.user) throw new AuthenticationError('You need to be logged in!');
+            
+            const updatedIncome = {
+                description: name,
+                category,
+                amount,
+                date,
+                isRecurring
+            };
+            const updatedUser = await User.findOneAndUpdate(
+                { _id: context.user._id, "income._id": incomeID },
+                { "$set": { "income.$": updatedIncome } },
+                { new: true }
+            );
+
+            if (!updatedUser) 
+                throw new Error('Unable to update income.');
+
+            return updatedUser;
+        },
+        removeIncome: async (parent, { incomeID }, context) => {
+            if (!context.user) throw new AuthenticationError('You need to be logged in!');
+
+            const updatedUser = await User.findByIdAndUpdate(
+                context.user._id,
+                { $pull: { income: { _id: incomeID } } },
+                { new: true }
+            );
+            return updatedUser;
+        },
+
+        addExpense: async (parent, { name, amount, category, date, isRecurring }, context) => {
+            if (!context.user) throw new AuthenticationError('You need to be logged in!');
+            
+            const newExpense = {
+                description: name,
+                category,
+                amount,
+                date,
+                isRecurring
+            };
+            
+            const updatedUser = await User.findByIdAndUpdate(
+                context.user._id,
+                { $push: { expense: newExpense } },
+                { new: true }
+            );
+            return updatedUser;
+        },
+        editExpense: async (parent, { expenseID, name, amount, category, date, isRecurring }, context) => {
+            if (!context.user) throw new AuthenticationError('You need to be logged in!');
+            
+            const updatedExpense = {
+                description: name,
+                category,
+                amount,
+                date,
+                isRecurring
+            };
+            const updatedUser = await User.findOneAndUpdate(
+                { _id: context.user._id, "expense._id": expenseID },
+                { "$set": { "expense.$": updatedExpense } },
+                { new: true }
+            );
+
+            if (!updatedUser) throw new Error('Unable to update expense.');
+
+            return updatedUser;
+        },
+        removeExpense: async (parent, { expenseID }, context) => {
+            if (!context.user) throw new AuthenticationError('You need to be logged in!');
+
+            const updatedUser = await User.findByIdAndUpdate(
+                context.user._id,
+                { $pull: { expense: { _id: expenseID } } },
+                { new: true }
+            );
+            return updatedUser;
+        },
+
         addcategory: async (parents, category, context) => {
             if (context.user) {
                 try {
@@ -219,6 +319,7 @@ const resolvers = {
             );
             return updatedUser;
         },
+
         addBudget: async (parent, { category, amount }, context) => {
             if (!context.user) throw new AuthenticationError('You need to be logged in!');
 
@@ -253,103 +354,17 @@ const resolvers = {
         
             return updatedUser;
         },
-        addIncome: async (parent, { name, amount, category, date, isRecurring }, context) => {
-            if (!context.user) throw new AuthenticationError('You need to be logged in!');
-            
-            const newIncome = {
-                description: name,
-                category,
-                amount,
-                date,
-                isRecurring
-            };
-            
-            const updatedUser = await User.findByIdAndUpdate(
-                context.user._id,
-                { $push: { income: newIncome } },
-                { new: true }
-            );
-            return updatedUser;
-        },
-        addExpense: async (parent, { name, amount, category, date, isRecurring }, context) => {
-            if (!context.user) throw new AuthenticationError('You need to be logged in!');
-            
-            const newExpense = {
-                description: name,
-                category,
-                amount,
-                date,
-                isRecurring
-            };
-            
-            const updatedUser = await User.findByIdAndUpdate(
-                context.user._id,
-                { $push: { expense: newExpense } },
-                { new: true }
-            );
-            return updatedUser;
-        },
-        editIncome: async (parent, { incomeID, name, amount, category, date, isRecurring }, context) => {
-            if (!context.user) throw new AuthenticationError('You need to be logged in!');
-            
-            const updatedIncome = {
-                description: name,
-                category,
-                amount,
-                date,
-                isRecurring
-            };
-            const updatedUser = await User.findOneAndUpdate(
-                { _id: context.user._id, "income._id": incomeID },
-                { "$set": { "income.$": updatedIncome } },
-                { new: true }
-            );
-
-            if (!updatedUser) 
-                throw new Error('Unable to update income.');
-
-            return updatedUser;
-        },
-        editExpense: async (parent, { expenseID, name, amount, category, date, isRecurring }, context) => {
-            if (!context.user) throw new AuthenticationError('You need to be logged in!');
-            
-            const updatedExpense = {
-                description: name,
-                category,
-                amount,
-                date,
-                isRecurring
-            };
-            const updatedUser = await User.findOneAndUpdate(
-                { _id: context.user._id, "expense._id": expenseID },
-                { "$set": { "expense.$": updatedExpense } },
-                { new: true }
-            );
-
-            if (!updatedUser) throw new Error('Unable to update expense.');
-
-            return updatedUser;
-        },
-        removeIncome: async (parent, { incomeID }, context) => {
+        removeBudget: async (parent, { budgetID }, context) => {
             if (!context.user) throw new AuthenticationError('You need to be logged in!');
 
             const updatedUser = await User.findByIdAndUpdate(
                 context.user._id,
-                { $pull: { income: { _id: incomeID } } },
+                { $pull: { budgets: { _id: budgetID } } },
                 { new: true }
             );
             return updatedUser;
         },
-        removeExpense: async (parent, { expenseID }, context) => {
-            if (!context.user) throw new AuthenticationError('You need to be logged in!');
 
-            const updatedUser = await User.findByIdAndUpdate(
-                context.user._id,
-                { $pull: { expense: { _id: expenseID } } },
-                { new: true }
-            );
-            return updatedUser;
-        },
         addDonation: async (parents, args, context) => {
             const amount = args.amount;
             const donation = new Donation({ amount });
