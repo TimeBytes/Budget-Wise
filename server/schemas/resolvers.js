@@ -10,11 +10,7 @@ const { signToken } = require("../utils/auth");
 
 const defaultCategories = [
     {
-        name: "",
-        isExpnese: false,
-        isIncome: false,
-        isBudget: false,
-
+        name: "Transportation",
     },
     
 ];
