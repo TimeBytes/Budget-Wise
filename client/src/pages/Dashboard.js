@@ -5,7 +5,7 @@ import Overview from "../components/Overview";
 import Category from "../components/Category";
 import "bootstrap/dist/css/bootstrap.css";
 
-const Profile = () => {
+const Dashboard = () => {
   const [transaction, setTransaction] = useState("Income");
   const handleTransactionTab = (event) => {
     setTransaction(event.target.textContent);
@@ -38,4 +38,4 @@ const Profile = () => {
   );
 };
 
-export default Profile;
+export default Dashboard;
