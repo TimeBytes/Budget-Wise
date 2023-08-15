@@ -6,7 +6,6 @@ import Footer from "../components/Footer";
 import "bootstrap/dist/css/bootstrap.css";
 import logoImage from "../assets/images/budgetwise.png";
 
-
 const HomePage = () => {
   const [transaction, setTransaction] = useState("Income");
 
@@ -21,7 +20,14 @@ const HomePage = () => {
   return (
     <div className="homepage-container">
       <section className="hero-section">
-      <img src={logoImage} class="mx-auto d-block"  alt="Budget Wise Logo" className="logo" height="800" width="800" />
+        <img
+          src={logoImage}
+          class="mx-auto d-block"
+          alt="Budget Wise Logo"
+          className="logo"
+          height="800"
+          width="800"
+        />
       </section>
       <section className="overview-section py-5">
         <div className="container">
@@ -31,10 +37,10 @@ const HomePage = () => {
             </div>
             <div className="col-md-4">
               <div className="transaction-section">
-                <h1>Manage Your Transactions</h2>
+                <h1>Manage Your Transactions</h1>
                 <Transaction type={transaction} />
               </div>
-              <h1>Take a peek at your Budget</h3>
+              <h1>Take a peek at your Budget</h1>
               <Budget />
             </div>
           </div>

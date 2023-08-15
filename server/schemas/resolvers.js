@@ -9,6 +9,7 @@ const stripe = require("stripe")(
 );
 
 const { signToken } = require("../utils/auth");
+const { countDocuments } = require("../models/User");
 
 const defaultCategories = [
   {
@@ -24,14 +25,13 @@ const resolvers = {
     users: async () => {
       return User.find({});
     },
-    user: async (parent, { _id }, context) => {
-      if (_id) {
-        return User.findById(_id);
-      }
+    user: async (parent, args, context) => {
       if (context.user) {
-        return User.findById(context.user._id);
+        const userData = await User.findOne({ _id: context.user._id }).select(
+          "-__v -password"
+        );
+        return userData;
       }
-      throw new AuthenticationError("User not found");
     },
 
     allIncomes: async () => {
@@ -80,10 +80,11 @@ const resolvers = {
     },
 
     allCategories: async () => {
-      try {
-        return await Category.find({});
-      } catch (error) {
-        throw new Error(error);
+      if (context.user) {
+        const userData = await User.findOne({ _id: context.user._id }).select(
+          "-__v -password"
+        );
+        return userData;
       }
     },
 

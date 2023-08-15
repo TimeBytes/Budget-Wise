@@ -1,13 +1,16 @@
 import React, { useState } from "react";
-import { useLazyQuery } from "@apollo/client";
-import {QUERY_ALL_CATEGORIES} from "../utils/queries";
 import {
   Button,
+  FormGroup,
+  FormLabel,
+  FormSelect,
+  FormCheck,
+  ListGroup,
   InputGroup,
   FormControl,
-  ListGroup,
-  Form,
-} from 'react-bootstrap';
+} from "react-bootstrap";
+import { useLazyQuery } from "@apollo/client";
+import { QUERY_ALL_CATEGORIES } from "../utils/queries";
 
 const BudgetComponent = () => {
   const sampleCategories = ["Groceries", "Utilities", "Entertainment", "Other"];
@@ -55,34 +58,38 @@ const BudgetComponent = () => {
     }
   };
   return (
-    <div className="m-auto border border-dark border-2 p-3">
-      <div className="mb-3">
-        <Form.Select
-          value={selectedCategory}
-          onChange={handleCategoryChange}
-        >
-          <option value="">Select a Category</option>
-          {sampleCategories.map((category, index) => (
-            <option key={index} value={category}>
-              {category}
-            </option>
-          ))}
-        </Form.Select>
-        <InputGroup className="mb-3">
-          <FormControl
+    <div className="m-auto">
+      <div>
+        <FormGroup className="d-flex flex-wrap justify-content-center border border-info rounded-2 p-3 bg-info">
+          <FormSelect
+            value={selectedCategory}
+            onChange={handleCategoryChange}
+            className="my-2"
+          >
+            <option value="">Select a Category</option>
+            {sampleCategories.map((category, index) => (
+              <option key={index} value={category}>
+                {category}
+              </option>
+            ))}
+          </FormSelect>
+          <input
             type="number"
             placeholder="Budget Amount"
             value={newBudgetAmount}
             onChange={handleNewBudgetAmountChange}
           />
-          <Button variant="primary" onClick={handleAddBudget}>
+          <Button onClick={handleAddBudget} className="mx-3">
             Add Budget
           </Button>
-        </InputGroup>
+        </FormGroup>
       </div>
-      <ListGroup className="mt-4">
+      <ListGroup className="list-unstyled bg-info rounded-2 px-2 my-2 py-2">
         {budgets.map((budget, index) => (
-          <ListGroup.Item key={index} className="mb-3">
+          <ListGroup.Item
+            key={index}
+            className="my-4 d-flex justify-content-between"
+          >
             {editingBudget === index ? (
               <InputGroup>
                 <FormControl
@@ -92,9 +99,9 @@ const BudgetComponent = () => {
                 />
               </InputGroup>
             ) : (
-              <p>
+              <span className="m-2">
                 Budget for {budget.category} is currently set to {budget.amount}
-              </p>
+              </span>
             )}
             {editingBudget !== index ? (
               <Button
@@ -104,10 +111,7 @@ const BudgetComponent = () => {
                 Edit
               </Button>
             ) : (
-              <Button
-                variant="primary"
-                onClick={() => handleSaveBudget(index)}
-              >
+              <Button variant="primary" onClick={() => handleSaveBudget(index)}>
                 Save
               </Button>
             )}

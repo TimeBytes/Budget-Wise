@@ -15,7 +15,7 @@ import Home from "./pages/Homepage";
 import AppNavbar from "./components/Navbar";
 import DonationForm from "./pages/DonationForm";
 import Success from "./pages/Success";
-
+import Category from "./components/Category";
 import Footer from "./components/Footer";
 import "bootstrap/dist/css/bootstrap.min.css";
 // import { Donation } from "./utils/mutations";
@@ -58,6 +58,7 @@ function App() {
               path="*"
               element={<h1 className="display-2">Wrong page!</h1>}
             />
+            {/* <Route path="/categories" element={<Category />} /> */}
             <Route path="/donate" element={<DonationForm />} />
             <Route path="/success" element={<Success />} />
           </Routes>
