@@ -85,14 +85,27 @@ const OverviewComponent = () => {
   };
 
   return (
-    <div>
-      <h2>Overview</h2>
-      <Bar data={chartData} options={chartOptions} />
-      <h2>Income Categories Distribution</h2>
-      <Pie data={pieIncomeData} />
-      <h2>Expense Categories Distribution</h2>
-      <Pie data={pieExpenseData} />
-    </div>
+    <>
+      <h1 className="display-1 text-center my-4">Overview</h1>
+      <div className="d-flex flex-row justify-content-around">
+        <div className="w-25">
+          <h3 className="display-5 text-center mb-3">Income vs Expenses</h3>
+          <Bar data={chartData} options={chartOptions} />
+        </div>
+        <div className="w-25">
+          <h3 className="display-5 text-center mb-3">
+            Income Categories Distribution
+          </h3>
+          <Pie data={pieIncomeData} />
+        </div>
+        <div className="w-25">
+          <h3 className="display-5 text-center mb-3">
+            Expense Categories Distribution
+          </h3>
+          <Pie data={pieExpenseData} />
+        </div>
+      </div>
+    </>
   );
 };
 

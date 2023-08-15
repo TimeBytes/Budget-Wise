@@ -1,4 +1,8 @@
 import React, { useState } from "react";
+import { useLazyQuery } from "@apollo/client";
+import { QUERY_ALL_CATEGORIES } from "../utils/queries";
+import "bootstrap/dist/css/bootstrap.min.css"; // Import Bootstrap CSS
+import { FormGroup, FormLabel, FormSelect, FormCheck } from "react-bootstrap"; // Import Bootstrap components
 
 const TransactionComponent = ({ type }) => {
   const [selectedCategory, setSelectedCategory] = useState("");
@@ -41,54 +45,67 @@ const TransactionComponent = ({ type }) => {
     // Implement API call to submit the transaction data to the backend
   };
 
+  const [categoryList, { error }] = useLazyQuery(QUERY_ALL_CATEGORIES);
+  console.log(categoryList);
   return (
     <div className="d-flex flex-column">
       <h2>Add New {type === "Income" ? "Income" : "Expense"}</h2>
       {showWarning && (
         <p style={{ color: "red" }}>Please fill in all required fields.</p>
       )}
-      <label>
-        Category:
-        <select value={selectedCategory} onChange={handleCategoryChange}>
+
+      <FormGroup>
+        <FormLabel>Category:</FormLabel>
+        <FormSelect value={selectedCategory} onChange={handleCategoryChange}>
           <option value="">Select a Category</option>
           {/* Map over your income/expense categories and generate options */}
-        </select>
-      </label>
-      <label>
-        Amount:
+        </FormSelect>
+      </FormGroup>
+
+      <FormGroup>
+        <FormLabel>Amount:</FormLabel>
         <input
           type="number"
+          className="form-control"
           placeholder="Amount"
           value={amount}
           onChange={handleAmountChange}
         />
-      </label>
-      <label>
-        Description:
+      </FormGroup>
+
+      <FormGroup>
+        <FormLabel>Description:</FormLabel>
         <input
           type="text"
+          className="form-control"
           placeholder="Description"
           value={description}
           onChange={handleDescriptionChange}
         />
-      </label>
-      <label>
-        Date of {type === "Income" ? "Income" : "Expense"}:
+      </FormGroup>
+
+      <FormGroup>
+        <FormLabel>
+          Date of {type === "Income" ? "Income" : "Expense"}:
+        </FormLabel>
         <input
           type="date"
+          className="form-control"
           value={dateOfTransaction}
           onChange={handleDateChange}
         />
-      </label>
-      <label>
-        Recurring:
-        <input
+      </FormGroup>
+
+      <FormGroup>
+        <FormCheck
           type="checkbox"
+          label="Recurring"
           checked={recurring}
           onChange={handleRecurringChange}
         />
-      </label>
-      <button onClick={handleTransactionSubmit}>
+      </FormGroup>
+
+      <button className="btn btn-primary" onClick={handleTransactionSubmit}>
         Add {type === "Income" ? "Income" : "Expense"}
       </button>
     </div>
