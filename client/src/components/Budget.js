@@ -5,7 +5,12 @@ import {
   FormLabel,
   FormSelect,
   FormCheck,
+  ListGroup,
+  InputGroup,
+  FormControl,
 } from "react-bootstrap";
+import { useLazyQuery } from "@apollo/client";
+import { QUERY_ALL_CATEGORIES } from "../utils/queries";
 
 const BudgetComponent = () => {
   const sampleCategories = ["Groceries", "Utilities", "Entertainment", "Other"];
@@ -52,7 +57,6 @@ const BudgetComponent = () => {
       setNewBudgetAmount("");
     }
   };
-
   return (
     <div className="m-auto">
       <div>
@@ -80,28 +84,40 @@ const BudgetComponent = () => {
           </Button>
         </FormGroup>
       </div>
-      <ul className="list-unstyled bg-info rounded-2 px-2 my-2 py-2">
+      <ListGroup className="list-unstyled bg-info rounded-2 px-2 my-2 py-2">
         {budgets.map((budget, index) => (
-          <li key={index} className="my-4 d-flex justify-content-between">
+          <ListGroup.Item
+            key={index}
+            className="my-4 d-flex justify-content-between"
+          >
             {editingBudget === index ? (
-              <input
-                type="number"
-                value={budget.amount}
-                onChange={(event) => handleBudgetChange(index, event)}
-              />
+              <InputGroup>
+                <FormControl
+                  type="number"
+                  value={budget.amount}
+                  onChange={(event) => handleBudgetChange(index, event)}
+                />
+              </InputGroup>
             ) : (
               <span className="m-2">
                 Budget for {budget.category} is currently set to {budget.amount}
               </span>
             )}
             {editingBudget !== index ? (
-              <Button onClick={() => handleEditBudget(index)}>Edit</Button>
+              <Button
+                variant="secondary"
+                onClick={() => handleEditBudget(index)}
+              >
+                Edit
+              </Button>
             ) : (
-              <Button onClick={() => handleSaveBudget(index)}>Save</Button>
+              <Button variant="primary" onClick={() => handleSaveBudget(index)}>
+                Save
+              </Button>
             )}
-          </li>
+          </ListGroup.Item>
         ))}
-      </ul>
+      </ListGroup>
     </div>
   );
 };
