@@ -11,9 +11,6 @@ const Dashboard = () => {
   const handleTransactionTab = (event) => {
     setTransaction(event.target.textContent);
   };
-  useEffect(() => {
-    console.log(transaction);
-  }, [transaction]);
 
   return (
     <div className="d-flex flex-column justify-content-around">

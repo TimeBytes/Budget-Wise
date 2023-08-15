@@ -1,8 +1,9 @@
-import React, { useState } from "react";
-import { useLazyQuery, useQuery, useMutation } from "@apollo/client";
-import { QUERY_ALL_CATEGORIES, QUERY_USER } from "../utils/queries";
+import { useQuery } from "@apollo/client";
 import "bootstrap/dist/css/bootstrap.min.css"; // Import Bootstrap CSS
-import { FormGroup, FormLabel, FormSelect, FormCheck } from "react-bootstrap"; // Import Bootstrap components
+import React, { useState, useEffect } from "react";
+import { FormCheck, FormGroup, FormLabel, FormSelect } from "react-bootstrap"; // Import Bootstrap components
+import { QUERY_USER } from "../utils/queries";
+import { ADD_INCOME } from "../utils/mutations";
 
 const TransactionComponent = ({ type }) => {
   const [selectedCategory, setSelectedCategory] = useState("");
@@ -45,23 +46,9 @@ const TransactionComponent = ({ type }) => {
     // Implement API call to submit the transaction data to the backend
   };
 
-  const { data: userData } = useQuery(QUERY_USER); // Replace with the actual user ID
-  console.log(userData);
-
-  // const { loading, error, data } = useQuery(QUERY_ALL_CATEGORIES, {
-  //   variables: { id: userId },
-  // });
-
-  // if (loading) {
-  //   return <div>Loading...</div>;
-  // }
-
-  // if (error) {
-  //   console.error("Error:", error);
-  //   return <div>Error fetching data</div>;
-  // }
-
-  // const categories = data.user.categories;
+  const { loading, data } = useQuery(QUERY_USER); // Replace with the actual user ID
+  const userData = data?.user || {};
+  const categories = userData.categories || [];
 
   return (
     <div className="d-flex flex-column mt-4">
@@ -76,7 +63,11 @@ const TransactionComponent = ({ type }) => {
         <FormLabel>Category:</FormLabel>
         <FormSelect value={selectedCategory} onChange={handleCategoryChange}>
           <option value="">Select a Category</option>
-          {/* Map over your income/expense categories and generate options */}
+          {categories.map((category) => (
+            <option key={category._id} value={category._id}>
+              {category.name}
+            </option>
+          ))}
         </FormSelect>
       </FormGroup>
 
