@@ -11,7 +11,7 @@ import { setContext } from "@apollo/client/link/context";
 import LoginForm from "./pages/LoginForm";
 import SignupForm from "./pages/SignupForm";
 import Profile from "./pages/Profile";
-// import Home from "./pages/Home";
+// import Home from "./pages/Homepage";
 import AppNavbar from "./components/Navbar";
 import DonationForm from "./pages/DonationForm";
 import Success from "./pages/Success";
@@ -61,7 +61,7 @@ function App() {
             <Route path="/donate" element={<DonationForm />} />
             <Route path="/success" element={<Success />} />
           </Routes>
-          { <Footer /> }
+           <Footer /> 
         </div>
       </Router>
     </ApolloProvider>
