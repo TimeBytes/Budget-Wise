@@ -1,6 +1,6 @@
 const {Schema, model} = require('mongoose');
 const bcrypt = require('bcrypt');
-const financeSchema = require('./Finance');
+const transactionSchema = require('./Transaction');
 const budgetSchema = require('./Budget');
 const categorySchema = require('./Category');
 
@@ -33,7 +33,7 @@ const userSchema = new Schema({
         trim: true
     },
 
-    finance: [financeSchema],
+    transaction: [transactionSchema],
     budget: [budgetSchema],
     categories: [categorySchema],
 },

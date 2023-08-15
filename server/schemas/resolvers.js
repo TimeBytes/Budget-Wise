@@ -8,6 +8,16 @@ const stripe = require("stripe")("sk_test_51NdeCcJJYT86npXC8Avw8l7TZLOZAcw07zfHS
 
 const { signToken } = require("../utils/auth");
 
+const defaultCategories = [
+    {
+        name: "",
+        isExpnese: false,
+        isIncome: false,
+        isBudget: false,
+
+    },
+    
+];
 
 const resolvers = {
     Query: {
@@ -83,6 +93,7 @@ const resolvers = {
 
     Mutation: {
         addUser: async (parents, args) => {
+            args.categories = defaultCategories;
             const user = await User.create(args);
             const token = signToken(user);
             return { token, user };
