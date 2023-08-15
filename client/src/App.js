@@ -11,7 +11,7 @@ import { setContext } from "@apollo/client/link/context";
 import LoginForm from "./pages/LoginForm";
 import SignupForm from "./pages/SignupForm";
 import Profile from "./pages/Profile";
-// import Home from "./pages/Homepage";
+ import Home from "./pages/Homepage";
 import AppNavbar from "./components/Navbar";
 import DonationForm from "./pages/DonationForm";
 import Success from "./pages/Success";
@@ -50,7 +50,7 @@ function App() {
         <div>
           <AppNavbar />
           <Routes>
-            {/* <Route path="/" element={<Home />} /> */}
+            { <Route path="/" element={<Home />} /> }
             <Route path="/login" element={<LoginForm />} />
             <Route path="/signup" element={<SignupForm />} />
             <Route path="/profile" element={<Profile />} />
