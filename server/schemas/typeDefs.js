@@ -7,9 +7,9 @@ const typeDefs = gql`
         email: String
         firstName: String
         lastName: String
-        income: [Income]
-        expense: [Expense]
-        budget: [Budget]
+        incomes: [Income]
+        expenses: [Expense]
+        budgets: [Budget]
         categories: [Category]
         donations: [Donation]
     }
@@ -68,9 +68,9 @@ const typeDefs = gql`
         users: [User]
         user(_id: ID!): User
         allIncomes: [Income!]!
-        incomeByCategory: [Income!]!
-        allExpenses: [Expense!]!
-        expenseByCategory: [Expense!]!
+        incomeByCategory(categoryID: ID!): [Income!]!
+        allExpenses: [Expense]
+        expenseByCategory(categoryID: ID!): [Expense!]!
         allBudgets: [Budget!]!
         budgetByCategory: [Budget!]!
         allCategories: [Category!]!
@@ -84,28 +84,50 @@ const typeDefs = gql`
         login(email: String!, password: String!): Auth
         
         addIncome(name: String!, amount: Float!, category: ID!, date: String!, isRecurring: Boolean!): User
-        editIncome(incomeID: ID!, name: String!, amount: Float!, category: ID!, date: String!, isRecurring: Boolean!): User
+        editIncome(incomeID: ID!, incomeData: incomeInput!): User
         removeIncome(incomeID: ID!): User
 
         addExpense(name: String!, amount: Float!, category: ID!, date: String!, isRecurring: Boolean!): User
-        editExpense(expenseID: ID!, name: String!, amount: Float!, category: ID!, date: String!, isRecurring: Boolean!): User
+        editExpense(expenseID: ID!, expenseData: expenseInput!): User
         removeExpense(expenseID: ID!): User
 
         addcategory(name: String!, isIncome: Boolean!, isExpense: Boolean!, isBudget: Boolean!): User
         editCategory(id: ID!, categoryData: categoryInput!): User        
         removeCategory(category: ID!): User
         
-        addBudget(name: String!, amount: Float!, category: String!): Budget
-        editBudget(budgetID: ID!, name: String!, amount: Float!, category: String!): User
+        addBudget(amount: Float!, category: ID!): Budget
+        editBudget(id: ID! budgetData: budgetInput): User
         removeBudget(budgetID: ID!): User
         
         addDonation(amount: Float): Donation
     }
+
+    input incomeInput {
+        description: String!
+        amount: Float!
+        category: ID!
+        date: String!
+        isRecurring: Boolean!
+    }
+
+    input expenseInput {
+        description: String!
+        amount: Float!
+        category: ID!
+        date: String!
+        isRecurring: Boolean!
+    }
+
     input categoryInput {
         name: String!
         isIncome: Boolean
         isExpense: Boolean
         isBudget: Boolean
+    }
+
+    input budgetInput {
+        amount: Float!
+        category: ID!
     }
 `;
 
