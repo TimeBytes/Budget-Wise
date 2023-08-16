@@ -8,60 +8,6 @@ export const QUERY_CHECKOUT = gql`
   }
 `;
 
-// export const QUERY_USER = gql`
-//   query user {
-//     user {
-//       _id
-//       firstName
-//       lastName
-//       email
-//       username
-//       income {
-//         _id
-//         description
-//         category {
-//           _id
-//           name
-//         }
-//         amount
-//         date
-//         isRecurring
-//       }
-//       expense {
-//         _id
-//         description
-//         category {
-//           _id
-//           name
-//         }
-//         amount
-//         date
-//         isRecurring
-//       }
-//       budget {
-//         _id
-//         category {
-//           _id
-//           name
-//         }
-//         amount
-//       }
-//       categories {
-//         _id
-//         name
-//         isIncome
-//         isExpense
-//         isBudget
-//       }
-//       donations {
-//         _id
-//         amount
-//         date
-//       }
-//     }
-//   }
-// `;
-
 export const QUERY_USER = gql`
   query user {
     user {
@@ -233,14 +179,27 @@ export const QUERY_USER = gql`
 //   }
 // `;
 
-// export const QUERY_ALL_CATEGORIES = gql`
-//   query allCategories {
-//     categories {
-//       _id
-//       name
-//       isBudget
-//       isExpense
-//       isIncome
-//     }
-//   }
-// `;
+export const QUERY_ALL_CATEGORIES = gql`
+  query allCategories {
+    allCategories {
+      _id
+      name
+      isIncome
+      isExpense
+      isBudget
+    }
+  }
+`;
+
+export const QUERY_CATEGORY_BY_TYPE = gql`
+  query categoryByType($type: String!) {
+    categoryByType(type: $type) {
+      _id
+      name
+      isIncome
+      isExpense
+      isBudget
+    }
+  }
+`;
+

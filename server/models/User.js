@@ -33,9 +33,9 @@ const userSchema = new Schema({
         trim: true
     },
 
-    income: [incomeSchema],
-    expense: [expenseSchema],
-    budget: [budgetSchema],
+    incomes: [incomeSchema],
+    expenses: [expenseSchema],
+    budgets: [budgetSchema],
     categories: [categorySchema],
 },
 {
