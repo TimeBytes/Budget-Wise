@@ -9,7 +9,6 @@ const stripe = require("stripe")(
 );
 
 const { signToken } = require("../utils/auth");
-const { countDocuments } = require("../models/User");
 
 const defaultCategories = [
   {
@@ -34,70 +33,117 @@ const resolvers = {
       }
     },
 
-    allIncomes: async () => {
-      try {
-        return await Income.find({});
-      } catch (error) {
-        throw new Error(error);
-      }
-    },
-    incomeByCategory: async () => {
-      try {
-        return await Category.find({ isIncome: true });
-      } catch (error) {
-        throw new Error(error);
-      }
-    },
+        allIncomes: async (parent, args, context) => {
+            try {
+                const { user } = context;
+                const userData = await User.findById(user._id);
+                return userData.incomes;
+            } catch (error) {
+                throw new Error(error);
+            }
+        },
+        incomeByCategory: async (parent, args, context) => {
+            try {
+                const { user } = context;
+                const userData = await User.findById(user._id);
+                const allIncomes = userData.incomes;
+                const incomesByCategory = allIncomes.filter(income => income.category == args.categoryID);
+                return incomesByCategory;
+            } catch (error) {
+              throw new Error(error);
+            }
+        },
 
-    allExpenses: async () => {
-      try {
-        return await Expense.find({});
-      } catch (error) {
-        throw new Error(error);
-      }
-    },
-    expenseByCategory: async () => {
-      try {
-        return await Category.find({ isExpense: true });
-      } catch (error) {
-        throw new Error(error);
-      }
-    },
+        allExpenses: async (parent, args, context) => {
+            try {
+                const { user } = context;
+                const userData = await User.findById(user._id);
+                return userData.expenses;
+            } catch (error) {
+                throw new Error(error);
+            }
+        },
+        expenseByCategory: async (parent, args, context) => {
+            try {
+                const { user } = context;
+                const userData = await User.findById(user._id);
+                const allExpenses = userData.expenses;
+                const expenseByCategory = allExpenses.filter(expense => expense.category == args.categoryID);
+                return expenseByCategory;
+            } catch (error) {
+              throw new Error(error);
+            }
+        },
 
-    allBudgets: async () => {
-      try {
-        return await Budget.find({});
-      } catch (error) {
-        throw new Error(error);
-      }
-    },
-    budgetByCategory: async () => {
-      try {
-        return await Category.find({ isBudget: true });
-      } catch (error) {
-        throw new Error(error);
-      }
-    },
+        allBudgets: async (parent, args, context) => {
+            try {
+                const { user } = context;
+                const userData = await User.findById(user._id);
+                return userData.budgets;
+            } catch (error) {
+                throw new Error(error);
+            }
+        },
+        budgetByCategory: async (parent, args, context) => {
+            try {
+                const { user } = context;
+                const userData = await User.findById(user._id);
+                const allBudgets = userData.budgets;
+                const budgetsByCategory = allBudgets.filter(budget => budget.category == args.categoryID);
+                return budgetsByCategory;
+            } catch (error) {
+              throw new Error(error);
+            }
+        },
 
-    allCategories: async () => {
-      if (context.user) {
-        const userData = await User.findOne({ _id: context.user._id }).select(
-          "-__v -password"
-        );
-        return userData;
-      }
-    },
+        allCategories: async (parent, args, context) => {
+            try {
+                const { user } = context;
+                const userData = await User.findById(user._id);
+                return userData.categories;
+            } catch (error) {
+                throw new Error(error);
+            }
+        },
+        categoryByType: async (parent, args, context) => {
+            try {
+                const { user } = context;
+                const userData = await User.findById(user._id);
+                const allCategories = userData.categories;
+                switch (args.type) {
+                    case "income":
+                        const incomeCategories = allCategories.filter(category => category.isIncome == true);
+                        return incomeCategories;
+                        break;
+                    case "expense":
+                        const expenseCategories = allCategories.filter(category => category.isExpense == true);
+                        return expenseCategories;
+                        break;
+                    case "budget":
+                        const budgetCatergories = allCategories.filter(category => category.isBudget == true);
+                        return budgetCatergories;
+                        break;
+                    default:
+                        throw new Error("Category type not found");
+                }
 
-    donations: async () => {
-      return Donation.find({});
-    },
-    singleDonation: async (parent, { _id }, context) => {
-      if (_id) {
-        return Donation.findById(_id);
-      } else {
-        throw new AuthenticationError("Donation not found");
-      }
-    },
+                return;
+                
+            } catch (error) {
+                throw new Error(error);
+            }
+        },
+        donations: async () => {
+            return Donation.find({});
+        },
+        singleDonation: async (parent, { _id }, context) => {
+            if (_id) {
+                return Donation.findById(_id);
+            } else {
+                throw new AuthenticationError("Donation not found");
+            }
+          },
+            
     checkout: async (parent, args, context) => {
       const amount = args.amount;
       const url = new URL(context.headers.referer).origin;
@@ -125,240 +171,263 @@ const resolvers = {
         // line_items is the donation not items in cart
         line_items,
 
-        // {
-        // price_data: {
-        //   currency: "cad",
-        //   product_data: {
-        //     description: "Complete your donation via Stripe Checkout",
-        //   },
-        //   unit_amount: (amount * 100),
-        // },
-
-        // quantity: 1,
-        // },
-
         mode: "payment",
       });
       return { session: session.id };
     },
   },
 
-  Mutation: {
-    addUser: async (parents, args) => {
-      args.categories = defaultCategories;
-      const user = await User.create(args);
-      const token = signToken(user);
-      return { token, user };
-    },
-    login: async (parents, { email, password }) => {
-      const user = await User.findOne({ email });
-      if (!user) {
-        throw new AuthenticationError("Not Registered");
-      }
-      const correctPw = await user.isCorrectPassword(password);
-      if (!correctPw) {
-        throw new AuthenticationError("Incorrect Password");
-      }
-      const token = signToken(user);
-      return { token, user };
-    },
+    Mutation: {
+        addUser: async (parents, args) => {
+            args.categories = defaultCategories;
+            const user = await User.create(args);
+            const token = signToken(user);
+            return { token, user };
+        },
+        login: async (parents, { email, password }) => {
+            const user = await User.findOne({ email });
+            if (!user) {
+                throw new AuthenticationError("Not Registered");
+            }
+            const correctPw = await user.isCorrectPassword(password);
+            if (!correctPw) {
+                throw new AuthenticationError("Incorrect Password");
+            }
+            const token = signToken(user);
+            return { token, user };
+        },
 
-    addIncome: async (
-      parent,
-      { name, amount, category, date, isRecurring },
-      context
-    ) => {
-      if (!context.user)
-        throw new AuthenticationError("You need to be logged in!");
+        addIncome: async (parent, { name, amount, category, date, isRecurring }, context) => {
+            if (context.user){
+                try {
+                    const checkDuplicate = await User.findOne({ _id: context.user._id, "income.description": name });
+                    if (checkDuplicate) {
+                        throw new Error('Income already exists.');
+                    }
+                    const updatedUser = await User.findByIdAndUpdate(
+                        {_id: context.user._id},
+                        { $push: { incomes: { description: name, amount, category, date, isRecurring } } },
+                        { new: true }
+                    );
+                    return updatedUser;
+                } catch (error) {
+                    throw new Error(error);
+                }
+            }
+        },
+        editIncome: async (parent, { incomeID, incomeData }, context) => {
+            if (context.user){
+                try {
+                    const userData = await User.findOne({ _id: context.user._id, "incomes._id": incomeID });
+                    const existingIncome = userData.incomes.find(income => income._id == incomeID);
+                    const newIncome = {
+                        description: incomeData.description || existingIncome.description,
+                        amount: incomeData.amount || existingIncome.amount,
+                        category: incomeData.category || existingIncome.category,
+                        date: incomeData.date || existingIncome.date,
+                        isRecurring: incomeData.isRecurring || existingIncome.isRecurring
+                    };
+                    const updatedUser = await User.findOneAndUpdate(
+                        { _id: context.user._id, "incomes._id": incomeID },
+                        { $set: { "incomes.$": newIncome} },
+                        { new: true }
+                    );
+                    return updatedUser;
+                } catch (error) {
+                throw new Error(error);
+                }
+            } else {
+                throw new Error('You need to be logged in!');
+            }
+        },
+        removeIncome: async (parent, { incomeID }, context) => {
+            if (context.user)
+                {
+                    try{
+                        const updatedUser = await User.findOneAndUpdate(
+                            { _id: context.user._id },
+                            { $pull: { incomes: { _id: incomeID } } },
+                            { new: true }
+                        );
+                        return updatedUser;
+                    } catch (error) {
+                        throw new Error(error);
+                    }
+                }
+        },
 
-      const newIncome = {
-        description: name,
-        category,
-        amount,
-        date,
-        isRecurring,
-      };
+        addExpense: async (parent, { name, amount, category, date, isRecurring }, context) => {
+            if(context.user){
+                try {
+                    const checkDuplicate = await User.findOne({ _id: context.user._id, "expenses.description": name });
+                    if (checkDuplicate) {
+                        throw new Error('Expense already exists.');
+                    }
+                    const updateUser = await User.findByIdAndUpdate(
+                        { _id: context.user._id },
+                        { $push: { expenses: { description: name, amount, category, date, isRecurring } } },
+                        { new: true }
+                    );
+                    return updateUser;
+                } catch (error) {
+                    throw new Error(error);
+                }
+            } else {
+                throw new Error('You need to be logged in!');
+            }
+        },
+        editExpense: async (parent, { expenseID, expenseData}, context) => {
+            if (context.user){
+                try {
+                    const userData = await User.findOne({ _id: context.user._id, "expenses._id": expenseID });
+                    const existingExpense = userData.expenses.find(expense => expense._id == expenseID);
+                    const newExpense = {
+                        description: expenseData.description || existingExpense.description,
+                        amount: expenseData.amount || existingExpense.amount,
+                        category: expenseData.category || existingExpense.category,
+                        date: expenseData.date || existingExpense.date,
+                        isRecurring: expenseData.isRecurring || existingExpense.isRecurring
+                    };
+                    const updatedUser = await User.findOneAndUpdate(
+                        { _id: context.user._id, "expenses._id": expenseID },
+                        {$set: {"expenses.$": newExpense }},
+                        { new: true }
+                    );
+                    return updatedUser;
+                } catch (error) {
+                    throw new Error(error);
+                }
+            }
+        },
+        removeExpense: async (parent, { expenseID }, context) => {
+            if (context.user){
+                try{
+                    const updatedUser = await User.findOneAndUpdate(
+                        { _id: context.user._id },
+                        { $pull: { expenses: { _id: expenseID } } },
+                        { new: true }
+                    );
+                    return updatedUser;
+                } catch (error) {
+                    throw new Error(error);
+                }
+            }
+        },
 
-      const updatedUser = await User.findByIdAndUpdate(
-        context.user._id,
-        { $push: { income: newIncome } },
-        { new: true }
-      );
-      return updatedUser;
-    },
-    editIncome: async (
-      parent,
-      { incomeID, name, amount, category, date, isRecurring },
-      context
-    ) => {
-      if (!context.user)
-        throw new AuthenticationError("You need to be logged in!");
+        addcategory: async (parents, category, context) => {
+            if (context.user) {
+                try {
+                    const checkDuplicate = await User.findOne({
+                        _id: context.user._id,
+                        'categories.name': category.name,
+                    });
+                    if (checkDuplicate) {
+                        throw new Error("Category already added");
+                    }
+                    const updateUser = await User.findByIdAndUpdate(
+                        { _id: context.user._id },
+                        { $addToSet: { categories: category } },
+                        { new: true }
+                    );
+                    return updateUser;
+                } catch(err) {
+                    throw new Error("try again");
+                }
+            }
+            throw new AuthenticationError("You need to be logged in!");
+        },
+        editCategory: async (parent, { id, categoryData }, context) => {
+            if (context.user) {
+                try {
+                    const userData = await User.findOne({ _id: context.user._id, "categories._id": id });
+                    const existingCategory = userData.categories.find(category => category._id == id);
+                    const newCategory = {
+                        name: categoryData.name || existingCategory.name,
+                        isBudget: categoryData.isBudget || existingCategory.isBudget,
+                        isIncome: categoryData.isIncome || existingCategory.isIncome,
+                        isExpense: categoryData.isExpense || existingCategory.isExpense
+                    };
+                    const updatedUser = await User.findOneAndUpdate(
+                        { _id: context.user._id, "categories._id": id },
+                        { $set: { "categories.$": newCategory } },
+                        { new: true }
+                    );
+                    return updatedUser;
+                } catch(err) {
+                    throw new Error("Error updating category");
+                }
+            }
+            throw new AuthenticationError("You need to be logged in!");
+        },        
+        removeCategory: async (parent, { category }, context) => {
+            if (context.user) {
+                try {
+                    const updatedUser = await User.findOneAndUpdate(
+                        { _id: context.user._id },
+                        { $pull: { categories: { _id: category._id } } },
+                        { new: true }
+                    );
+                    return updatedUser;
+                } catch(err) {
+                    throw new Error("Error removing category");
+                }
+            }
+        },
 
-      const updatedIncome = {
-        description: name,
-        category,
-        amount,
-        date,
-        isRecurring,
-      };
-      const updatedUser = await User.findOneAndUpdate(
-        { _id: context.user._id, "income._id": incomeID },
-        { $set: { "income.$": updatedIncome } },
-        { new: true }
-      );
+        addBudget: async (parent, { category, amount }, context) => {
+            if (context.user) {
+                try {
+                    const checkDuplicate = await User.findOne({
+                        _id: context.user._id,
+                        'budgets.category': category,
+                    });
+                    if (checkDuplicate) {
+                        throw new Error("Budget already added");
+                    }
+                    const updateUser = await User.findByIdAndUpdate(
+                        { _id: context.user._id },
+                        { $addToSet: { budgets: { category, amount } } },
+                        { new: true }
+                    );
+                    return updateUser;
+                } catch(err) {
+                    throw new Error("try again");
+                }
+            }
+        },
+        editBudget: async (parent, { budgetID, budgetData }, context) => {
+            if(context.user){
+                try {
+                    const userData = await User.findOne({ _id: context.user._id, "budgets._id": budgetID });
+                    const existingBudget = userData.budgets.find(budget => budget._id == budgetID);
+                    const newBudgetData = {
+                        category: budgetData.category || existingBudget.category,
+                        amount: budgetData.amount || existingBudget.amount
+                    };
+                    const updatedUser = await User.findOneAndUpdate(
+                        { _id: context.user._id, "budgets._id": budgetID },
+                        { $set: { "budgets.$": newBudgetData} },
+                        { new: true }
+                    );
+                    return updatedUser;
+                } catch (error) {
+                    throw new Error(error);
+                }
+            } else {
+                throw new Error('You need to be logged in!');
+            }
+        },
+        removeBudget: async (parent, { budgetID }, context) => {
+            if (context.user){
+                const updatedUser = await User.findOneAndUpdate(
+                    { _id: context.user._id },
+                    { $pull: { budgets: { _id: budgetID } } },
+                    { new: true }
+                );
+                return updatedUser;
+            }
+        },
 
-      if (!updatedUser) throw new Error("Unable to update income.");
-
-      return updatedUser;
-    },
-    removeIncome: async (parent, { incomeID }, context) => {
-      if (!context.user)
-        throw new AuthenticationError("You need to be logged in!");
-
-      const updatedUser = await User.findByIdAndUpdate(
-        context.user._id,
-        { $pull: { income: { _id: incomeID } } },
-        { new: true }
-      );
-      return updatedUser;
-    },
-
-    addExpense: async (
-      parent,
-      { name, amount, category, date, isRecurring },
-      context
-    ) => {
-      if (!context.user)
-        throw new AuthenticationError("You need to be logged in!");
-
-      const newExpense = {
-        description: name,
-        category,
-        amount,
-        date,
-        isRecurring,
-      };
-
-      const updatedUser = await User.findByIdAndUpdate(
-        context.user._id,
-        { $push: { expense: newExpense } },
-        { new: true }
-      );
-      return updatedUser;
-    },
-    editExpense: async (
-      parent,
-      { expenseID, name, amount, category, date, isRecurring },
-      context
-    ) => {
-      if (!context.user)
-        throw new AuthenticationError("You need to be logged in!");
-
-      const updatedExpense = {
-        description: name,
-        category,
-        amount,
-        date,
-        isRecurring,
-      };
-      const updatedUser = await User.findOneAndUpdate(
-        { _id: context.user._id, "expense._id": expenseID },
-        { $set: { "expense.$": updatedExpense } },
-        { new: true }
-      );
-
-      if (!updatedUser) throw new Error("Unable to update expense.");
-
-      return updatedUser;
-    },
-    removeExpense: async (parent, { expenseID }, context) => {
-      if (!context.user)
-        throw new AuthenticationError("You need to be logged in!");
-
-      const updatedUser = await User.findByIdAndUpdate(
-        context.user._id,
-        { $pull: { expense: { _id: expenseID } } },
-        { new: true }
-      );
-      return updatedUser;
-    },
-
-    addcategory: async (parents, category, context) => {
-      if (context.user) {
-        try {
-          const checkDuplicate = await User.findOne({
-            _id: context.user._id,
-            "categories.name": category.name,
-          });
-          if (checkDuplicate) {
-            throw new Error("Category already added");
-          }
-          const updateUser = await User.findByIdAndUpdate(
-            { _id: context.user._id },
-            { $addToSet: { categories: category } },
-            { new: true }
-          );
-          return updateUser;
-        } catch (err) {
-          throw new Error("try again");
-        }
-      }
-      throw new AuthenticationError("You need to be logged in!");
-    },
-    editCategory: async (parent, { id, categoryData }, context) => {
-      if (context.user) {
-        try {
-          // Check if the category with the new name already exists
-          const checkDuplicate = await User.findOne({
-            _id: context.user._id,
-            "categories.name": categoryData.name,
-            "categories._id": { $ne: id },
-          });
-          if (checkDuplicate) {
-            throw new Error("Category with this name already exists");
-          }
-
-          // Update the category
-          const updatedUser = await User.findOneAndUpdate(
-            { _id: context.user._id, "categories._id": id },
-            { $set: { "categories.$": categoryData } },
-            { new: true }
-          );
-          return updatedUser;
-        } catch (err) {
-          console.error(err);
-          throw new Error("Error updating category");
-        }
-      }
-      throw new AuthenticationError("You need to be logged in!");
-    },
-    removeCategory: async (parent, { category }, context) => {
-      if (!context.user)
-        throw new AuthenticationError("You need to be logged in!");
-
-      // First, it might be a good idea to ensure that no incomes or expenses reference this category
-      const userWithReferences = await User.findOne({
-        _id: context.user._id,
-        $or: [
-          { "income.category": category },
-          { "expense.category": category },
-        ],
-      });
-
-      if (userWithReferences) {
-        throw new Error(
-          "Can't delete a category that's still being referenced by incomes or expenses."
-        );
-      }
-
-      // If no references, proceed to remove
-      const updatedUser = await User.findByIdAndUpdate(
-        context.user._id,
-        { $pull: { categories: { _id: category } } },
-        { new: true }
-      );
-      return updatedUser;
-    },
 
     addBudget: async (parent, { category, amount }, context) => {
       if (!context.user)
