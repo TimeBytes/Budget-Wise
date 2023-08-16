@@ -10,12 +10,12 @@ import {
 import { setContext } from "@apollo/client/link/context";
 import LoginForm from "./pages/LoginForm";
 import SignupForm from "./pages/SignupForm";
-import Profile from "./pages/Profile";
-// import Home from "./pages/Homepage";
+import Dashboard from "./pages/Dashboard";
+import Home from "./pages/Homepage";
 import AppNavbar from "./components/Navbar";
 import DonationForm from "./pages/DonationForm";
 import Success from "./pages/Success";
-
+import Category from "./components/Category";
 import Footer from "./components/Footer";
 import "bootstrap/dist/css/bootstrap.min.css";
 // import { Donation } from "./utils/mutations";
@@ -50,18 +50,19 @@ function App() {
         <div>
           <AppNavbar />
           <Routes>
-            {/* <Route path="/" element={<Home />} /> */}
+            <Route path="/" element={<Home />} />
             <Route path="/login" element={<LoginForm />} />
             <Route path="/signup" element={<SignupForm />} />
-            <Route path="/profile" element={<Profile />} />
+            <Route path="/dashboard" element={<Dashboard />} />
             <Route
               path="*"
               element={<h1 className="display-2">Wrong page!</h1>}
             />
+            {/* <Route path="/categories" element={<Category />} /> */}
             <Route path="/donate" element={<DonationForm />} />
             <Route path="/success" element={<Success />} />
           </Routes>
-           <Footer /> 
+          <Footer />
         </div>
       </Router>
     </ApolloProvider>
