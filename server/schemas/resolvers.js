@@ -31,42 +31,32 @@ const resolvers = {
             throw new AuthenticationError("User not found");
         },
 
-        allIncomes: async () => {
+        allIncomes: async (parent, args, context) => {
             try {
-                return await Income.find({});
+                const { user } = context;
+                const userData = await User.findById(user._id);
+                return userData.incomes;
             } catch (error) {
                 throw new Error(error);
             }
         },
         incomeByCategory: async (parent, args, context) => {
             try {
-                //get user id from context
                 const { user } = context;
-                //get category id from args
-                const { categoryID } = args;
-                const userData = User.findById(user._id);
-                //get all incomes for that user
-                const incomes = await Income.find({ user: user._id });
-                //filter by category
-                const filteredIncomes = incomes.filter(
-                    (income) => income.category
-                );
-                //return filtered incomes
-                return filteredIncomes;
-
-                return await Category.find({ isIncome: true });
+                const userData = await User.findById(user._id);
+                const allIncomes = userData.incomes;
+                const incomesByCategory = allIncomes.filter(income => income.category == args.categoryID);
+                return incomesByCategory;
             } catch (error) {
-                throw new Error(error);
+              throw new Error(error);
             }
         },
 
         allExpenses: async (parent, args, context) => {
             try {
                 const { user } = context;
-                // console.log({user});
                 const userData = await User.findById(user._id);
-                console.log({userData});
-                return await userData.expenses;
+                return userData.expenses;
             } catch (error) {
                 throw new Error(error);
             }
@@ -74,41 +64,73 @@ const resolvers = {
         expenseByCategory: async (parent, args, context) => {
             try {
                 const { user } = context;
-                const { categoryID } = args;
                 const userData = await User.findById(user._id);
-                console.log({userData});
-                const filteredExpenses = userData.expenses.filter(
-                    (expense) => expenses.category._id === categoryID
-                );
-                return filteredExpenses;
+                const allExpenses = userData.expenses;
+                const expenseByCategory = allExpenses.filter(expense => expense.category == args.categoryID);
+                return expenseByCategory;
             } catch (error) {
               throw new Error(error);
             }
         },
 
-        allBudgets: async () => {
+        allBudgets: async (parent, args, context) => {
             try {
-                return await Budget.find({});
+                const { user } = context;
+                const userData = await User.findById(user._id);
+                return userData.budgets;
             } catch (error) {
                 throw new Error(error);
             }
         },
-        budgetByCategory: async () => {
+        budgetByCategory: async (parent, args, context) => {
             try {
-                return await Category.find({ isBudget: true });
+                const { user } = context;
+                const userData = await User.findById(user._id);
+                const allBudgets = userData.budgets;
+                const budgetsByCategory = allBudgets.filter(budget => budget.category == args.categoryID);
+                return budgetsByCategory;
             } catch (error) {
-                throw new Error(error);
+              throw new Error(error);
             }
         },
 
-        allCategories: async () => {
+        allCategories: async (parent, args, context) => {
             try {
-                return await Category.find({});
+                const { user } = context;
+                const userData = await User.findById(user._id);
+                return userData.categories;
             } catch (error) {
                 throw new Error(error);
             }
         },
-        
+        categoryByType: async (parent, args, context) => {
+            try {
+                const { user } = context;
+                const userData = await User.findById(user._id);
+                const allCategories = userData.categories;
+                switch (args.type) {
+                    case "income":
+                        const incomeCategories = allCategories.filter(category => category.isIncome == true);
+                        return incomeCategories;
+                        break;
+                    case "expense":
+                        const expenseCategories = allCategories.filter(category => category.isExpense == true);
+                        return expenseCategories;
+                        break;
+                    case "budget":
+                        const budgetCatergories = allCategories.filter(category => category.isBudget == true);
+                        return budgetCatergories;
+                        break;
+                    default:
+                        throw new Error("Category type not found");
+                }
+
+                return;
+                
+            } catch (error) {
+                throw new Error(error);
+            }
+        },
         donations: async () => {
             return Donation.find({});
         },
@@ -206,12 +228,21 @@ const resolvers = {
         editIncome: async (parent, { incomeID, incomeData }, context) => {
             if (context.user){
                 try {
+                    const userData = await User.findOne({ _id: context.user._id, "incomes._id": incomeID });
+                    const existingIncome = userData.incomes.find(income => income._id == incomeID);
+                    const newIncome = {
+                        description: incomeData.description || existingIncome.description,
+                        amount: incomeData.amount || existingIncome.amount,
+                        category: incomeData.category || existingIncome.category,
+                        date: incomeData.date || existingIncome.date,
+                        isRecurring: incomeData.isRecurring || existingIncome.isRecurring
+                    };
                     const updatedUser = await User.findOneAndUpdate(
                         { _id: context.user._id, "incomes._id": incomeID },
-                        { $set: { "incomes.$": incomeData} },
+                        { $set: { "incomes.$": newIncome} },
                         { new: true }
                     );
-                    console.log({updatedUser});
+                    return updatedUser;
                 } catch (error) {
                 throw new Error(error);
                 }
@@ -258,9 +289,18 @@ const resolvers = {
         editExpense: async (parent, { expenseID, expenseData}, context) => {
             if (context.user){
                 try {
+                    const userData = await User.findOne({ _id: context.user._id, "expenses._id": expenseID });
+                    const existingExpense = userData.expenses.find(expense => expense._id == expenseID);
+                    const newExpense = {
+                        description: expenseData.description || existingExpense.description,
+                        amount: expenseData.amount || existingExpense.amount,
+                        category: expenseData.category || existingExpense.category,
+                        date: expenseData.date || existingExpense.date,
+                        isRecurring: expenseData.isRecurring || existingExpense.isRecurring
+                    };
                     const updatedUser = await User.findOneAndUpdate(
                         { _id: context.user._id, "expenses._id": expenseID },
-                        {$set: {"expenses.$": expenseData }},
+                        {$set: {"expenses.$": newExpense }},
                         { new: true }
                     );
                     return updatedUser;
@@ -309,10 +349,17 @@ const resolvers = {
         editCategory: async (parent, { id, categoryData }, context) => {
             if (context.user) {
                 try {
-                    // Update the category
+                    const userData = await User.findOne({ _id: context.user._id, "categories._id": id });
+                    const existingCategory = userData.categories.find(category => category._id == id);
+                    const newCategory = {
+                        name: categoryData.name || existingCategory.name,
+                        isBudget: categoryData.isBudget || existingCategory.isBudget,
+                        isIncome: categoryData.isIncome || existingCategory.isIncome,
+                        isExpense: categoryData.isExpense || existingCategory.isExpense
+                    };
                     const updatedUser = await User.findOneAndUpdate(
                         { _id: context.user._id, "categories._id": id },
-                        { $set: { "categories.$": categoryData } },
+                        { $set: { "categories.$": newCategory } },
                         { new: true }
                     );
                     return updatedUser;
@@ -361,9 +408,15 @@ const resolvers = {
         editBudget: async (parent, { budgetID, budgetData }, context) => {
             if(context.user){
                 try {
+                    const userData = await User.findOne({ _id: context.user._id, "budgets._id": budgetID });
+                    const existingBudget = userData.budgets.find(budget => budget._id == budgetID);
+                    const newBudgetData = {
+                        category: budgetData.category || existingBudget.category,
+                        amount: budgetData.amount || existingBudget.amount
+                    };
                     const updatedUser = await User.findOneAndUpdate(
                         { _id: context.user._id, "budgets._id": budgetID },
-                        { $set: { "budgets.$": budgetData} },
+                        { $set: { "budgets.$": newBudgetData} },
                         { new: true }
                     );
                     return updatedUser;

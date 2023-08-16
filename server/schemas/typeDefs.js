@@ -67,13 +67,19 @@ const typeDefs = gql`
     type Query {
         users: [User]
         user(_id: ID!): User
+        
         allIncomes: [Income!]!
         incomeByCategory(categoryID: ID!): [Income!]!
+        
         allExpenses: [Expense]
-        expenseByCategory(categoryID: ID!): [Expense!]!
+        expenseByCategory(categoryID: ID!): [Expense]
+        
         allBudgets: [Budget!]!
-        budgetByCategory: [Budget!]!
+        budgetByCategory(categoryID: ID!): [Budget!]!
+        
         allCategories: [Category!]!
+        categoryByType(type: String!): [Category!]
+        
         donations:[Donation]
         checkout(amount: Float): Checkout
         singleDonation(_id: ID!): Donation
@@ -103,11 +109,11 @@ const typeDefs = gql`
     }
 
     input incomeInput {
-        description: String!
-        amount: Float!
-        category: ID!
-        date: String!
-        isRecurring: Boolean!
+        description: String
+        amount: Float
+        category: ID
+        date: String
+        isRecurring: Boolean
     }
 
     input expenseInput {

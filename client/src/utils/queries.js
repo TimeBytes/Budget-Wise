@@ -181,3 +181,15 @@ export const QUERY_ALL_CATEGORIES = gql`
     }
   }
 `;
+
+export const QUERY_CATEGORY_BY_TYPE = gql`
+  query categoryByType($type: String!) {
+    categoryByType(type: $type) {
+      _id
+      name
+      isIncome
+      isExpense
+      isBudget
+    }
+  }
+`;
