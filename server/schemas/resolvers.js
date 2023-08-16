@@ -1,35 +1,37 @@
-const { User, Donation } = require("../models");
+const { User, Donation, Category } = require("../models");
 const { AuthenticationError } = require("apollo-server-express");
 
 require("dotenv").config();
 
 // const stripeSecretKey = process.env.STRIPE_SK;
-const stripe = require("stripe")("sk_test_51NdeCcJJYT86npXC8Avw8l7TZLOZAcw07zfHSpQlECD9FMsyrv7d7u2b4kIHKzXpM0jz95vv8NBw1cXXKO41AHhZ009UuOCiP7");
+const stripe = require("stripe")(
+  "sk_test_51NdeCcJJYT86npXC8Avw8l7TZLOZAcw07zfHSpQlECD9FMsyrv7d7u2b4kIHKzXpM0jz95vv8NBw1cXXKO41AHhZ009UuOCiP7"
+);
 
 const { signToken } = require("../utils/auth");
-const { find } = require("../models/User");
 
 const defaultCategories = [
-    {
-        name: "Transportation",
-    },
-    
+  {
+    name: "Transportation",
+    isIncome: false,
+    isExpense: true,
+    isBudget: false,
+  },
 ];
 
 const resolvers = {
-    Query: {
-        users: async () => { 
-            return User.find({});
-        },
-        user: async (parent, { _id }, context) => {
-            if (_id) {
-                return User.findById(_id);
-            }
-            if (context.user) {
-                return User.findById(context.user._id);
-            }
-            throw new AuthenticationError("User not found");
-        },
+  Query: {
+    users: async () => {
+      return User.find({});
+    },
+    user: async (parent, args, context) => {
+      if (context.user) {
+        const userData = await User.findOne({ _id: context.user._id }).select(
+          "-__v -password"
+        );
+        return userData;
+      }
+    },
 
         allIncomes: async (parent, args, context) => {
             try {
@@ -141,13 +143,14 @@ const resolvers = {
                 throw new AuthenticationError("Donation not found");
             }
           },
+            
     checkout: async (parent, args, context) => {
       const amount = args.amount;
       const url = new URL(context.headers.referer).origin;
       // const url = "http://localhost:3000";
       // create a new donation
       const line_items = [];
-      
+
       line_items.push({
         price_data: {
           currency: "cad",
@@ -155,7 +158,7 @@ const resolvers = {
             name: "Donation",
             description: "Complete your donation via Stripe Checkout",
           },
-          unit_amount: (amount * 100)
+          unit_amount: amount * 100,
         },
         quantity: 1,
       });
@@ -168,20 +171,7 @@ const resolvers = {
         // line_items is the donation not items in cart
         line_items,
 
-          // {
-            // price_data: {
-            //   currency: "cad",
-            //   product_data: {
-            //     description: "Complete your donation via Stripe Checkout",
-            //   },
-            //   unit_amount: (amount * 100),
-            // },
-          
-            // quantity: 1,
-          // },
-
-        
-        mode: "payment"
+        mode: "payment",
       });
       return { session: session.id };
     },
@@ -438,16 +428,66 @@ const resolvers = {
             }
         },
 
-        addDonation: async (parents, args, context) => {
-            const amount = args.amount;
-            const donation = new Donation({ amount });
-            await donation.save();
-            return donation;
-        },
 
-    }
+    addBudget: async (parent, { category, amount }, context) => {
+      if (!context.user)
+        throw new AuthenticationError("You need to be logged in!");
+
+      const newBudget = {
+        category,
+        amount,
+      };
+
+      const updatedUser = await User.findByIdAndUpdate(
+        context.user._id,
+        { $push: { budgets: newBudget } },
+        { new: true }
+      );
+      return updatedUser;
+    },
+    editBudget: async (
+      parent,
+      { budgetID, name, amount, category },
+      context
+    ) => {
+      if (!context.user)
+        throw new AuthenticationError("You need to be logged in!");
+
+      const updatedBudget = {
+        name,
+        amount,
+        category,
+      };
+
+      const updatedUser = await User.findOneAndUpdate(
+        { _id: context.user._id, "budget._id": budgetID },
+        { $set: { "budget.$": updatedBudget } },
+        { new: true }
+      );
+
+      if (!updatedUser) throw new Error("Unable to update budget.");
+
+      return updatedUser;
+    },
+    removeBudget: async (parent, { budgetID }, context) => {
+      if (!context.user)
+        throw new AuthenticationError("You need to be logged in!");
+
+      const updatedUser = await User.findByIdAndUpdate(
+        context.user._id,
+        { $pull: { budgets: { _id: budgetID } } },
+        { new: true }
+      );
+      return updatedUser;
+    },
+
+    addDonation: async (parents, args, context) => {
+      const amount = args.amount;
+      const donation = new Donation({ amount });
+      await donation.save();
+      return donation;
+    },
+  },
 };
-
-
 
 module.exports = resolvers;

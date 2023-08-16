@@ -3,8 +3,13 @@ import React from 'react';
 
 
 const Footer = () => {
+  const footerStyle = {
+    backgroundColor: "#037390",
+    // Add other styling properties here if needed
+  };
   return (
-    <div className="footer text-center mt-5 py-3 text-dark">
+    
+    <div className="footer text-center mt-5 py-3 text-dark" style={footerStyle}>
             <div className="row">
               <div className="col-md-4">
                 <a href="https://www.facebook.com">
@@ -18,13 +23,13 @@ const Footer = () => {
                 </a>
               </div>
               <div className="col-md-4">
-                <p className="m-0">Contact us: contact@expensetracker.com</p>
+                <p className="m-0">Contact <br></br> budgetwise@email.com</p>
 
               </div>
             </div>
             <div className="mt-1">
               <h2 className="footer-text">
-                &copy; 2023. Created by Andy, Gurveer, Mahdi, Mehdi, Kaijan
+                &copy; 2023. Created by Andy, Gurveer, Mahdi, Mehdi, Kajian
               </h2>
             </div>
           </div>

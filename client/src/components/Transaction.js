@@ -1,4 +1,9 @@
-import React, { useState } from "react";
+import { useQuery } from "@apollo/client";
+import "bootstrap/dist/css/bootstrap.min.css"; // Import Bootstrap CSS
+import React, { useState, useEffect } from "react";
+import { FormCheck, FormGroup, FormLabel, FormSelect } from "react-bootstrap"; // Import Bootstrap components
+import { QUERY_USER } from "../utils/queries";
+import { ADD_INCOME } from "../utils/mutations";
 
 const TransactionComponent = ({ type }) => {
   const [selectedCategory, setSelectedCategory] = useState("");
@@ -41,54 +46,75 @@ const TransactionComponent = ({ type }) => {
     // Implement API call to submit the transaction data to the backend
   };
 
+  const { loading, data } = useQuery(QUERY_USER); // Replace with the actual user ID
+  const userData = data?.user || {};
+  const categories = userData.categories || [];
+
   return (
-    <div className="d-flex flex-column">
-      <h2>Add New {type === "Income" ? "Income" : "Expense"}</h2>
+    <div className="d-flex flex-column mt-4">
+      <h2 className="my-2 display-5 text-center">
+        Add New {type === "Income" ? "Income" : "Expense"}
+      </h2>
       {showWarning && (
         <p style={{ color: "red" }}>Please fill in all required fields.</p>
       )}
-      <label>
-        Category:
-        <select value={selectedCategory} onChange={handleCategoryChange}>
+
+      <FormGroup>
+        <FormLabel>Category:</FormLabel>
+        <FormSelect value={selectedCategory} onChange={handleCategoryChange}>
           <option value="">Select a Category</option>
-          {/* Map over your income/expense categories and generate options */}
-        </select>
-      </label>
-      <label>
-        Amount:
+          {categories.map((category) => (
+            <option key={category._id} value={category._id}>
+              {category.name}
+            </option>
+          ))}
+        </FormSelect>
+      </FormGroup>
+
+      <FormGroup>
+        <FormLabel>Amount:</FormLabel>
         <input
           type="number"
+          className="form-control"
           placeholder="Amount"
           value={amount}
           onChange={handleAmountChange}
         />
-      </label>
-      <label>
-        Description:
+      </FormGroup>
+
+      <FormGroup>
+        <FormLabel>Description:</FormLabel>
         <input
           type="text"
+          className="form-control"
           placeholder="Description"
           value={description}
           onChange={handleDescriptionChange}
         />
-      </label>
-      <label>
-        Date of {type === "Income" ? "Income" : "Expense"}:
+      </FormGroup>
+
+      <FormGroup>
+        <FormLabel>
+          Date of {type === "Income" ? "Income" : "Expense"}:
+        </FormLabel>
         <input
           type="date"
+          className="form-control"
           value={dateOfTransaction}
           onChange={handleDateChange}
         />
-      </label>
-      <label>
-        Recurring:
-        <input
+      </FormGroup>
+
+      <FormGroup className="my-3">
+        <FormCheck
           type="checkbox"
+          label="Recurring"
           checked={recurring}
           onChange={handleRecurringChange}
         />
-      </label>
-      <button onClick={handleTransactionSubmit}>
+      </FormGroup>
+
+      <button className="btn btn-primary" onClick={handleTransactionSubmit}>
         Add {type === "Income" ? "Income" : "Expense"}
       </button>
     </div>
