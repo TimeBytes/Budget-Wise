@@ -12,6 +12,10 @@ const typeDefs = gql`
         budgets: [Budget]
         categories: [Category]
         donations: [Donation]
+        description: String
+        amount: Float
+        date: String
+        isRecurring: Boolean
     }
 
     type Budget {
@@ -66,7 +70,7 @@ const typeDefs = gql`
 
     type Query {
         users: [User]
-        user(_id: ID!): User
+        user: User
         
         allIncomes: [Income!]!
         incomeByCategory(categoryID: ID!): [Income!]!
@@ -93,7 +97,7 @@ const typeDefs = gql`
         editIncome(incomeID: ID!, incomeData: incomeInput!): User
         removeIncome(incomeID: ID!): User
 
-        addExpense(name: String!, amount: Float!, category: ID!, date: String!, isRecurring: Boolean!): User
+        addExpense(name: String!, amount: Float!, category: ID!, date: String!, isRecurring: Boolean): User
         editExpense(expenseID: ID!, expenseData: expenseInput!): User
         removeExpense(expenseID: ID!): User
 
