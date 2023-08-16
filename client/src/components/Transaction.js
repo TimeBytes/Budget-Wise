@@ -1,17 +1,25 @@
-import { useQuery } from "@apollo/client";
-import "bootstrap/dist/css/bootstrap.min.css"; // Import Bootstrap CSS
-import React, { useState, useEffect } from "react";
-import { FormCheck, FormGroup, FormLabel, FormSelect } from "react-bootstrap"; // Import Bootstrap components
-import { QUERY_USER } from "../utils/queries";
-import { ADD_INCOME } from "../utils/mutations";
+
+import { useQuery, useMutation } from "@apollo/client";
+import "bootstrap/dist/css/bootstrap.min.css";
+import React, { useState } from "react";
+import { FormCheck, FormGroup, FormLabel, FormSelect } from "react-bootstrap";
+import { QUERY_CATEGORY_BY_TYPE } from "../utils/queries";
+import { ADD_INCOME, ADD_EXPENSE } from "../utils/mutations";
 
 const TransactionComponent = ({ type }) => {
+  const { loading, error, data } = useQuery(QUERY_CATEGORY_BY_TYPE, {
+    variables: { type },
+  });
+  const categories = data?.categoryByType || [];
+
   const [selectedCategory, setSelectedCategory] = useState("");
   const [amount, setAmount] = useState("");
   const [description, setDescription] = useState("");
   const [dateOfTransaction, setDateOfTransaction] = useState("");
   const [recurring, setRecurring] = useState(false);
-  const [showWarning, setShowWarning] = useState(false); // State for showing warning
+  const [showWarning, setShowWarning] = useState(false);
+  const [addIncome, { error: errorIncome }] = useMutation(ADD_INCOME);
+  const [addExpense, { error: errorExpense }] = useMutation(ADD_EXPENSE);
 
   const handleCategoryChange = (event) => {
     setSelectedCategory(event.target.value);
@@ -35,25 +43,32 @@ const TransactionComponent = ({ type }) => {
 
   const handleTransactionSubmit = () => {
     if (!selectedCategory || !amount || !dateOfTransaction) {
-      // Show warning if any required fields are empty
       setShowWarning(true);
       return;
     }
 
-    // Clear warning if all required fields are filled
     setShowWarning(false);
 
-    // Implement API call to submit the transaction data to the backend
-  };
+    const transactionVariables = {
+      category: selectedCategory,
+      amount: parseFloat(amount),
+      name: description,
+      date: dateOfTransaction,
+      isRecurring: recurring || false,
+    };
+    console.log(transactionVariables);
 
-  const { loading, data } = useQuery(QUERY_USER); // Replace with the actual user ID
-  const userData = data?.user || {};
-  const categories = userData.categories || [];
+    if (type === "income") {
+      addIncome({ variables: transactionVariables });
+    } else {
+      addExpense({ variables: transactionVariables });
+    }
+  };
 
   return (
     <div className="d-flex flex-column mt-4">
       <h2 className="my-2 display-5 text-center">
-        Add New {type === "Income" ? "Income" : "Expense"}
+        Add New {type === "income" ? "income" : "expense"}
       </h2>
       {showWarning && (
         <p style={{ color: "red" }}>Please fill in all required fields.</p>
@@ -95,7 +110,7 @@ const TransactionComponent = ({ type }) => {
 
       <FormGroup>
         <FormLabel>
-          Date of {type === "Income" ? "Income" : "Expense"}:
+          Date of {type === "income" ? "income" : "expense"}:
         </FormLabel>
         <input
           type="date"

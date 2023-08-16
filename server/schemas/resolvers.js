@@ -12,11 +12,16 @@ const { signToken } = require("../utils/auth");
 
 const defaultCategories = [
   {
-    name: "Transportation",
+    name: "Groceries",
     isIncome: false,
     isExpense: true,
     isBudget: false,
   },
+  { name: "Salary",
+    isIncome: true,
+    isExpense: false,
+    isBudget: false
+    },
 ];
 
 const resolvers = {
@@ -178,8 +183,9 @@ const resolvers = {
   },
 
     Mutation: {
-        addUser: async (parents, args) => {
-            args.categories = defaultCategories;
+        addUser: async (parents, args, context) => {
+            console.log({args});
+            args.categories = JSON.parse(JSON.stringify(defaultCategories));
             const user = await User.create(args);
             const token = signToken(user);
             return { token, user };
@@ -259,10 +265,10 @@ const resolvers = {
         addExpense: async (parent, { name, amount, category, date, isRecurring }, context) => {
             if(context.user){
                 try {
-                    const checkDuplicate = await User.findOne({ _id: context.user._id, "expenses.description": name });
-                    if (checkDuplicate) {
-                        throw new Error('Expense already exists.');
-                    }
+                    // const checkDuplicate = await User.findOne({ _id: context.user._id, "expenses.description": name });
+                    // if (checkDuplicate) {
+                    //     throw new Error('Expense already exists.');
+                    // }
                     const updateUser = await User.findByIdAndUpdate(
                         { _id: context.user._id },
                         { $push: { expenses: { description: name, amount, category, date, isRecurring } } },
@@ -314,7 +320,7 @@ const resolvers = {
             }
         },
 
-        addcategory: async (parents, category, context) => {
+        addCategory: async (parents, category, context) => {
             if (context.user) {
                 try {
                     const checkDuplicate = await User.findOne({

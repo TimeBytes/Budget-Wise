@@ -23,7 +23,7 @@ export const QUERY_USER = gql`
         isExpense
         isIncome
       }
-      income {
+      incomes {
         _id
         description
         category {
@@ -37,7 +37,7 @@ export const QUERY_USER = gql`
         date
         isRecurring
       }
-      expense {
+      expenses {
         _id
         description
         category {
@@ -51,7 +51,7 @@ export const QUERY_USER = gql`
         date
         isRecurring
       }
-      budget {
+      budgets {
         _id
         category {
           _id
@@ -147,21 +147,21 @@ export const QUERY_USER = gql`
 //   }
 // `;
 
-// export const QUERY_ALL_BUDGET = gql`
-//   query allBudget {
-//     allBudget {
-//       _id
-//       category {
-//         _id
-//         name
-//         isIncome
-//         isExpense
-//         isBudget
-//       }
-//       amount
-//     }
-//   }
-// `;
+export const QUERY_ALL_BUDGET = gql`
+  query allBudgets {
+    allBudgets {
+      _id
+      amount
+      category {
+        _id
+        name
+        isIncome
+        isExpense
+        isBudget
+      }
+    }
+  }
+`;
 
 // export const QUERY_BUDGET_BY_CATEGORY = gql`
 //   query budgetByCategory($category: ID!) {

@@ -5,6 +5,7 @@ import SignUpForm from "../pages/SignupForm";
 import LoginForm from "../pages/LoginForm";
 
 import Auth from "../utils/auth";
+import { Heading } from "@chakra-ui/react";
 
 const AppNavbar = () => {
   // set modal display state
@@ -20,16 +21,17 @@ const AppNavbar = () => {
         collapseOnSelect
         variant="light"
         expand="lg"
-        className="navbar"
+        className="navbar py-5 fs-4"
         style={navbarStyle}
+        
       >
-        <Container fluid>
-          <Navbar.Brand as={Link} to="/">
-            BudgetWise
+        <Container fluid className="d-flex ">
+          <Navbar.Brand as={Link} to="/" >
+            <h1 className="display-2 fw-bold ">BudgetWise</h1>
           </Navbar.Brand>
           <Navbar.Toggle aria-controls="navbar" />
           <Navbar.Collapse id="navbar">
-            <Nav className="ml-auto">
+            <Nav className="ml-auto ">
               <Nav.Link eventKey="1" as={Link} to="/">
                 Home
               </Nav.Link>
