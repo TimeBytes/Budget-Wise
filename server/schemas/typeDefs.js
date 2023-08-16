@@ -22,6 +22,7 @@ const typeDefs = gql`
         _id: ID!
         category: Category
         amount: Float
+        name: String
     }
 
     type Income {
@@ -105,7 +106,7 @@ const typeDefs = gql`
         editCategory(id: ID!, categoryData: categoryInput!): User        
         removeCategory(category: ID!): User
         
-        addBudget(amount: Float!, category: ID!): Budget
+        addBudget(name: String! amount: Float!, category: ID!): Budget
         editBudget(id: ID! budgetData: budgetInput): User
         removeBudget(budgetID: ID!): User
         
