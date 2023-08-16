@@ -1,9 +1,9 @@
-import { useQuery } from "@apollo/client";
+import { useQuery, useMutation } from "@apollo/client";
 import "bootstrap/dist/css/bootstrap.min.css"; // Import Bootstrap CSS
 import React, { useState, useEffect } from "react";
 import { FormCheck, FormGroup, FormLabel, FormSelect } from "react-bootstrap"; // Import Bootstrap components
 import { QUERY_USER } from "../utils/queries";
-import { ADD_INCOME } from "../utils/mutations";
+import { ADD_INCOME, ADD_EXPENSE } from "../utils/mutations";
 
 const TransactionComponent = ({ type }) => {
   const [selectedCategory, setSelectedCategory] = useState("");
@@ -12,7 +12,8 @@ const TransactionComponent = ({ type }) => {
   const [dateOfTransaction, setDateOfTransaction] = useState("");
   const [recurring, setRecurring] = useState(false);
   const [showWarning, setShowWarning] = useState(false); // State for showing warning
-
+  const [addIncome, { errorIncome }] = useMutation(ADD_INCOME);
+  const [addExpense, { errorExpense }] = useMutation(ADD_EXPENSE);
   const handleCategoryChange = (event) => {
     setSelectedCategory(event.target.value);
   };
@@ -44,6 +45,27 @@ const TransactionComponent = ({ type }) => {
     setShowWarning(false);
 
     // Implement API call to submit the transaction data to the backend
+    if (type === "Income") {
+      addIncome({
+        variables: {
+          category: selectedCategory,
+          amount: parseFloat(amount),
+          description,
+          date: dateOfTransaction,
+          recurring,
+        },
+      });
+    } else {
+      addExpense({
+        variables: {
+          category: selectedCategory,
+          amount: parseFloat(amount),
+          description,
+          date: dateOfTransaction,
+          recurring,
+        },
+      });
+    }
   };
 
   const { loading, data } = useQuery(QUERY_USER); // Replace with the actual user ID
@@ -85,7 +107,7 @@ const TransactionComponent = ({ type }) => {
       <FormGroup>
         <FormLabel>Description:</FormLabel>
         <input
-          type="text"
+          type="description"
           className="form-control"
           placeholder="Description"
           value={description}
