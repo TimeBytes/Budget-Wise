@@ -97,7 +97,7 @@ const typeDefs = gql`
         editExpense(expenseID: ID!, expenseData: expenseInput!): User
         removeExpense(expenseID: ID!): User
 
-        addcategory(name: String!, isIncome: Boolean!, isExpense: Boolean!, isBudget: Boolean!): User
+        addCategory(name: String!, isIncome: Boolean!, isExpense: Boolean!, isBudget: Boolean!): User
         editCategory(id: ID!, categoryData: categoryInput!): User        
         removeCategory(category: ID!): User
         
