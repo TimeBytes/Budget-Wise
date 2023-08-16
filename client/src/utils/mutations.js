@@ -1,4 +1,4 @@
-import { gql } from '@apollo/client';
+import { gql } from "@apollo/client";
 
 export const LOGIN = gql`
   mutation login($email: String!, $password: String!) {
@@ -29,20 +29,19 @@ export const ADD_USER = gql`
       user {
         _id
       }
-
     }
   }
 `;
 export const ADD_INCOME = gql`
   mutation addIncome(
-    $description: String!
-    $category: String!
+    $name: String!
+    $category: ID!
     $amount: Float!
     $date: String!
     $isRecurring: Boolean!
   ) {
     addIncome(
-      description: $description
+      name: $name
       category: $category
       amount: $amount
       date: $date
@@ -50,7 +49,6 @@ export const ADD_INCOME = gql`
     ) {
       _id
       description
-      category
       amount
       date
       isRecurring
@@ -100,14 +98,14 @@ export const REMOVE_INCOME = gql`
 
 export const ADD_EXPENSE = gql`
   mutation addExpense(
-    $description: String!
-    $category: String!
+    $name: String!
+    $category: ID!
     $amount: Float!
     $date: String!
     $isRecurring: Boolean!
   ) {
     addExpense(
-      description: $description
+      name: $name
       category: $category
       amount: $amount
       date: $date
@@ -115,7 +113,6 @@ export const ADD_EXPENSE = gql`
     ) {
       _id
       description
-      category
       amount
       date
       isRecurring
@@ -164,16 +161,8 @@ export const REMOVE_EXPENSE = gql`
 `;
 
 export const ADD_BUDGET = gql`
-  mutation addBudget(
-    $name: String!
-    $amount: Float!
-    $category: String!
-  ) {
-    addBudget(
-      name: $name
-      amount: $amount
-      category: $category
-    ) {
+  mutation addBudget($name: String!, $amount: Float!, $category: String!) {
+    addBudget(name: $name, amount: $amount, category: $category) {
       _id
       name
       amount

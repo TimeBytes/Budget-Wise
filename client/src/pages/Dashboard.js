@@ -7,7 +7,7 @@ import { Button } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.css";
 
 const Dashboard = () => {
-  const [transaction, setTransaction] = useState("Income");
+  const [transaction, setTransaction] = useState("income");
   const handleTransactionTab = (event) => {
     setTransaction(event.target.textContent);
   };
@@ -22,10 +22,10 @@ const Dashboard = () => {
           </h1>
           <nav className="d-flex justify-content-around">
             <Button className="btn" onClick={handleTransactionTab}>
-              Income
+              income
             </Button>
             <Button className="btn" onClick={handleTransactionTab}>
-              Expense
+              expense
             </Button>
           </nav>
           <Transaction type={transaction} />

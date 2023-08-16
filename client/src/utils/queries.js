@@ -23,7 +23,7 @@ export const QUERY_USER = gql`
         isExpense
         isIncome
       }
-      income {
+      incomes {
         _id
         description
         category {
@@ -37,7 +37,7 @@ export const QUERY_USER = gql`
         date
         isRecurring
       }
-      expense {
+      expenses {
         _id
         description
         category {
@@ -51,7 +51,7 @@ export const QUERY_USER = gql`
         date
         isRecurring
       }
-      budget {
+      budgets {
         _id
         category {
           _id
