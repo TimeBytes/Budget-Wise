@@ -58,15 +58,20 @@ const stripePromise = loadStripe(
 
   return (
     <div>
-      <Center>
-        <Heading>Help us, help you!</Heading>
+      <Center
+        bg={useColorModeValue("gray.50", "gray.800")}
+      >
+        <Heading mt={10} 
+        bg={useColorModeValue("gray.50", "gray.800")}
+        >Help us, help you!</Heading>
       </Center>
 
       <Flex
-        minH={"100vh"}
+        minH={"65vh"}
         align={"center"}
         justify={"center"}
         bg={useColorModeValue("gray.50", "gray.800")}
+
       >
         <Stack
           spacing={4}
@@ -92,16 +97,6 @@ const stripePromise = loadStripe(
             />
           </FormControl>
           <Stack spacing={6} direction={["column", "row"]}>
-            <Button
-              bg={"red.400"}
-              color={"white"}
-              w="full"
-              _hover={{
-                bg: "red.500",
-              }}
-            >
-              Cancel
-            </Button>
             <Button
               bg={"blue.400"}
               color={"white"}

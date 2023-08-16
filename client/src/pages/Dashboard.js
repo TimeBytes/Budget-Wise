@@ -16,7 +16,7 @@ const Dashboard = () => {
     <div className="d-flex flex-column justify-content-around">
       <Overview />
       <div className="d-flex justify-content-around">
-        <div className="w-25 border border-info border-2 p-3">
+        <div className="w-25 border border-info border-2 p-3 mt-3 mb-5">
           <h1 className="text-center display-1 my-2 border border-info rounded-3 pb-2 bg-info bg-gradient">
             Transactions
           </h1>
@@ -30,7 +30,7 @@ const Dashboard = () => {
           </nav>
           <Transaction type={transaction} />
         </div>
-        <section className="w-25 border border-info border-2 p-3">
+        <section className="w-25 border border-info border-2 p-3 mt-3 mb-5">
           <h1 className="text-center display-1 my-2 border border-info rounded-3 pb-2 bg-info bg-gradient">
             Budgets
           </h1>

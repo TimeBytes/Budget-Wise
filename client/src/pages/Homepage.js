@@ -1,7 +1,7 @@
 import React from "react";
 import "bootstrap/dist/css/bootstrap.css";
 
-import logoImage from "../assets/images/budgetwise.png";
+import logoImage from "../assets/images/budgetwise1.png";
 import expenseimg from "../assets/images/expensetracking.jpg";
 import chartimg from "../assets/images/charts.jpg";
 import analyticsimg from "../assets/images/analytics.jpg";
