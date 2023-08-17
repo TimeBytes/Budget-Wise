@@ -65,7 +65,7 @@ const CategoryComponent = () => {
     console.log(categoryId);
     deleteCategory({
       variables: {
-        id: categoryId,
+        category: categoryId,
       },
     });
   };
