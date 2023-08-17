@@ -61,7 +61,7 @@ const CategoryComponent = () => {
 
   useEffect(() => {
     refetch();
-  }, [refetch]);
+  }, [successMessage]);
 
   const handleAddCategory = () => {
     if (newCategory) {
