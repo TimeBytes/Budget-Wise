@@ -21,20 +21,18 @@ const AppNavbar = () => {
         collapseOnSelect
         variant="light"
         expand="lg"
-        className="navbar py-5 fs-4"
+        className="navbar py-3 fs-4"
         style={navbarStyle}
         
       >
         <Container fluid className="d-flex ">
           <Navbar.Brand as={Link} to="/" >
-            <h1 className="display-2 fw-bold ">BudgetWise</h1>
+            <h1 className="display-1 " style={{fontFamily:'Titan One', color:"white"}}>BudgetWise</h1>
           </Navbar.Brand>
           <Navbar.Toggle aria-controls="navbar" />
           <Navbar.Collapse id="navbar">
             <Nav className="ml-auto ">
-              <Nav.Link eventKey="1" as={Link} to="/">
-                Home
-              </Nav.Link>
+
               {/* if user is logged in show and Enter Transactions and Logout */}
               {Auth.loggedIn() ? (
                 <>
@@ -43,9 +41,6 @@ const AppNavbar = () => {
                   </Nav.Link>
                   <Nav.Link eventKey="3" as={Link} to="/categories">
                     Categories
-                  </Nav.Link>
-                  <Nav.Link eventKey="3" as={Link} to="/appendix">
-                    Appendix
                   </Nav.Link>
                   <Nav.Link eventKey="5" as={Link} to="/donate">
                     Donate
