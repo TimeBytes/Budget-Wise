@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import {
-  Button,
+  
   FormGroup,
   FormLabel,
   FormSelect,
@@ -9,6 +9,7 @@ import {
   InputGroup,
   FormControl,
 } from "react-bootstrap";
+import { Button } from "@chakra-ui/react";
 import { useLazyQuery, useQuery, useMutation } from "@apollo/client";
 import { QUERY_ALL_BUDGET, QUERY_CATEGORY_BY_TYPE } from "../utils/queries";
 import { ADD_BUDGET } from "../utils/mutations";
@@ -21,7 +22,6 @@ const BudgetComponent = () => {
     variables: { type: "budget" },
   });
   const categoriesList = queryCategoryList?.data?.categoryByType || [];
-  console.log(categoriesList);
 
   // Queries the Budgets for the list
   const { loading, error, data } = useQuery(QUERY_ALL_BUDGET);
@@ -88,7 +88,11 @@ const BudgetComponent = () => {
             value={newBudgetAmount}
             onChange={handleNewBudgetAmountChange}
           />
-          <Button onClick={handleAddBudget} className="mx-3">
+          <Button onClick={handleAddBudget} className="mx-3" bg={"blue.600"}
+              color={"white"}
+              _hover={{
+                bg: "blue.700",
+              }}>
             Add Budget
           </Button>
         </FormGroup>
@@ -96,8 +100,6 @@ const BudgetComponent = () => {
 
       <ListGroup className="list-unstyled bg rounded-2 px-2 my-2 py-2">
         {budgetList.map((budget, index) => (
-
-
           <ListGroup.Item
             key={index}
             className="my-4 d-flex justify-content-between"
