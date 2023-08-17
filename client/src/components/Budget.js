@@ -69,7 +69,7 @@ const BudgetComponent = () => {
   return (
     <div className="m-auto">
       <div>
-        <FormGroup className="d-flex flex-wrap justify-content-center border border-info rounded-2 p-3 bg-info">
+        <FormGroup className="d-flex flex-wrap justify-content-center border border rounded-2 p-3 bg">
           <FormSelect
             value={selectedCategory}
             onChange={handleCategoryChange}
@@ -93,8 +93,11 @@ const BudgetComponent = () => {
           </Button>
         </FormGroup>
       </div>
+
       <ListGroup className="list-unstyled bg-info rounded-2 px-2 my-2 py-2">
         {budgetList.map((budget, index) => (
+
+
           <ListGroup.Item
             key={index}
             className="my-4 d-flex justify-content-between"

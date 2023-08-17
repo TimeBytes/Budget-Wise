@@ -1,7 +1,9 @@
 import React from "react";
 import { Bar, Pie } from "react-chartjs-2";
 import Chart from "chart.js/auto";
-
+import "bootstrap/dist/css/bootstrap.css";
+import Card from 'react-bootstrap/Card';
+import { Container, Row, Col } from 'react-bootstrap';
 import { from } from "@apollo/client";
 
 const OverviewComponent = () => {
@@ -42,7 +44,6 @@ const OverviewComponent = () => {
     "Groceries",
     "Utilities",
     "Entertainment",
-    "Other",
   ];
 
   const pieIncomeData = {
@@ -59,18 +60,20 @@ const OverviewComponent = () => {
     labels: expenseCategories,
     datasets: [
       {
-        data: [30, 25, 15, 20, 10], // Sample data for expense categories
+        data: [30, 25, 15, 20], // Sample data for expense categories
         backgroundColor: [
           "#FF6384",
           "#36A2EB",
           "#FFCE56",
           "#33cc33",
-          "#FF5733",
         ],
       },
     ],
   };
 
+  const borderRight = {
+    borderRight: "1px solid rgb(222,226,230)",
+  }
   const chartOptions = {
     scales: {
       x: {
@@ -84,29 +87,43 @@ const OverviewComponent = () => {
     maintainAspectRatio: true,
   };
 
-  return (
-    <>
-      <h1 className="display-1 text-center my-4">Overview</h1>
-      <div className="d-flex flex-row justify-content-around">
-        <div className="w-25">
+
+return (
+  <Container className="mt-4 col-12">
+    <h1 className="display-2 text-center my-4" style={{fontFamily:'Titan One', color:"#037390"}}>Overview</h1>
+    <Row className="justify-content-around">
+      <Container className=" border col-10">
+      <Col className="mb-4 ">
+        <div className=" p-3">
           <h3 className="display-5 text-center mb-3">Income vs Expenses</h3>
           <Bar data={chartData} options={chartOptions} />
         </div>
-        <div className="w-25">
-          <h3 className="display-5 text-center mb-3">
-            Income Categories Distribution
+      </Col>
+      <Container className=" d-flex border-top pt-3">
+      <Col className="mb-4 col-6"  style={borderRight}>
+        <div className=" m-1 ">
+          <h3 className="display-5 text-center mb-3 ">
+            Income Distribution
           </h3>
           <Pie data={pieIncomeData} />
         </div>
-        <div className="w-25">
+      </Col>
+      <Col className="mb-4 col-6">
+        <div className=" m-1">
           <h3 className="display-5 text-center mb-3">
-            Expense Categories Distribution
+            Expense Distribution
           </h3>
           <Pie data={pieExpenseData} />
         </div>
-      </div>
-    </>
-  );
+      </Col>
+      </Container>
+      </Container>
+
+      </Row>
+    
+  </Container>
+);
+
 };
 
 export default OverviewComponent;

@@ -3,7 +3,7 @@ import Budget from "../components/Budget";
 import Transaction from "../components/Transaction";
 import Overview from "../components/Overview";
 import Category from "../components/Category";
-import { Button } from "react-bootstrap";
+import { Button, Container } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.css";
 
 const Dashboard = () => {
@@ -15,9 +15,9 @@ const Dashboard = () => {
   return (
     <div className="d-flex flex-column justify-content-around">
       <Overview />
-      <div className="d-flex justify-content-around">
-        <div className="w-25 border border-info border-2 p-3 mt-3 mb-5">
-          <h1 className="text-center display-1 my-2 border border-info rounded-3 pb-2 bg-info bg-gradient">
+      <div className="border col-10 col-lg-7 p-3 m-auto my-3 d-flex flex-column flex-lg-row justify-content-between">
+        <div className="col-4.5">
+          <h1 className="text-center display-1 my-2 border border rounded-3 pb-2 bg-gradient ">
             Transactions
           </h1>
           <nav className="d-flex justify-content-around">
@@ -30,8 +30,8 @@ const Dashboard = () => {
           </nav>
           <Transaction type={transaction} />
         </div>
-        <section className="w-25 border border-info border-2 p-3 mt-3 mb-5">
-          <h1 className="text-center display-1 my-2 border border-info rounded-3 pb-2 bg-info bg-gradient">
+        <section className="col-4.5">
+          <h1 className="text-center display-1 my-2 border border rounded-3 pb-2 bg-gradient">
             Budgets
           </h1>
           <Budget />
