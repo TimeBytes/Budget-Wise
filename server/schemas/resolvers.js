@@ -1,6 +1,6 @@
 const { User, Donation, Category } = require("../models");
 const { AuthenticationError } = require("apollo-server-express");
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
 require("dotenv").config();
 
@@ -19,6 +19,10 @@ const defaultCategories = [
     isBudget: false,
   },
   { name: "Salary", isIncome: true, isExpense: false, isBudget: false },
+  { name: "Rent", isIncome: false, isExpense: true, isBudget: true },
+  { name: "Utilities", isIncome: false, isExpense: true, isBudget: true },
+  { name: "Freelance", isIncome: true, isExpense: false, isBudget: false },
+  { name: "Investment", isIncome: true, isExpense: false, isBudget: false },
 ];
 
 const resolvers = {
@@ -85,7 +89,6 @@ const resolvers = {
       try {
         const { user } = context;
         const userData = await User.findById(user._id);
-        console.log(userData.budgets);
         return userData.budgets;
       } catch (error) {
         throw new Error(error);
@@ -120,19 +123,19 @@ const resolvers = {
         const userData = await User.findById(user._id);
         const allCategories = userData.categories;
         switch (args.type) {
-          case "income":
+          case "Income":
             const incomeCategories = allCategories.filter(
               (category) => category.isIncome == true
             );
             return incomeCategories;
             break;
-          case "expense":
+          case "Expense":
             const expenseCategories = allCategories.filter(
               (category) => category.isExpense == true
             );
             return expenseCategories;
             break;
-          case "budget":
+          case "Budget":
             const budgetCatergories = allCategories.filter(
               (category) => category.isBudget == true
             );
@@ -193,7 +196,6 @@ const resolvers = {
 
   Mutation: {
     addUser: async (parents, args, context) => {
-      console.log({ args });
       args.categories = JSON.parse(JSON.stringify(defaultCategories));
       const user = await User.create(args);
       const token = signToken(user);
@@ -432,21 +434,20 @@ const resolvers = {
       throw new AuthenticationError("You need to be logged in!");
     },
 
-    removeCategory: async (parent, {category}, context) => {
-        if (context.user) {
-            try {
-                const updatedUser = await User.findOneAndUpdate(
-                    { _id: context.user._id },
-                    { $pull: { categories: { _id: category } } },
-                    { new: true }
-                );
-                return updatedUser;
-            } catch (err) {
-                throw new Error("Category not removed");
-            }
+    removeCategory: async (parent, { category }, context) => {
+      if (context.user) {
+        try {
+          const updatedUser = await User.findOneAndUpdate(
+            { _id: context.user._id },
+            { $pull: { categories: { _id: category } } },
+            { new: true }
+          );
+          return updatedUser;
+        } catch (err) {
+          throw new Error("Category not removed");
         }
+      }
     },
-
 
     addBudget: async (parent, { category, amount }, context) => {
       if (context.user) {
