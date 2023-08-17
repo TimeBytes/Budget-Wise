@@ -71,6 +71,9 @@ const OverviewComponent = () => {
     ],
   };
 
+  const borderRight = {
+    borderRight: "1px solid rgb(222,226,230)",
+  }
   const chartOptions = {
     scales: {
       x: {
@@ -87,19 +90,19 @@ const OverviewComponent = () => {
 
 return (
   <Container className="mt-4 col-12">
-    <h1 className="display-2 text-center my-4" style={{fontFamily:'Titan One'}}>Overview</h1>
+    <h1 className="display-2 text-center my-4" style={{fontFamily:'Titan One', color:"#037390"}}>Overview</h1>
     <Row className="justify-content-around">
       <Container className=" border col-10">
-      <Col className="mb-4">
+      <Col className="mb-4 ">
         <div className=" p-3">
           <h3 className="display-5 text-center mb-3">Income vs Expenses</h3>
           <Bar data={chartData} options={chartOptions} />
         </div>
       </Col>
       <Container className=" d-flex border-top pt-3">
-      <Col className="mb-4 col-6">
+      <Col className="mb-4 col-6"  style={borderRight}>
         <div className=" m-1 ">
-          <h3 className="display-5 text-center mb-3">
+          <h3 className="display-5 text-center mb-3 ">
             Income Distribution
           </h3>
           <Pie data={pieIncomeData} />

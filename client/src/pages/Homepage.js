@@ -8,10 +8,15 @@ import analyticsimg from "../assets/images/analytics.jpg";
 import { Container, Row, Col } from 'react-bootstrap';
 
 // Assuming this code is within your component's render method
+const fontfam={
+  fontFamily: "cambria",
+  fontWeight: "bold",
+  fontSize: "17px",
+}
 
 const HomePage = () => {
   return (
-    <div className="homepage-container">
+    <div className="homepage-container" style={fontfam}>
       <section className="hero-section text-center">
     <Container>
       <Row>
@@ -22,21 +27,21 @@ const HomePage = () => {
     </Container>
   </section>
 
-      <div className="container text-center features-section">    
+      <div className="container text-center features-section ">    
         <FeatureCard 
-          title="Expense Tracker" 
-          description="Effortlessly monitor your expenses and stay on top of your budget." 
+          title="Expense Tracker:" 
+          description="Effortlessly monitor your expenses to stay on top of your budget." 
           imgSrc={expenseimg} 
           altText="Expense img example"
         />
-        <FeatureCard 
-          title="Analytics" 
+        <FeatureCard
+          title="Analytics:" 
           description="Receive tips for recurring bill payments and learn how to budget." 
           imgSrc={analyticsimg} 
           altText="analytics img example"
         />
         <FeatureCard 
-          title="Data Visualization" 
+          title="Data Visualization:" 
           description="Visualize your financial progress with intuitive graphs and charts." 
           imgSrc={chartimg} 
           altText="Chart example"
