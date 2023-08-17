@@ -164,11 +164,13 @@ export const ADD_BUDGET = gql`
   mutation addBudget($amount: Float!, $category: ID!) {
     addBudget(amount: $amount, category: $category) {
       _id
-      amount
-      name
-      category {
+      budgets {
         _id
         name
+        amount
+        category {
+          _id
+        }
       }
     }
   }
