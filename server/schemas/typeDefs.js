@@ -7,17 +7,22 @@ const typeDefs = gql`
     email: String
     firstName: String
     lastName: String
-    income: [Income]
-    expense: [Expense]
-    budget: [Budget]
+    incomes: [Income]
+    expenses: [Expense]
+    budgets: [Budget]
     categories: [Category]
     donations: [Donation]
+    description: String
+    amount: Float
+    date: String
+    isRecurring: Boolean
   }
 
   type Budget {
     _id: ID!
-    category: Category
     amount: Float
+    name: String
+    category: Category!
   }
 
   type Income {
@@ -41,8 +46,8 @@ const typeDefs = gql`
     message: String
   }
   type Category {
-    _id: ID
-    name: String
+    _id: ID!
+    name: String!
     isIncome: Boolean
     isExpense: Boolean
     isBudget: Boolean
@@ -66,13 +71,19 @@ const typeDefs = gql`
   type Query {
     users: [User]
     user: User
+
     allIncomes: [Income!]!
-    incomeByCategory: [Income!]!
-    allExpenses: [Expense!]!
-    expenseByCategory: [Expense!]!
+    incomeByCategory(categoryID: ID!): [Income!]!
+
+    allExpenses: [Expense]
+    expenseByCategory(categoryID: ID!): [Expense]
+
     allBudgets: [Budget!]!
-    budgetByCategory: [Budget!]!
+    budgetByCategory(categoryID: ID!): [Budget!]!
+
     allCategories: [Category!]!
+    categoryByType(type: String!): [Category!]
+
     donations: [Donation]
     checkout(amount: Float): Checkout
     singleDonation(_id: ID!): Donation
@@ -95,14 +106,7 @@ const typeDefs = gql`
       date: String!
       isRecurring: Boolean!
     ): User
-    editIncome(
-      incomeID: ID!
-      name: String!
-      amount: Float!
-      category: ID!
-      date: String!
-      isRecurring: Boolean!
-    ): User
+    editIncome(incomeID: ID!, incomeData: incomeInput!): User
     removeIncome(incomeID: ID!): User
 
     addExpense(
@@ -110,43 +114,53 @@ const typeDefs = gql`
       amount: Float!
       category: ID!
       date: String!
-      isRecurring: Boolean!
+      isRecurring: Boolean
     ): User
-    editExpense(
-      expenseID: ID!
-      name: String!
-      amount: Float!
-      category: ID!
-      date: String!
-      isRecurring: Boolean!
-    ): User
+    editExpense(expenseID: ID!, expenseData: expenseInput!): User
     removeExpense(expenseID: ID!): User
 
-    addcategory(
+    addCategory(
       name: String!
       isIncome: Boolean!
       isExpense: Boolean!
       isBudget: Boolean!
-    ): User
-    editCategory(id: ID!, categoryData: categoryInput!): User
+    ): Category
+    editCategory(id: ID!, categoryData: categoryInput!): Category
     removeCategory(category: ID!): User
 
-    addBudget(name: String!, amount: Float!, category: String!): Budget
-    editBudget(
-      budgetID: ID!
-      name: String!
-      amount: Float!
-      category: String!
-    ): User
+    addBudget(amount: Float!, category: ID!, name: String): User
+    editBudget(id: ID!, budgetData: budgetInput): User
     removeBudget(budgetID: ID!): User
 
     addDonation(amount: Float): Donation
   }
+
+  input incomeInput {
+    description: String
+    amount: Float
+    category: ID
+    date: String
+    isRecurring: Boolean
+  }
+
+  input expenseInput {
+    description: String!
+    amount: Float!
+    category: ID!
+    date: String!
+    isRecurring: Boolean!
+  }
+
   input categoryInput {
     name: String!
     isIncome: Boolean
     isExpense: Boolean
     isBudget: Boolean
+  }
+
+  input budgetInput {
+    amount: Float!
+    category: ID!
   }
 `;
 

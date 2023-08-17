@@ -1,4 +1,4 @@
-import { gql } from '@apollo/client';
+import { gql } from "@apollo/client";
 
 export const LOGIN = gql`
   mutation login($email: String!, $password: String!) {
@@ -10,15 +10,6 @@ export const LOGIN = gql`
     }
   }
 `;
-
-// export const Donation = gql`
-//   mutation donation($amount: Float!) {
-//     donation(amount: $amount) {
-//       session
-//     }
-//   }
-// `;
-
 export const ADD_USER = gql`
   mutation addUser(
     $firstName: String!
@@ -38,34 +29,19 @@ export const ADD_USER = gql`
       user {
         _id
       }
-
     }
   }
 `;
-
-export const LOGIN_USER = gql`
-  mutation login($email: String!, $password: String!) {
-    login(email: $email, password: $password) {
-
-      token
-      user {
-        _id
-        username
-      }
-    }
-  }
-`;
-
 export const ADD_INCOME = gql`
   mutation addIncome(
-    $description: String!
-    $category: String!
+    $name: String!
+    $category: ID!
     $amount: Float!
     $date: String!
     $isRecurring: Boolean!
   ) {
     addIncome(
-      description: $description
+      name: $name
       category: $category
       amount: $amount
       date: $date
@@ -73,7 +49,6 @@ export const ADD_INCOME = gql`
     ) {
       _id
       description
-      category
       amount
       date
       isRecurring
@@ -109,12 +84,8 @@ export const EDIT_INCOME = gql`
 `;
 
 export const REMOVE_INCOME = gql`
-  mutation removeIncome(
-    $incomeID: ID!
-  ) {
-    removeIncome(
-      incomeID: $incomeID
-    ) {
+  mutation removeIncome($incomeID: ID!) {
+    removeIncome(incomeID: $incomeID) {
       _id
       description
       category
@@ -127,14 +98,14 @@ export const REMOVE_INCOME = gql`
 
 export const ADD_EXPENSE = gql`
   mutation addExpense(
-    $description: String!
-    $category: String!
+    $name: String!
+    $category: ID!
     $amount: Float!
     $date: String!
     $isRecurring: Boolean!
   ) {
     addExpense(
-      description: $description
+      name: $name
       category: $category
       amount: $amount
       date: $date
@@ -142,7 +113,6 @@ export const ADD_EXPENSE = gql`
     ) {
       _id
       description
-      category
       amount
       date
       isRecurring
@@ -178,12 +148,8 @@ export const EDIT_EXPENSE = gql`
 `;
 
 export const REMOVE_EXPENSE = gql`
-  mutation removeExpense(
-    $expenseID: ID!
-  ) {
-    removeExpense(
-      expenseID: $expenseID
-    ) {
+  mutation removeExpense($expenseID: ID!) {
+    removeExpense(expenseID: $expenseID) {
       _id
       description
       category
@@ -195,20 +161,17 @@ export const REMOVE_EXPENSE = gql`
 `;
 
 export const ADD_BUDGET = gql`
-  mutation addBudget(
-    $name: String!
-    $amount: Float!
-    $category: String!
-  ) {
-    addBudget(
-      name: $name
-      amount: $amount
-      category: $category
-    ) {
+  mutation addBudget($amount: Float!, $category: ID!) {
+    addBudget(amount: $amount, category: $category) {
       _id
-      name
-      amount
-      category
+      budgets {
+        _id
+        name
+        amount
+        category {
+          _id
+        }
+      }
     }
   }
 `;
@@ -235,12 +198,8 @@ export const EDIT_BUDGET = gql`
 `;
 
 export const REMOVE_BUDGET = gql`
-  mutation removeBudget(
-    $budgetID: ID!
-  ) {
-    removeBudget(
-      budgetID: $budgetID
-    ) {
+  mutation removeBudget($budgetID: ID!) {
+    removeBudget(budgetID: $budgetID) {
       _id
       name
       amount
@@ -262,7 +221,6 @@ export const ADD_CATEGORY = gql`
       isExpense: $isExpense
       isBudget: $isBudget
     ) {
-      _id
       name
       isIncome
       isExpense
@@ -273,12 +231,18 @@ export const ADD_CATEGORY = gql`
 
 export const EDIT_CATEGORY = gql`
   mutation editCategory(
-    $id: ID!
-    $categoryData: categoryInput!
+    $category: ID!
+    $name: String!
+    $isIncome: Boolean!
+    $isExpense: Boolean!
+    $isBudget: Boolean!
   ) {
     editCategory(
-      id: $id
-      categoryData: $categoryData
+      category: $category
+      name: $name
+      isIncome: $isIncome
+      isExpense: $isExpense
+      isBudget: $isBudget
     ) {
       _id
       name
@@ -290,17 +254,16 @@ export const EDIT_CATEGORY = gql`
 `;
 
 export const REMOVE_CATEGORY = gql`
-  mutation removeCategory(
-    $category: ID!
-  ) {
-    removeCategory(
-      category: $category
-    ) {
+  mutation removeCategory($category: ID!) {
+    removeCategory(category: $category) {
       _id
-      name
-      isIncome
-      isExpense
-      isBudget
+      categories {
+        _id
+        name
+        isIncome
+        isExpense
+        isBudget
+      }
     }
   }
 `;

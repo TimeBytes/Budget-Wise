@@ -1,81 +1,174 @@
-// import React, { useState } from "react";
-// import { useLazyQuery, useQuery, useMutation } from "@apollo/client";
-// import "bootstrap/dist/css/bootstrap.min.css"; // Import Bootstrap CSS
-// import { FormGroup, FormLabel, FormSelect, FormCheck } from "react-bootstrap";
+import React, { useState } from "react";
+import { gql } from "@apollo/client";
+import {
+  FormGroup,
+  FormSelect,
+  FormCheck,
+  ListGroup,
+  InputGroup,
+} from "react-bootstrap";
+import { Button } from "@chakra-ui/react";
+import { useMutation, useQuery } from "@apollo/client";
+import {
+  ADD_CATEGORY,
+  REMOVE_CATEGORY,
+  EDIT_CATEGORY,
+} from "../utils/mutations";
+import { QUERY_ALL_CATEGORIES } from "../utils/queries";
 
-// const CategoryComponent = () => {
-//   const [categories, setCategories] = useState([]);
-//   const [category, setCategory] = useState("");
-//   const [checked, setChecked] = useState(false);
-//   const [categoryList, setCategoryList] = useState([]);
-//   const [getCategories, { loading, data }] = useLazyQuery(QUERY_ALL_CATEGORIES);
-//   const { data: userData } = useQuery(QUERY_USER);
-//   // const [updateUser] = useMutation(UPDATE_USER);
+const CategoryComponent = () => {
+  const [categories, setCategories] = useState([]);
+  const [newCategory, setNewCategory] = useState("");
+  const [isIncome, setIsIncome] = useState(false);
+  const [isExpense, setIsExpense] = useState(false);
+  const [isBudget, setIsBudget] = useState(false);
+  // Queries all existing categories
+  const { loading, error, data } = useQuery(QUERY_ALL_CATEGORIES);
+  const categoryList = data?.allCategories || [];
 
-//   // const handleFormSubmit = async (event) => {
-//   //   event.preventDefault();
-//   //   try {
-//   //     const mutationResponse = await updateUser({
-//   //       variables: {
-//   //         categories: categoryList,
-//   //       },
-//   //     });
-//   //     console.log(mutationResponse);
-//   //   } catch (e) {
-//   //     console.log(e);
-//   //   }
-//   // };
+  const handleIsIncome = () => {
+    setIsIncome(!isIncome);
+  };
+  const handleIsExpense = () => {
+    setIsExpense(!isExpense);
+  };
+  const handleIsBudget = () => {
+    setIsBudget(!isBudget);
+  };
+  const [addCategory] = useMutation(ADD_CATEGORY);
 
-//   const handleChange = (event) => {
-//     const { value } = event.target;
-//     setCategory(value);
-//     setCategoryList([...categoryList, value]);
-//     console.log(categoryList);
-//   };
+  const [deleteCategory] = useMutation(REMOVE_CATEGORY);
 
-//   const handleCheck = (event) => {
-//     const { checked } = event.target;
-//     setChecked(checked);
-//     console.log(checked);
-//   };
+  const [editCategory] = useMutation(EDIT_CATEGORY);
 
-//   const handleGetCategories = async () => {
-//     try {
-//       const { data } = await getCategories();
-//       const categoryData = data.categories;
-//       setCategories(categoryData);
-//     } catch (e) {
-//       console.log(e);
-//     }
-//   };
-//   {
-//     /* <form onSubmit={handleFormSubmit}></form> */
-//   }
-//   return (
-//     <div>
-//       <form>
-//         <FormGroup>
-//           <FormLabel>Categories</FormLabel>
-//           <FormSelect onChange={handleChange}>
-//             <option value="">Select a category</option>
-//             {categories.map((category) => (
-//               <option key={category._id} value={category._id}>
-//                 {category.name}
-//               </option>
-//             ))}
-//           </FormSelect>
-//         </FormGroup>
-//         <FormGroup>
-//           <FormCheck
-//             type="checkbox"
-//             label="I'm done selecting categories"
-//             onChange={handleCheck}
-//           />
-//         </FormGroup>
-//         <button type="submit">Submit</button>
-//       </form>
-//     </div>
-//   );
-// };
+  const handleNewCategoryChange = (event) => {
+    setNewCategory(event.target.value);
+  };
 
-// export default CategoryComponent;
+  const handleAddCategory = () => {
+    if (newCategory) {
+      addCategory({
+        variables: {
+          name: newCategory,
+          isIncome: isIncome,
+          isExpense: isExpense,
+          isBudget: isBudget,
+        },
+      });
+      setNewCategory("");
+    }
+  };
+
+  const handleDeleteCategory = (categoryId) => {
+    console.log(categoryId);
+    deleteCategory({
+      variables: {
+        category: categoryId,
+      },
+    });
+  };
+  const handleEditCategory = (categoryId) => {
+    editCategory({
+      variables: {
+        id: categoryId,
+      },
+    });
+  };
+
+  return (
+    <div className="m-auto col-10 my-5 border" style={{fontWeight:"bold"}} >
+      <div className="border-bottom">
+        <h2
+          className="display-5 text-center"
+          style={{ fontFamily: "Titan One", color: "#037390" }}
+        >
+          Customize Your Categories
+        </h2>
+        <FormGroup className="mt-5 d-flex flex-column align-content-center flex-wrap p-3 bg">
+          <div>
+            <input
+              type="text"
+              placeholder="Category Name"
+              value={newCategory}
+              onChange={handleNewCategoryChange}
+              style={{
+                fontWeight: "bold",
+                borderColor: "#037390",
+                borderWidth: "1px",
+              }}
+            />
+            <Button
+              onClick={handleAddCategory}
+              className="mx-3"
+              bg={"blue.600"}
+              color={"white"}
+              _hover={{
+                bg: "blue.700",
+              }}
+            >
+              Add Category
+            </Button>
+          </div>
+          <div>
+            <FormGroup className="m-3">
+              <FormCheck
+                type="checkbox"
+                label="Add as income"
+                checked={isIncome}
+                onChange={handleIsIncome}
+              />
+            </FormGroup>
+            <FormGroup className="m-3">
+              <FormCheck
+                type="checkbox"
+                label="Add as Expense"
+                checked={isExpense}
+                onChange={handleIsExpense}
+              />
+            </FormGroup>
+            <FormGroup className="m-3">
+              <FormCheck
+                type="checkbox"
+                label="Add as Budget"
+                checked={isBudget}
+                onChange={handleIsBudget}
+              />
+            </FormGroup>
+          </div>
+        </FormGroup>
+      </div>
+      <ListGroup className="list-unstyled px-2 my-2 py-2 d-flex flex-row flex-wrap justify-content-center">
+        {categoryList.map((category) => (
+          <li
+            key={category._id}
+            className="my-4 d-flex justify-content-between border d-flex flex-column col-3 align-items-center"
+          >
+            <span className="m-2">
+              Category: {category.name}
+              <br />
+              Income: {category.isIncome ? "Yes" : "No"}
+              <br />
+              Expense: {category.isExpense ? "Yes" : "No"}
+              <br />
+              Budget: {category.isBudget ? "Yes" : "No"}
+            </span>
+            <Button
+              value={category._id}
+              onClick={() => handleDeleteCategory(category._id)}
+              bg={"blue.600"}
+              color={"white"}
+              _hover={{
+                bg: "blue.700",
+              }}
+              className="mx-5 my-2"
+            >
+              Delete
+            </Button>
+          </li>
+        ))}
+      </ListGroup>
+    </div>
+  );
+};
+
+export default CategoryComponent;

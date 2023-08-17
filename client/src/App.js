@@ -58,7 +58,7 @@ function App() {
               path="*"
               element={<h1 className="display-2">Wrong page!</h1>}
             />
-            {/* <Route path="/categories" element={<Category />} /> */}
+            <Route path="/categories" element={<Category />} />
             <Route path="/donate" element={<DonationForm />} />
             <Route path="/success" element={<Success />} />
           </Routes>

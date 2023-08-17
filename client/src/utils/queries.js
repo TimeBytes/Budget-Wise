@@ -8,60 +8,6 @@ export const QUERY_CHECKOUT = gql`
   }
 `;
 
-// export const QUERY_USER = gql`
-//   query user {
-//     user {
-//       _id
-//       firstName
-//       lastName
-//       email
-//       username
-//       income {
-//         _id
-//         description
-//         category {
-//           _id
-//           name
-//         }
-//         amount
-//         date
-//         isRecurring
-//       }
-//       expense {
-//         _id
-//         description
-//         category {
-//           _id
-//           name
-//         }
-//         amount
-//         date
-//         isRecurring
-//       }
-//       budget {
-//         _id
-//         category {
-//           _id
-//           name
-//         }
-//         amount
-//       }
-//       categories {
-//         _id
-//         name
-//         isIncome
-//         isExpense
-//         isBudget
-//       }
-//       donations {
-//         _id
-//         amount
-//         date
-//       }
-//     }
-//   }
-// `;
-
 export const QUERY_USER = gql`
   query user {
     user {
@@ -73,11 +19,11 @@ export const QUERY_USER = gql`
       categories {
         _id
         name
-        isBudget
-        isExpense
         isIncome
+        isExpense
+        isBudget
       }
-      income {
+      incomes {
         _id
         description
         category {
@@ -91,7 +37,7 @@ export const QUERY_USER = gql`
         date
         isRecurring
       }
-      expense {
+      expenses {
         _id
         description
         category {
@@ -105,8 +51,9 @@ export const QUERY_USER = gql`
         date
         isRecurring
       }
-      budget {
+      budgets {
         _id
+        name
         category {
           _id
           name
@@ -201,21 +148,18 @@ export const QUERY_USER = gql`
 //   }
 // `;
 
-// export const QUERY_ALL_BUDGET = gql`
-//   query allBudget {
-//     allBudget {
-//       _id
-//       category {
-//         _id
-//         name
-//         isIncome
-//         isExpense
-//         isBudget
-//       }
-//       amount
-//     }
-//   }
-// `;
+export const QUERY_ALL_BUDGET = gql`
+  query allBudgets {
+    allBudgets {
+      amount
+      category {
+        _id
+      }
+      name
+      _id
+    }
+  }
+`;
 
 // export const QUERY_BUDGET_BY_CATEGORY = gql`
 //   query budgetByCategory($category: ID!) {
@@ -233,14 +177,26 @@ export const QUERY_USER = gql`
 //   }
 // `;
 
-// export const QUERY_ALL_CATEGORIES = gql`
-//   query allCategories {
-//     categories {
-//       _id
-//       name
-//       isBudget
-//       isExpense
-//       isIncome
-//     }
-//   }
-// `;
+export const QUERY_ALL_CATEGORIES = gql`
+  query allCategories {
+    allCategories {
+      _id
+      name
+      isIncome
+      isExpense
+      isBudget
+    }
+  }
+`;
+
+export const QUERY_CATEGORY_BY_TYPE = gql`
+  query categoryByType($type: String!) {
+    categoryByType(type: $type) {
+      _id
+      name
+      isIncome
+      isExpense
+      isBudget
+    }
+  }
+`;
