@@ -66,7 +66,7 @@ const TransactionComponent = ({ type }) => {
   };
 
   return (
-    <div className="d-flex flex-column mt-4">
+    <div className="d-flex flex-column mt-4 ">
       <h2 className="my-2 display-5 text-center">
         Add New {type === "income" ? "income" : "expense"}
       </h2>

@@ -9,6 +9,7 @@ import {
   Stack,
   useColorModeValue,
 } from "@chakra-ui/react";
+
 import logo from "../assets/images/budgetwise-logo.png";
 import React, { useEffect, useState } from "react"; // Update the import
 import { loadStripe } from "@stripe/stripe-js";
@@ -63,6 +64,8 @@ const stripePromise = loadStripe(
       >
         <Heading mt={10} 
         bg={useColorModeValue()}
+        style={{fontFamily:"titan one",color:"#037390"}}
+        fontSize={50}
         >Help us, help you!</Heading>
       </Center>
       <section className="text-center " >
