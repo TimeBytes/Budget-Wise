@@ -13,25 +13,6 @@ import { useLazyQuery, useQuery, useMutation } from "@apollo/client";
 import { QUERY_ALL_BUDGET, QUERY_CATEGORY_BY_TYPE } from "../utils/queries";
 import { ADD_BUDGET } from "../utils/mutations";
 
-const groupBudgetsByCategory = (budgetList) => {
-  const groupedBudgets = {};
-
-  budgetList.forEach((budget) => {
-    const categoryId = budget.category._id;
-
-    if (!groupedBudgets[categoryId]) {
-      groupedBudgets[categoryId] = {
-        category: budget.category.name, // Assuming you have a 'category' field in your budget
-        totalAmount: budget.amount,
-      };
-    } else {
-      groupedBudgets[categoryId].totalAmount += budget.amount;
-    }
-  });
-  console.log(groupedBudgets);
-  return Object.values(groupedBudgets);
-};
-
 const BudgetComponent = () => {
   const [budgets, setBudgets] = useState([]);
 
@@ -44,8 +25,9 @@ const BudgetComponent = () => {
 
   // Queries the Budgets for the list
   const { loading, error, data } = useQuery(QUERY_ALL_BUDGET);
+  console.log(data);
   const budgetList = data?.allBudgets || [];
-  const groupedBudgets = groupBudgetsByCategory(budgetList);
+  console.log(budgetList);
 
   const [editingBudget, setEditingBudget] = useState(null);
   const [selectedCategory, setSelectedCategory] = useState("");
@@ -112,7 +94,7 @@ const BudgetComponent = () => {
         </FormGroup>
       </div>
       <ListGroup className="list-unstyled bg-info rounded-2 px-2 my-2 py-2">
-        {groupedBudgets.map((budget, index) => (
+        {budgetList.map((budget, index) => (
           <ListGroup.Item
             key={index}
             className="my-4 d-flex justify-content-between"
@@ -127,8 +109,7 @@ const BudgetComponent = () => {
               </InputGroup>
             ) : (
               <span className="m-2">
-                Budget for {budget.category} is currently set to $
-                {budget.totalAmount}
+                Budget for {budget.name} is currently set to ${budget.amount}
               </span>
             )}
             {editingBudget !== index ? (

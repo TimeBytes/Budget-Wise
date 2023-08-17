@@ -442,10 +442,17 @@ const resolvers = {
           if (checkDuplicate) {
             throw new Error("Budget already added");
           }
+          const categoryData = await User.findOne({
+            _id: context.user._id,
+            "categories._id": category,
+          });
+
           const updateUser = await User.findByIdAndUpdate(
             { _id: context.user._id },
             {
-              $addToSet: { budgets: { category, amount, name: category.name } },
+              $addToSet: {
+                budgets: { category, amount, name: categoryData.name },
+              },
             },
             { new: true }
           );
@@ -491,58 +498,6 @@ const resolvers = {
         );
         return updatedUser;
       }
-    },
-
-    addBudget: async (parent, { category, amount }, context) => {
-      if (!context.user)
-        throw new AuthenticationError("You need to be logged in!");
-
-      const newBudget = {
-        category,
-        amount,
-      };
-
-      const updatedUser = await User.findByIdAndUpdate(
-        context.user._id,
-        { $push: { budgets: newBudget } },
-        { new: true }
-      );
-      return updatedUser;
-    },
-    editBudget: async (
-      parent,
-      { budgetID, name, amount, category },
-      context
-    ) => {
-      if (!context.user)
-        throw new AuthenticationError("You need to be logged in!");
-
-      const updatedBudget = {
-        name,
-        amount,
-        category,
-      };
-
-      const updatedUser = await User.findOneAndUpdate(
-        { _id: context.user._id, "budget._id": budgetID },
-        { $set: { "budget.$": updatedBudget } },
-        { new: true }
-      );
-
-      if (!updatedUser) throw new Error("Unable to update budget.");
-
-      return updatedUser;
-    },
-    removeBudget: async (parent, { budgetID }, context) => {
-      if (!context.user)
-        throw new AuthenticationError("You need to be logged in!");
-
-      const updatedUser = await User.findByIdAndUpdate(
-        context.user._id,
-        { $pull: { budgets: { _id: budgetID } } },
-        { new: true }
-      );
-      return updatedUser;
     },
 
     addDonation: async (parents, args, context) => {

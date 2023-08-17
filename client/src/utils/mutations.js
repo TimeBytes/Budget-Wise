@@ -165,7 +165,6 @@ export const ADD_BUDGET = gql`
     addBudget(amount: $amount, category: $category) {
       _id
       amount
-      name
       category {
         _id
         name
