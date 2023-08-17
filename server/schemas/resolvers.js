@@ -452,6 +452,7 @@ const resolvers = {
     addBudget: async (parent, { category, amount }, context) => {
       if (context.user) {
         try {
+          console.log("try");
           const checkDuplicate = await User.findOne({
             _id: context.user._id,
             "budgets.category": category,
@@ -477,6 +478,7 @@ const resolvers = {
           );
           return updateUser;
         } catch (err) {
+          console.log("catch");
           console.log(err);
           throw new Error("try again");
         }
