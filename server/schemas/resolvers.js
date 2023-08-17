@@ -297,9 +297,12 @@ const resolvers = {
     ) => {
       if (context.user) {
         try {
-          const checkDuplicate = await User.findOne({ _id: context.user._id, "expenses.description": name });
+          const checkDuplicate = await User.findOne({
+            _id: context.user._id,
+            "expenses.description": name,
+          });
           if (checkDuplicate) {
-              throw new Error('Expense already exists.');
+            throw new Error("Expense already exists.");
           }
           const updateUser = await User.findByIdAndUpdate(
             { _id: context.user._id },
@@ -367,7 +370,11 @@ const resolvers = {
       }
     },
 
-    addCategory: async (parents, {name, isBudget, isExpense, isIncome}, context) => {
+    addCategory: async (
+      parents,
+      { name, isBudget, isExpense, isIncome },
+      context
+    ) => {
       if (context.user) {
         try {
           const checkDuplicate = await User.findOne({
@@ -379,10 +386,14 @@ const resolvers = {
           }
           const updateUser = await User.findByIdAndUpdate(
             { _id: context.user._id },
-            { $addToSet: { categories: {name, isBudget, isExpense, isIncome}}},
+            {
+              $addToSet: {
+                categories: { name, isBudget, isExpense, isIncome },
+              },
+            },
             { new: true }
           );
-          const newCategory = {name, isIncome, isExpense, isBudget}
+          const newCategory = { name, isIncome, isExpense, isBudget };
           return newCategory;
         } catch (err) {
           throw new Error("try again");
@@ -418,12 +429,12 @@ const resolvers = {
       }
       throw new AuthenticationError("You need to be logged in!");
     },
-    removeCategory: async (parent, { category }, context) => {
+    removeCategory: async (parent, category, context) => {
       if (context.user) {
         try {
           const updatedUser = await User.findOneAndUpdate(
             { _id: context.user._id },
-            { $pull: { categories: { _id: category._id } } },
+            { $pull: { categories: { _id: category } } },
             { new: true }
           );
           return updatedUser;
@@ -447,7 +458,9 @@ const resolvers = {
             _id: context.user._id,
           });
           const categoriesData = userData.categories;
-          const categoryName = categoriesData.filter((singleCategory)=> singleCategory._id == category);
+          const categoryName = categoriesData.filter(
+            (singleCategory) => singleCategory._id == category
+          );
           const updateUser = await User.findByIdAndUpdate(
             { _id: context.user._id },
             {
