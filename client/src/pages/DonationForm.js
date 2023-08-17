@@ -10,6 +10,7 @@ import {
   useColorModeValue,
 } from "@chakra-ui/react";
 
+import logo from "../assets/images/budgetwise-logo.png";
 import React, { useEffect, useState } from "react"; // Update the import
 import { loadStripe } from "@stripe/stripe-js";
 import { useLazyQuery } from "@apollo/client";
@@ -59,29 +60,34 @@ const stripePromise = loadStripe(
   return (
     <div>
       <Center
-        bg={useColorModeValue("gray.50", "gray.800")}
+        bg={useColorModeValue()}
       >
         <Heading mt={10} 
-        bg={useColorModeValue("gray.50", "gray.800")}
+        bg={useColorModeValue()}
+        style={{fontFamily:"titan one",color:"#037390"}}
+        fontSize={50}
         >Help us, help you!</Heading>
       </Center>
+      <section className="text-center " >
+        <img src={logo} alt="Budget Wise Logo" className="logo" style={{maxWidth:300}} />
+      </section>
 
       <Flex
-        minH={"65vh"}
+        minH={"60vh"}
         align={"center"}
         justify={"center"}
-        bg={useColorModeValue("gray.50", "gray.800")}
+        bg={useColorModeValue()}
 
       >
         <Stack
           spacing={4}
           w={"full"}
-          maxW={"md"}
-          bg={useColorModeValue("white", "gray.700")}
+          maxW={"xl"}
+          bg={useColorModeValue("gray.100")}
           rounded={"xl"}
           boxShadow={"lg"}
           p={6}
-          my={12}
+          mb={12}
         >
           <Heading lineHeight={1.1} fontSize={{ base: "2xl", sm: "3xl" }}>
             Donate

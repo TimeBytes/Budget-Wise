@@ -5,7 +5,8 @@ import SignUpForm from "../pages/SignupForm";
 import LoginForm from "../pages/LoginForm";
 
 import Auth from "../utils/auth";
-import { Heading } from "@chakra-ui/react";
+import { Heading, color } from "@chakra-ui/react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const AppNavbar = () => {
   // set modal display state
@@ -21,41 +22,36 @@ const AppNavbar = () => {
         collapseOnSelect
         variant="light"
         expand="lg"
-        className="navbar py-5 fs-4"
+        className="navbar py-3 fs-4"
         style={navbarStyle}
         
       >
         <Container fluid className="d-flex ">
           <Navbar.Brand as={Link} to="/" >
-            <h1 className="display-2 fw-bold ">BudgetWise</h1>
+            <h1 className="display-1 " style={{fontFamily:'Titan One', color:"white"}}>BudgetWise</h1>
           </Navbar.Brand>
-          <Navbar.Toggle aria-controls="navbar" />
-          <Navbar.Collapse id="navbar">
-            <Nav className="ml-auto ">
-              <Nav.Link eventKey="1" as={Link} to="/">
-                Home
-              </Nav.Link>
+          <Navbar.Toggle aria-controls="navbar" style={{color:"white"}} />
+          <Navbar.Collapse id="navbar " style={{color:"white"}} >
+            <Nav className="ml-auto " >
+
               {/* if user is logged in show and Enter Transactions and Logout */}
               {Auth.loggedIn() ? (
                 <>
-                  <Nav.Link eventKey="2" as={Link} to="/dashboard">
+                  <Nav.Link eventKey="2" as={Link} to="/dashboard "style={{fontFamily:'fira code',color:"white", fontWeight:'bold'}}>
                     Dashboard
                   </Nav.Link>
-                  <Nav.Link eventKey="3" as={Link} to="/categories">
+                  <Nav.Link eventKey="3" as={Link} to="/categories"style={{fontFamily:'fira code',color:"white", fontWeight:'bold'}}>
                     Categories
                   </Nav.Link>
-                  <Nav.Link eventKey="3" as={Link} to="/appendix">
-                    Appendix
-                  </Nav.Link>
-                  <Nav.Link eventKey="5" as={Link} to="/donate">
+                  <Nav.Link eventKey="5" as={Link} to="/donate"style={{fontFamily:'fira code',color:"white", fontWeight:'bold'}}>
                     Donate
                   </Nav.Link>
-                  <Nav.Link eventKey="6" onClick={Auth.logout}>
+                  <Nav.Link eventKey="6" onClick={Auth.logout}style={{fontFamily:'fira code',color:"white", fontWeight:'bold'}}>
                     Logout
                   </Nav.Link>
                 </>
               ) : (
-                <Nav.Link eventKey="5" onClick={() => setShowModal(true)}>
+                <Nav.Link eventKey="5" onClick={() => setShowModal(true)}style={{fontFamily:'fira code',color:"white", fontWeight:'bold'}}>
                   Login/Sign Up
                 </Nav.Link>
               )}
