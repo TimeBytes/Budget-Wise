@@ -255,6 +255,13 @@ export const REMOVE_CATEGORY = gql`
   mutation removeCategory($category: ID!) {
     removeCategory(category: $category) {
       _id
+      categories {
+        _id
+        name
+        isIncome
+        isExpense
+        isBudget
+      }
     }
   }
 `;
