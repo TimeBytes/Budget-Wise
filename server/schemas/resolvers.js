@@ -85,6 +85,7 @@ const resolvers = {
       try {
         const { user } = context;
         const userData = await User.findById(user._id);
+        console.log(userData.budgets);
         return userData.budgets;
       } catch (error) {
         throw new Error(error);
