@@ -477,6 +477,7 @@ const resolvers = {
           );
           return updateUser;
         } catch (err) {
+          console.log(err);
           throw new Error("try again");
         }
       }
