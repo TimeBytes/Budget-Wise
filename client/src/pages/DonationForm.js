@@ -104,11 +104,11 @@ const stripePromise = loadStripe(
           </FormControl>
           <Stack spacing={6} direction={["column", "row"]}>
             <Button
-              bg={"blue.400"}
+              bg={"blue.600"}
               color={"white"}
               w="full"
               _hover={{
-                bg: "blue.500",
+                bg: "blue.700",
               }}
               onClick={submitCheckout}
             >

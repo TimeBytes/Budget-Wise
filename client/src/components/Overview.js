@@ -90,7 +90,7 @@ const OverviewComponent = () => {
 
 return (
   <Container className="mt-4 col-12">
-    <h1 className="display-2 text-center my-4" style={{fontFamily:'Titan One', color:"#037390"}}>Overview</h1>
+    <h1 className="display-2 text-center my-4" style={{fontFamily:'Titan One', color:"#037390"}}>Dashboard</h1>
     <Row className="justify-content-around">
       <Container className=" border col-10">
       <Col className="mb-4 ">

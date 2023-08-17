@@ -94,7 +94,7 @@ const BudgetComponent = () => {
         </FormGroup>
       </div>
 
-      <ListGroup className="list-unstyled bg-info rounded-2 px-2 my-2 py-2">
+      <ListGroup className="list-unstyled bg rounded-2 px-2 my-2 py-2">
         {budgetList.map((budget, index) => (
 
 
