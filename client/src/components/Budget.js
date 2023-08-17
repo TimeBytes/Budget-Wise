@@ -50,7 +50,7 @@ const BudgetComponent = () => {
 
   useEffect(() => {
     queryCategoryList.refetch();
-  });
+  }, [queryCategoryList]);
 
   const handleBudgetChange = (index, event) => {
     const updatedBudgets = [...budgets];
