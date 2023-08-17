@@ -87,7 +87,6 @@ const CategoryComponent = () => {
   };
 
   const handleDeleteCategory = (categoryId) => {
-    console.log(categoryId);
     deleteCategory({
       variables: {
         category: categoryId,
