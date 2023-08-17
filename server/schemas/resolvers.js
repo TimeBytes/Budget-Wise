@@ -452,34 +452,20 @@ const resolvers = {
     addBudget: async (parent, { category, amount }, context) => {
       if (context.user) {
         try {
-          console.log("try");
           const checkDuplicate = await User.findOne({
             _id: context.user._id,
             "budgets.category": category,
           });
           if (checkDuplicate) {
-            console.log("duplicate");
             throw new Error("Budget already added");
           }
           const userData = await User.findOne({
             _id: context.user._id,
           });
-          console.log("userData");
           const categoriesData = userData.categories;
           const categoryName = categoriesData.filter(
             (singleCategory) => singleCategory._id == category
           );
-
-          console.log("categoryName");
-          console.log({ categoryName });
-
-          console.log({
-            category,
-            amount,
-            name: categoryName[0].name,
-            context: context.user._id,
-          });
-
           const updateUser = await User.findByIdAndUpdate(
             { _id: context.user._id },
             {
@@ -489,11 +475,9 @@ const resolvers = {
             },
             { new: true }
           );
-          console.log("updateUser before return");
+
           return updateUser;
         } catch (err) {
-          console.log("catch");
-          console.log(err);
           throw new Error("try again");
         }
       }
