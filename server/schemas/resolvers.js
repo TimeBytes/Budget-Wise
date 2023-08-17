@@ -1,5 +1,6 @@
 const { User, Donation, Category } = require("../models");
 const { AuthenticationError } = require("apollo-server-express");
+const mongoose = require('mongoose');
 
 require("dotenv").config();
 
@@ -429,20 +430,22 @@ const resolvers = {
       }
       throw new AuthenticationError("You need to be logged in!");
     },
-    removeCategory: async (parent, category, context) => {
-      if (context.user) {
-        try {
-          const updatedUser = await User.findOneAndUpdate(
-            { _id: context.user._id },
-            { $pull: { categories: { _id: category } } },
-            { new: true }
-          );
-          return updatedUser;
-        } catch (err) {
-          throw new Error("Error removing category");
+
+    removeCategory: async (parent, {category}, context) => {
+        if (context.user) {
+            try {
+                const updatedUser = await User.findOneAndUpdate(
+                    { _id: context.user._id },
+                    { $pull: { categories: { _id: category } } },
+                    { new: true }
+                );
+                return updatedUser;
+            } catch (err) {
+                throw new Error("Category not removed");
+            }
         }
-      }
     },
+
 
     addBudget: async (parent, { category, amount }, context) => {
       if (context.user) {
