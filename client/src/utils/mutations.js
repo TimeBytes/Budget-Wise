@@ -161,12 +161,15 @@ export const REMOVE_EXPENSE = gql`
 `;
 
 export const ADD_BUDGET = gql`
-  mutation addBudget($name: String!, $amount: Float!, $category: String!) {
-    addBudget(name: $name, amount: $amount, category: $category) {
+  mutation addBudget($amount: Float!, $category: ID!) {
+    addBudget(amount: $amount, category: $category) {
       _id
-      name
       amount
-      category
+      name
+      category {
+        _id
+        name
+      }
     }
   }
 `;

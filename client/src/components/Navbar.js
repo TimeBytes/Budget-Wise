@@ -23,10 +23,9 @@ const AppNavbar = () => {
         expand="lg"
         className="navbar py-5 fs-4"
         style={navbarStyle}
-        
       >
         <Container fluid className="d-flex ">
-          <Navbar.Brand as={Link} to="/" >
+          <Navbar.Brand as={Link} to="/">
             <h1 className="display-2 fw-bold ">BudgetWise</h1>
           </Navbar.Brand>
           <Navbar.Toggle aria-controls="navbar" />
@@ -44,18 +43,15 @@ const AppNavbar = () => {
                   <Nav.Link eventKey="3" as={Link} to="/categories">
                     Categories
                   </Nav.Link>
-                  <Nav.Link eventKey="3" as={Link} to="/appendix">
-                    Appendix
-                  </Nav.Link>
-                  <Nav.Link eventKey="5" as={Link} to="/donate">
+                  <Nav.Link eventKey="4" as={Link} to="/donate">
                     Donate
                   </Nav.Link>
-                  <Nav.Link eventKey="6" onClick={Auth.logout}>
+                  <Nav.Link eventKey="5" onClick={Auth.logout}>
                     Logout
                   </Nav.Link>
                 </>
               ) : (
-                <Nav.Link eventKey="5" onClick={() => setShowModal(true)}>
+                <Nav.Link eventKey="6" onClick={() => setShowModal(true)}>
                   Login/Sign Up
                 </Nav.Link>
               )}

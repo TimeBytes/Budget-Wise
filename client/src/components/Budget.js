@@ -21,14 +21,14 @@ const groupBudgetsByCategory = (budgetList) => {
 
     if (!groupedBudgets[categoryId]) {
       groupedBudgets[categoryId] = {
-        category: budget.category, // Assuming you have a 'category' field in your budget
+        category: budget.category.name, // Assuming you have a 'category' field in your budget
         totalAmount: budget.amount,
       };
     } else {
       groupedBudgets[categoryId].totalAmount += budget.amount;
     }
   });
-
+  console.log(groupedBudgets);
   return Object.values(groupedBudgets);
 };
 
@@ -75,12 +75,10 @@ const BudgetComponent = () => {
   };
 
   const handleNewBudgetAmountChange = (event) => {
-    setNewBudgetAmount(event.target.value);
+    setNewBudgetAmount(parseFloat(event.target.value));
   };
 
   const handleAddBudget = () => {
-    console.log(selectedCategory);
-    console.log(newBudgetAmount);
     if (selectedCategory && newBudgetAmount) {
       addBudget();
     }
@@ -97,7 +95,7 @@ const BudgetComponent = () => {
           >
             <option value="">Select a Category</option>
             {categoriesList.map((category) => (
-              <option key={category._id} value={category.name}>
+              <option key={category._id} value={category._id}>
                 {category.name}
               </option>
             ))}
@@ -123,13 +121,13 @@ const BudgetComponent = () => {
               <InputGroup>
                 <FormControl
                   type="number"
-                  value={budget.amount}
+                  value={editingBudget}
                   onChange={(event) => handleBudgetChange(index, event)}
                 />
               </InputGroup>
             ) : (
               <span className="m-2">
-                Budget for {budget.category._id} is currently set to $
+                Budget for {budget.category} is currently set to $
                 {budget.totalAmount}
               </span>
             )}
