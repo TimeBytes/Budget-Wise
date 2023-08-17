@@ -24,7 +24,7 @@ const BudgetComponent = () => {
     refetchQueries: [{ query: QUERY_CATEGORY_BY_TYPE }],
   });
   const categoriesList = queryCategoryList?.data?.categoryByType || [];
-  const [isAddingBudget, setIsAddingBudget] = useState(false);
+
   // Queries the Budgets for the list
   const { loading, error, data, refetch } = useQuery(QUERY_ALL_BUDGET);
   const budgetList = data?.allBudgets || [];
@@ -83,8 +83,7 @@ const BudgetComponent = () => {
 
   const handleAddBudget = async () => {
     try {
-      if (selectedCategory && newBudgetAmount && !isAddingBudget) {
-        setIsAddingBudget(true);
+      if (selectedCategory && newBudgetAmount) {
         await addBudget();
         const updatedBudgets = [...budgets];
         updatedBudgets.push({
@@ -95,11 +94,9 @@ const BudgetComponent = () => {
         setSelectedCategory("");
         setNewBudgetAmount("");
         setSuccessMessage("Budget added successfully!");
-        setIsAddingBudget(false); // Re-enable the button
       }
     } catch (error) {
       console.error(error);
-      setIsAddingBudget(false); // Re-enable the button on error
       setSuccessMessage("An error occurred. Please try again later.");
     }
   };
