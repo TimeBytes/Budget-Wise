@@ -469,6 +469,17 @@ const resolvers = {
           const categoryName = categoriesData.filter(
             (singleCategory) => singleCategory._id == category
           );
+
+          console.log("categoryName");
+          console.log({ categoryName });
+
+          console.log({
+            category,
+            amount,
+            name: categoryName[0].name,
+            context: context.user._id,
+          });
+
           const updateUser = await User.findByIdAndUpdate(
             { _id: context.user._id },
             {
