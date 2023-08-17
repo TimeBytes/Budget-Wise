@@ -8,7 +8,7 @@
 
 ## Description
 
-An online web application that allows users to track their finances. This includes, income, expenses, budgetting, and more! This application was developed using the MERN stack.
+An online web application that allows users to track their finances. This includes, income, expenses, budgetting, and more! This application was developed using the MERN stack. Our app also has a donation page integrated with Stripe.
 
 ## Table of Contents
 
@@ -25,11 +25,17 @@ To use locally `git clone` this repository. open the terminal and type `npm inst
 
 ## Usage
 
-Visit the deployed app at LINK
+Visit the deployed app at https://afternoon-tundra-66898-d64f284645ec.herokuapp.com/ 
 
 ## Demo
 
-![DEMO]()
+Below are some images of the deployed site!
+
+![DEMO](./client/src/assets/images/homepageBW.PNG)
+![DEMO](./client/src/assets/images/overview.PNG)
+![DEMO](./client/src/assets/images/distribution.PNG)
+![DEMO](./client/src/assets/images/donate.PNG)
+
 
 ## Credits
 
