@@ -5,13 +5,22 @@ import logoImage from "../assets/images/budgetwise1.png";
 import expenseimg from "../assets/images/expensetracking.jpg";
 import chartimg from "../assets/images/charts.jpg";
 import analyticsimg from "../assets/images/analytics.jpg";
+import { Container, Row, Col } from 'react-bootstrap';
+
+// Assuming this code is within your component's render method
 
 const HomePage = () => {
   return (
     <div className="homepage-container">
       <section className="hero-section text-center">
-        <img src={logoImage} alt="Budget Wise Logo" className="logo" />
-      </section>
+    <Container>
+      <Row>
+        <Col>
+          <img src={logoImage} alt="Budget Wise Logo" className="logo img-fluid" />
+        </Col>
+      </Row>
+    </Container>
+  </section>
 
       <div className="container text-center features-section">    
         <FeatureCard 
