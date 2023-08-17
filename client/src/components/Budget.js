@@ -81,8 +81,7 @@ const BudgetComponent = () => {
     setNewBudgetAmount(parseFloat(event.target.value));
   };
 
-  const handleAddBudget = async (e) => {
-    e.stopPropagation();
+  const handleAddBudget = async () => {
     try {
       if (selectedCategory && newBudgetAmount) {
         await addBudget();
@@ -95,6 +94,10 @@ const BudgetComponent = () => {
         setSelectedCategory("");
         setNewBudgetAmount("");
         setSuccessMessage("Budget added successfully!");
+      } else {
+        setSuccessMessage(
+          "Please select a category and enter a budget amount."
+        );
       }
     } catch (error) {
       console.error(error);
