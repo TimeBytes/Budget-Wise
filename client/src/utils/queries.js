@@ -151,16 +151,12 @@ export const QUERY_USER = gql`
 export const QUERY_ALL_BUDGET = gql`
   query allBudgets {
     allBudgets {
-      _id
       amount
-      name
       category {
         _id
-        name
-        isIncome
-        isExpense
-        isBudget
       }
+      name
+      _id
     }
   }
 `;

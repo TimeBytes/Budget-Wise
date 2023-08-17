@@ -20,9 +20,9 @@ const typeDefs = gql`
 
   type Budget {
     _id: ID!
-    category: Category
     amount: Float
     name: String
+    category: Category!
   }
 
   type Income {
