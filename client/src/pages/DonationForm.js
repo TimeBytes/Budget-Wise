@@ -16,60 +16,60 @@ import { loadStripe } from "@stripe/stripe-js";
 import { useLazyQuery } from "@apollo/client";
 import { QUERY_CHECKOUT } from "../utils/queries";
 const stripePromise = loadStripe(
-"pk_test_51NdeCcJJYT86npXC9P0eXGwM0LEojk6P7yMabT5rpFsACJ01ZiYQXY2OfqhYDEmP93DJyYkDbkHOuXTcnEHDklX400aBYioMbW"
-  );
-  const DonationForm = () => {
+  "pk_test_51NdeCcJJYT86npXC9P0eXGwM0LEojk6P7yMabT5rpFsACJ01ZiYQXY2OfqhYDEmP93DJyYkDbkHOuXTcnEHDklX400aBYioMbW"
+);
+const DonationForm = () => {
+  const [getCheckout, { data, error }] = useLazyQuery(QUERY_CHECKOUT);
+  const [amount, setAmount] = useState("");
 
-    const [getCheckout, { data, error }] = useLazyQuery(QUERY_CHECKOUT);
-    const [amount, setAmount] = useState("");
+  function handleChange(event) {
+    setAmount(event.target.value);
+  }
 
-
-    function handleChange(event) {
-      setAmount(event.target.value);
-    };
-
-    useEffect(() => {
-      if (data) {
-        stripePromise.then((res) => {
-          console.log(data);
-          res.redirectToCheckout( { sessionId: data.checkout.session  });
-        });
-      }
-    }, [data]);
-
-    const submitCheckout = async (event) => {
-      event.preventDefault();
-      // const amount = document.querySelector("input").value;
-
-
-      if (!amount) {
-        alert("Please enter an amount");
-      } else {
-        getCheckout({
-          variables: { amount:parseFloat (amount) },
-        });
-      }
-    };
-
-
-    
-    if (error) {
-      console.error(error);
+  useEffect(() => {
+    if (data) {
+      stripePromise.then((res) => {
+        res.redirectToCheckout({ sessionId: data.checkout.session });
+      });
     }
+  }, [data]);
+
+  const submitCheckout = async (event) => {
+    event.preventDefault();
+    // const amount = document.querySelector("input").value;
+
+    if (!amount) {
+      alert("Please enter an amount");
+    } else {
+      getCheckout({
+        variables: { amount: parseFloat(amount) },
+      });
+    }
+  };
+
+  if (error) {
+    console.error(error);
+  }
 
   return (
     <div>
-      <Center
-        bg={useColorModeValue()}
-      >
-        <Heading mt={10} 
-        bg={useColorModeValue()}
-        style={{fontFamily:"titan one",color:"#037390"}}
-        fontSize={50}
-        >Help us, help you!</Heading>
+      <Center bg={useColorModeValue()}>
+        <Heading
+          mt={10}
+          bg={useColorModeValue()}
+          style={{ fontFamily: "titan one", color: "#037390" }}
+          fontSize={50}
+        >
+          Help us, help you!
+        </Heading>
       </Center>
-      <section className="text-center " >
-        <img src={logo} alt="Budget Wise Logo" className="logo" style={{maxWidth:300}} />
+      <section className="text-center ">
+        <img
+          src={logo}
+          alt="Budget Wise Logo"
+          className="logo"
+          style={{ maxWidth: 300 }}
+        />
       </section>
 
       <Flex
@@ -77,7 +77,6 @@ const stripePromise = loadStripe(
         align={"center"}
         justify={"center"}
         bg={useColorModeValue()}
-
       >
         <Stack
           spacing={4}
@@ -120,8 +119,5 @@ const stripePromise = loadStripe(
     </div>
   );
 };
-
-
-
 
 export default DonationForm;

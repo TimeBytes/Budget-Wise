@@ -35,8 +35,12 @@ const AppNavbar = () => {
             </h1>
           </Navbar.Brand>
           <Navbar.Toggle aria-controls="navbar" style={{ color: "white" }} />
-          <Navbar.Collapse id="navbar " style={{ color: "white" }}>
-            <Nav className="m-auto">
+          <Navbar.Collapse
+            id="navbar "
+            style={{ color: "white" }}
+            className="d-flex justify-content-end"
+          >
+            <Nav>
               {/* if user is logged in show and Enter Transactions and Logout */}
               {Auth.loggedIn() ? (
                 <>
