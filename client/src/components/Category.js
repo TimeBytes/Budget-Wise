@@ -26,7 +26,7 @@ const CategoryComponent = () => {
   const [successMessage, setSuccessMessage] = useState("");
   const successMessageDuration = 3000;
   // Queries all existing categories
-  const { loading, error, data } = useQuery(QUERY_ALL_CATEGORIES);
+  const { loading, error, data, refetch } = useQuery(QUERY_ALL_CATEGORIES);
   const categoryList = data?.allCategories || [];
 
   const handleIsIncome = () => {
@@ -58,6 +58,11 @@ const CategoryComponent = () => {
       };
     }
   }, [successMessage]);
+
+  useEffect(() => {
+    refetch();
+  });
+
   const handleAddCategory = () => {
     if (newCategory) {
       addCategory({
