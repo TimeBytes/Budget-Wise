@@ -1,15 +1,13 @@
 import React, { useState } from "react";
 import { gql } from "@apollo/client";
 import {
-  Button,
   FormGroup,
-  FormLabel,
   FormSelect,
   FormCheck,
   ListGroup,
   InputGroup,
-  FormControl,
 } from "react-bootstrap";
+import { Button } from "@chakra-ui/react";
 import { useMutation, useQuery } from "@apollo/client";
 import {
   ADD_CATEGORY,
@@ -78,21 +76,36 @@ const CategoryComponent = () => {
   };
 
   return (
-    <div className="m-auto">
-      <div>
-        <h2 className="display-5 text-center bg-info">
-          Here you can customize the name of the Categories and which dropdown
-          to include it into.
+    <div className="m-auto col-10 my-5 border" style={{fontWeight:"bold"}} >
+      <div className="border-bottom">
+        <h2
+          className="display-5 text-center"
+          style={{ fontFamily: "Titan One", color: "#037390" }}
+        >
+          Customize Your Categories
         </h2>
-        <FormGroup className="d-flex flex-column align-content-center flex-wrap border border-info rounded-2 p-3 bg-info">
+        <FormGroup className="mt-5 d-flex flex-column align-content-center flex-wrap p-3 bg">
           <div>
             <input
               type="text"
               placeholder="Category Name"
               value={newCategory}
               onChange={handleNewCategoryChange}
+              style={{
+                fontWeight: "bold",
+                borderColor: "#037390",
+                borderWidth: "1px",
+              }}
             />
-            <Button onClick={handleAddCategory} className="mx-3">
+            <Button
+              onClick={handleAddCategory}
+              className="mx-3"
+              bg={"blue.600"}
+              color={"white"}
+              _hover={{
+                bg: "blue.700",
+              }}
+            >
               Add Category
             </Button>
           </div>
@@ -124,23 +137,34 @@ const CategoryComponent = () => {
           </div>
         </FormGroup>
       </div>
-      <ListGroup className="list-unstyled bg-info rounded-2 px-2 my-2 py-2">
+      <ListGroup className="list-unstyled px-2 my-2 py-2 d-flex flex-row flex-wrap justify-content-center">
         {categoryList.map((category) => (
-          <ListGroup.Item
+          <li
             key={category._id}
-            className="my-4 d-flex justify-content-between"
+            className="my-4 d-flex justify-content-between border d-flex flex-column col-3 align-items-center"
           >
-            <span className="m-2">{category.name}</span>
-            <div>
-              <Button
-                variant="danger"
-                value={category._id}
-                onClick={() => handleDeleteCategory(category._id)}
-              >
-                Delete
-              </Button>
-            </div>
-          </ListGroup.Item>
+            <span className="m-2">
+              Category: {category.name}
+              <br />
+              Income: {category.isIncome ? "Yes" : "No"}
+              <br />
+              Expense: {category.isExpense ? "Yes" : "No"}
+              <br />
+              Budget: {category.isBudget ? "Yes" : "No"}
+            </span>
+            <Button
+              value={category._id}
+              onClick={() => handleDeleteCategory(category._id)}
+              bg={"blue.600"}
+              color={"white"}
+              _hover={{
+                bg: "blue.700",
+              }}
+              className="mx-5 my-2"
+            >
+              Delete
+            </Button>
+          </li>
         ))}
       </ListGroup>
     </div>

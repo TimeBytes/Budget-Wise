@@ -3,7 +3,9 @@ import Budget from "../components/Budget";
 import Transaction from "../components/Transaction";
 import Overview from "../components/Overview";
 import Category from "../components/Category";
-import { Button, Container } from "react-bootstrap";
+import { Container } from "react-bootstrap";
+import { Button } from "@chakra-ui/react";
+
 import "bootstrap/dist/css/bootstrap.css";
 
 const Dashboard = () => {
@@ -21,10 +23,18 @@ const Dashboard = () => {
             Transactions
           </h1>
           <nav className="d-flex justify-content-around">
-            <Button className="btn" onClick={handleTransactionTab}>
+            <Button className="btn" onClick={handleTransactionTab} bg={"blue.600"}
+              color={"white"}
+              _hover={{
+                bg: "blue.700",
+              }}>
               income
             </Button>
-            <Button className="btn" onClick={handleTransactionTab}>
+            <Button className="btn" onClick={handleTransactionTab} bg={"blue.600"}
+              color={"white"}
+              _hover={{
+                bg: "blue.700",
+              }}>
               expense
             </Button>
           </nav>

@@ -5,6 +5,8 @@ import React, { useState } from "react";
 import { FormCheck, FormGroup, FormLabel, FormSelect } from "react-bootstrap";
 import { QUERY_CATEGORY_BY_TYPE } from "../utils/queries";
 import { ADD_INCOME, ADD_EXPENSE } from "../utils/mutations";
+import { Button } from "@chakra-ui/react";
+
 
 const TransactionComponent = ({ type }) => {
   const { loading, error, data } = useQuery(QUERY_CATEGORY_BY_TYPE, {
@@ -129,9 +131,13 @@ const TransactionComponent = ({ type }) => {
         />
       </FormGroup>
 
-      <button className="btn btn-primary" onClick={handleTransactionSubmit}>
+      <Button className="btn btn-primary" onClick={handleTransactionSubmit} bg={"blue.600"}
+              color={"white"}
+              _hover={{
+                bg: "blue.700",
+              }}>
         Add {type === "Income" ? "Income" : "Expense"}
-      </button>
+      </Button>
     </div>
   );
 };
