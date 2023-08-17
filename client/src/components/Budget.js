@@ -13,25 +13,6 @@ import { useLazyQuery, useQuery, useMutation } from "@apollo/client";
 import { QUERY_ALL_BUDGET, QUERY_CATEGORY_BY_TYPE } from "../utils/queries";
 import { ADD_BUDGET } from "../utils/mutations";
 
-const groupBudgetsByCategory = (budgetList) => {
-  const groupedBudgets = {};
-
-  budgetList.forEach((budget) => {
-    const categoryId = budget.category._id;
-
-    if (!groupedBudgets[categoryId]) {
-      groupedBudgets[categoryId] = {
-        category: budget.category, // Assuming you have a 'category' field in your budget
-        totalAmount: budget.amount,
-      };
-    } else {
-      groupedBudgets[categoryId].totalAmount += budget.amount;
-    }
-  });
-
-  return Object.values(groupedBudgets);
-};
-
 const BudgetComponent = () => {
   const [budgets, setBudgets] = useState([]);
 
@@ -44,8 +25,9 @@ const BudgetComponent = () => {
 
   // Queries the Budgets for the list
   const { loading, error, data } = useQuery(QUERY_ALL_BUDGET);
+  console.log(data);
   const budgetList = data?.allBudgets || [];
-  const groupedBudgets = groupBudgetsByCategory(budgetList);
+  console.log(budgetList);
 
   const [editingBudget, setEditingBudget] = useState(null);
   const [selectedCategory, setSelectedCategory] = useState("");
@@ -75,12 +57,10 @@ const BudgetComponent = () => {
   };
 
   const handleNewBudgetAmountChange = (event) => {
-    setNewBudgetAmount(event.target.value);
+    setNewBudgetAmount(parseFloat(event.target.value));
   };
 
   const handleAddBudget = () => {
-    console.log(selectedCategory);
-    console.log(newBudgetAmount);
     if (selectedCategory && newBudgetAmount) {
       addBudget();
     }
@@ -97,7 +77,7 @@ const BudgetComponent = () => {
           >
             <option value="">Select a Category</option>
             {categoriesList.map((category) => (
-              <option key={category._id} value={category.name}>
+              <option key={category._id} value={category._id}>
                 {category.name}
               </option>
             ))}
@@ -113,8 +93,11 @@ const BudgetComponent = () => {
           </Button>
         </FormGroup>
       </div>
-      <ListGroup className="list-unstyled bg rounded-2 px-2 my-2 py-2">
-        {groupedBudgets.map((budget, index) => (
+
+      <ListGroup className="list-unstyled bg-info rounded-2 px-2 my-2 py-2">
+        {budgetList.map((budget, index) => (
+
+
           <ListGroup.Item
             key={index}
             className="my-4 d-flex justify-content-between"
@@ -123,14 +106,13 @@ const BudgetComponent = () => {
               <InputGroup>
                 <FormControl
                   type="number"
-                  value={budget.amount}
+                  value={editingBudget}
                   onChange={(event) => handleBudgetChange(index, event)}
                 />
               </InputGroup>
             ) : (
               <span className="m-2">
-                Budget for {budget.category._id} is currently set to $
-                {budget.totalAmount}
+                Budget for {budget.name} is currently set to ${budget.amount}
               </span>
             )}
             {editingBudget !== index ? (
