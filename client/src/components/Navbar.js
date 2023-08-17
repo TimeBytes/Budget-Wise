@@ -24,7 +24,6 @@ const AppNavbar = () => {
         expand="lg"
         className="navbar py-3 fs-4"
         style={navbarStyle}
-        
       >
         <Container fluid className="d-flex ">
           <Navbar.Brand as={Link} to="/" >
