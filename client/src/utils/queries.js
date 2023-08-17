@@ -19,9 +19,9 @@ export const QUERY_USER = gql`
       categories {
         _id
         name
-        isBudget
-        isExpense
         isIncome
+        isExpense
+        isBudget
       }
       incomes {
         _id
@@ -53,6 +53,7 @@ export const QUERY_USER = gql`
       }
       budgets {
         _id
+        name
         category {
           _id
           name

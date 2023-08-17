@@ -297,10 +297,10 @@ const resolvers = {
     ) => {
       if (context.user) {
         try {
-          // const checkDuplicate = await User.findOne({ _id: context.user._id, "expenses.description": name });
-          // if (checkDuplicate) {
-          //     throw new Error('Expense already exists.');
-          // }
+          const checkDuplicate = await User.findOne({ _id: context.user._id, "expenses.description": name });
+          if (checkDuplicate) {
+              throw new Error('Expense already exists.');
+          }
           const updateUser = await User.findByIdAndUpdate(
             { _id: context.user._id },
             {
@@ -367,22 +367,23 @@ const resolvers = {
       }
     },
 
-    addCategory: async (parents, category, context) => {
+    addCategory: async (parents, {name, isBudget, isExpense, isIncome}, context) => {
       if (context.user) {
         try {
           const checkDuplicate = await User.findOne({
             _id: context.user._id,
-            "categories.name": category.name,
+            "categories.name": name,
           });
           if (checkDuplicate) {
             throw new Error("Category already added");
           }
           const updateUser = await User.findByIdAndUpdate(
             { _id: context.user._id },
-            { $addToSet: { categories: category } },
+            { $addToSet: { categories: {name, isBudget, isExpense, isIncome}}},
             { new: true }
           );
-          return updateUser;
+          const newCategory = {name, isIncome, isExpense, isBudget}
+          return newCategory;
         } catch (err) {
           throw new Error("try again");
         }
@@ -407,7 +408,7 @@ const resolvers = {
           };
           const updatedUser = await User.findOneAndUpdate(
             { _id: context.user._id, "categories._id": id },
-            { $set: { "categories.$": newCategory } },
+            { $set: { categories: newCategory } },
             { new: true }
           );
           return updatedUser;
@@ -442,16 +443,16 @@ const resolvers = {
           if (checkDuplicate) {
             throw new Error("Budget already added");
           }
-          const categoryData = await User.findOne({
+          const userData = await User.findOne({
             _id: context.user._id,
-            "categories._id": category,
           });
-
+          const categoriesData = userData.categories;
+          const categoryName = categoriesData.filter((singleCategory)=> singleCategory._id == category);
           const updateUser = await User.findByIdAndUpdate(
             { _id: context.user._id },
             {
               $addToSet: {
-                budgets: { category, amount, name: categoryData.name },
+                budgets: { category, amount, name: categoryName[0].name },
               },
             },
             { new: true }

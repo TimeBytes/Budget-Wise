@@ -46,8 +46,8 @@ const typeDefs = gql`
     message: String
   }
   type Category {
-    _id: ID
-    name: String
+    _id: ID!
+    name: String!
     isIncome: Boolean
     isExpense: Boolean
     isBudget: Boolean
@@ -90,45 +90,22 @@ const typeDefs = gql`
   }
 
   type Mutation {
-    addUser(
-      username: String!
-      email: String!
-      password: String!
-      firstName: String!
-      lastName: String!
-    ): Auth
+    addUser(username: String!, email: String!, password: String!, firstName: String!, lastName: String!): Auth
     login(email: String!, password: String!): Auth
 
-    addIncome(
-      name: String!
-      amount: Float!
-      category: ID!
-      date: String!
-      isRecurring: Boolean!
-    ): User
+    addIncome(name: String!, amount: Float!, category: ID!, date: String!, isRecurring: Boolean!): User
     editIncome(incomeID: ID!, incomeData: incomeInput!): User
     removeIncome(incomeID: ID!): User
 
-    addExpense(
-      name: String!
-      amount: Float!
-      category: ID!
-      date: String!
-      isRecurring: Boolean
-    ): User
+    addExpense(name: String!, amount: Float!, category: ID!, date: String!, isRecurring: Boolean): User
     editExpense(expenseID: ID!, expenseData: expenseInput!): User
     removeExpense(expenseID: ID!): User
 
-    addCategory(
-      name: String!
-      isIncome: Boolean!
-      isExpense: Boolean!
-      isBudget: Boolean!
-    ): User
-    editCategory(id: ID!, categoryData: categoryInput!): User
-    removeCategory(category: ID!): User
+    addCategory(name: String!, isIncome: Boolean!, isExpense: Boolean!, isBudget: Boolean!): Category
+    editCategory(id: ID!, categoryData: categoryInput!): Category
+    removeCategory(category: ID!): Category
 
-    addBudget(amount: Float!, category: ID!): Budget
+    addBudget(amount: Float!, category: ID!, name: String): Budget
     editBudget(id: ID!, budgetData: budgetInput): User
     removeBudget(budgetID: ID!): User
 

@@ -37,64 +37,11 @@ const CategoryComponent = () => {
   const handleIsBudget = () => {
     setIsBudget(!isBudget);
   };
-  const [addCategory] = useMutation(ADD_CATEGORY, {
-    update(cache, { data: { addCategory } }) {
-      // Update the cache with the new category
-      cache.modify({
-        fields: {
-          allCategories(existingCategories = []) {
-            const newCategoryRef = cache.writeFragment({
-              data: addCategory,
-              fragment: gql`
-                fragment NewCategory on Category {
-                  _id
-                  name
-                }
-              `,
-            });
-            return [...existingCategories, newCategoryRef];
-          },
-        },
-      });
-    },
-  });
+  const [addCategory] = useMutation(ADD_CATEGORY);
 
-  const [deleteCategory] = useMutation(REMOVE_CATEGORY, {
-    update(cache, { data: { deleteCategory } }) {
-      // Remove the deleted category from the cache
-      cache.modify({
-        fields: {
-          allCategories(existingCategories = []) {
-            return existingCategories.filter(
-              (category) => category._id !== deleteCategory._id
-            );
-          },
-        },
-      });
-    },
-  });
+  const [deleteCategory] = useMutation(REMOVE_CATEGORY);
 
-  const [editCategory] = useMutation(EDIT_CATEGORY, {
-    update(cache, { data: { editCategory } }) {
-      // Update the cache with the new category
-      cache.modify({
-        fields: {
-          allCategories(existingCategories = []) {
-            const newCategoryRef = cache.writeFragment({
-              data: editCategory,
-              fragment: gql`
-                fragment NewCategory on Category {
-                  _id
-                  name
-                }
-              `,
-            });
-            return [...existingCategories, newCategoryRef];
-          },
-        },
-      });
-    },
-  });
+  const [editCategory] = useMutation(EDIT_CATEGORY);
 
   const handleNewCategoryChange = (event) => {
     setNewCategory(event.target.value);
@@ -105,6 +52,9 @@ const CategoryComponent = () => {
       addCategory({
         variables: {
           name: newCategory,
+          isIncome: isIncome,
+          isExpense: isExpense,
+          isBudget: isBudget
         },
       });
       setNewCategory("");
