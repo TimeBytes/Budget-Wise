@@ -54,7 +54,7 @@ const CategoryComponent = () => {
           name: newCategory,
           isIncome: isIncome,
           isExpense: isExpense,
-          isBudget: isBudget
+          isBudget: isBudget,
         },
       });
       setNewCategory("");
@@ -62,6 +62,7 @@ const CategoryComponent = () => {
   };
 
   const handleDeleteCategory = (categoryId) => {
+    console.log(categoryId);
     deleteCategory({
       variables: {
         id: categoryId,
@@ -129,25 +130,11 @@ const CategoryComponent = () => {
             key={category._id}
             className="my-4 d-flex justify-content-between"
           >
-            <span className="m-2">
-              Category: {category.name}
-              <br />
-              Is an income: {category.isIncome.toString()}
-              <br />
-              Is an expense: {category.isExpense.toString()}
-              <br />
-              Is a Budget: {category.isBudget.toString()}
-            </span>
-
+            <span className="m-2">{category.name}</span>
             <div>
               <Button
-                variant="secondary"
-                onClick={() => handleEditCategory(category._id)}
-              >
-                Edit
-              </Button>
-              <Button
                 variant="danger"
+                value={category._id}
                 onClick={() => handleDeleteCategory(category._id)}
               >
                 Delete

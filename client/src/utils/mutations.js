@@ -175,8 +175,18 @@ export const ADD_BUDGET = gql`
 `;
 
 export const EDIT_BUDGET = gql`
-  mutation editBudget($budgetID: ID!, $name: String!, $amount: Float!, $category: String!) {
-    editBudget(budgetID: $budgetID, name: $name, amount: $amount, category: $category) {
+  mutation editBudget(
+    $budgetID: ID!
+    $name: String!
+    $amount: Float!
+    $category: String!
+  ) {
+    editBudget(
+      budgetID: $budgetID
+      name: $name
+      amount: $amount
+      category: $category
+    ) {
       _id
       name
       amount
@@ -197,8 +207,18 @@ export const REMOVE_BUDGET = gql`
 `;
 
 export const ADD_CATEGORY = gql`
-  mutation addCategory($name: String!, $isIncome: Boolean!, $isExpense: Boolean!, $isBudget: Boolean!) {
-    addCategory(name: $name, isIncome: $isIncome, isExpense: $isExpense, isBudget: $isBudget){
+  mutation addCategory(
+    $name: String!
+    $isIncome: Boolean!
+    $isExpense: Boolean!
+    $isBudget: Boolean!
+  ) {
+    addCategory(
+      name: $name
+      isIncome: $isIncome
+      isExpense: $isExpense
+      isBudget: $isBudget
+    ) {
       name
       isIncome
       isExpense
@@ -208,8 +228,20 @@ export const ADD_CATEGORY = gql`
 `;
 
 export const EDIT_CATEGORY = gql`
-  mutation editCategory($category: ID!, $name: String!, $isIncome: Boolean!, $isExpense: Boolean!, $isBudget: Boolean!) {
-    editCategory(category: $category, name: $name, isIncome: $isIncome, isExpense: $isExpense, isBudget: $isBudget) {
+  mutation editCategory(
+    $category: ID!
+    $name: String!
+    $isIncome: Boolean!
+    $isExpense: Boolean!
+    $isBudget: Boolean!
+  ) {
+    editCategory(
+      category: $category
+      name: $name
+      isIncome: $isIncome
+      isExpense: $isExpense
+      isBudget: $isBudget
+    ) {
       _id
       name
       isIncome
@@ -223,10 +255,6 @@ export const REMOVE_CATEGORY = gql`
   mutation removeCategory($category: ID!) {
     removeCategory(category: $category) {
       _id
-      name
-      isIncome
-      isExpense
-      isBudget
     }
   }
 `;
