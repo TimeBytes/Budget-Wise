@@ -458,11 +458,13 @@ const resolvers = {
             "budgets.category": category,
           });
           if (checkDuplicate) {
+            console.log("duplicate");
             throw new Error("Budget already added");
           }
           const userData = await User.findOne({
             _id: context.user._id,
           });
+          console.log("userData");
           const categoriesData = userData.categories;
           const categoryName = categoriesData.filter(
             (singleCategory) => singleCategory._id == category
@@ -476,6 +478,7 @@ const resolvers = {
             },
             { new: true }
           );
+          console.log("updateUser before return");
           return updateUser;
         } catch (err) {
           console.log("catch");
