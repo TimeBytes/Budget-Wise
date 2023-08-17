@@ -32,8 +32,9 @@ Visit the deployed app at https://afternoon-tundra-66898-d64f284645ec.herokuapp.
 Below are some images of the deployed site!
 
 ![DEMO](./client/src/assets/images/homepageBW.PNG)
-![DEMO](./client/src/assets/images/overview.PNG)
+![DEMO](./client/src/assets/images/dashboard.PNG)
 ![DEMO](./client/src/assets/images/distribution.PNG)
+![DEMO](./client/src/assets/images/categories.PNG)
 ![DEMO](./client/src/assets/images/donate.PNG)
 
 
