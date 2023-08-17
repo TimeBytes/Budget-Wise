@@ -81,7 +81,8 @@ const BudgetComponent = () => {
     setNewBudgetAmount(parseFloat(event.target.value));
   };
 
-  const handleAddBudget = async () => {
+  const handleAddBudget = async (e) => {
+    e.stopPropagation();
     try {
       if (selectedCategory && newBudgetAmount) {
         await addBudget();
