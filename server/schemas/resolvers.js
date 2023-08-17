@@ -1,6 +1,6 @@
 const { User, Donation, Category } = require("../models");
 const { AuthenticationError } = require("apollo-server-express");
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
 require("dotenv").config();
 
@@ -120,19 +120,19 @@ const resolvers = {
         const userData = await User.findById(user._id);
         const allCategories = userData.categories;
         switch (args.type) {
-          case "income":
+          case "Income":
             const incomeCategories = allCategories.filter(
               (category) => category.isIncome == true
             );
             return incomeCategories;
             break;
-          case "expense":
+          case "Expense":
             const expenseCategories = allCategories.filter(
               (category) => category.isExpense == true
             );
             return expenseCategories;
             break;
-          case "budget":
+          case "Budget":
             const budgetCatergories = allCategories.filter(
               (category) => category.isBudget == true
             );
@@ -432,21 +432,20 @@ const resolvers = {
       throw new AuthenticationError("You need to be logged in!");
     },
 
-    removeCategory: async (parent, {category}, context) => {
-        if (context.user) {
-            try {
-                const updatedUser = await User.findOneAndUpdate(
-                    { _id: context.user._id },
-                    { $pull: { categories: { _id: category } } },
-                    { new: true }
-                );
-                return updatedUser;
-            } catch (err) {
-                throw new Error("Category not removed");
-            }
+    removeCategory: async (parent, { category }, context) => {
+      if (context.user) {
+        try {
+          const updatedUser = await User.findOneAndUpdate(
+            { _id: context.user._id },
+            { $pull: { categories: { _id: category } } },
+            { new: true }
+          );
+          return updatedUser;
+        } catch (err) {
+          throw new Error("Category not removed");
         }
+      }
     },
-
 
     addBudget: async (parent, { category, amount }, context) => {
       if (context.user) {

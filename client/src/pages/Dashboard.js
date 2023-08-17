@@ -9,7 +9,7 @@ import { Button } from "@chakra-ui/react";
 import "bootstrap/dist/css/bootstrap.css";
 
 const Dashboard = () => {
-  const [transaction, setTransaction] = useState("income");
+  const [transaction, setTransaction] = useState("Income");
   const handleTransactionTab = (event) => {
     setTransaction(event.target.textContent);
   };
@@ -23,19 +23,27 @@ const Dashboard = () => {
             Transactions
           </h1>
           <nav className="d-flex justify-content-around">
-            <Button className="btn" onClick={handleTransactionTab} bg={"blue.600"}
+            <Button
+              className="btn"
+              onClick={handleTransactionTab}
+              bg={"blue.600"}
               color={"white"}
               _hover={{
                 bg: "blue.700",
-              }}>
-              income
+              }}
+            >
+              Income
             </Button>
-            <Button className="btn" onClick={handleTransactionTab} bg={"blue.600"}
+            <Button
+              className="btn"
+              onClick={handleTransactionTab}
+              bg={"blue.600"}
               color={"white"}
               _hover={{
                 bg: "blue.700",
-              }}>
-              expense
+              }}
+            >
+              Expense
             </Button>
           </nav>
           <Transaction type={transaction} />

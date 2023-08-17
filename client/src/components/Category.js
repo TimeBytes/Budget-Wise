@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { gql } from "@apollo/client";
 import {
   FormGroup,
@@ -6,6 +6,7 @@ import {
   FormCheck,
   ListGroup,
   InputGroup,
+  Alert,
 } from "react-bootstrap";
 import { Button } from "@chakra-ui/react";
 import { useMutation, useQuery } from "@apollo/client";
@@ -22,6 +23,8 @@ const CategoryComponent = () => {
   const [isIncome, setIsIncome] = useState(false);
   const [isExpense, setIsExpense] = useState(false);
   const [isBudget, setIsBudget] = useState(false);
+  const [successMessage, setSuccessMessage] = useState("");
+  const successMessageDuration = 3000;
   // Queries all existing categories
   const { loading, error, data } = useQuery(QUERY_ALL_CATEGORIES);
   const categoryList = data?.allCategories || [];
@@ -44,7 +47,17 @@ const CategoryComponent = () => {
   const handleNewCategoryChange = (event) => {
     setNewCategory(event.target.value);
   };
+  useEffect(() => {
+    if (successMessage) {
+      const timer = setTimeout(() => {
+        setSuccessMessage("");
+      }, successMessageDuration);
 
+      return () => {
+        clearTimeout(timer); // Clear the timer if the component unmounts
+      };
+    }
+  }, [successMessage]);
   const handleAddCategory = () => {
     if (newCategory) {
       addCategory({
@@ -54,8 +67,22 @@ const CategoryComponent = () => {
           isExpense: isExpense,
           isBudget: isBudget,
         },
+        refetchQueries: [{ query: QUERY_ALL_CATEGORIES }],
       });
+      setCategories([
+        ...categories,
+        {
+          name: newCategory,
+          isIncome: isIncome,
+          isExpense: isExpense,
+          isBudget: isBudget,
+        },
+      ]);
       setNewCategory("");
+      setIsIncome(false);
+      setIsExpense(false);
+      setIsBudget(false);
+      setSuccessMessage("Category added successfully!");
     }
   };
 
@@ -76,7 +103,7 @@ const CategoryComponent = () => {
   };
 
   return (
-    <div className="m-auto col-10 my-5 border" style={{fontWeight:"bold"}} >
+    <div className="m-auto col-10 my-5 border" style={{ fontWeight: "bold" }}>
       <div className="border-bottom">
         <h2
           className="display-5 text-center"
@@ -84,6 +111,15 @@ const CategoryComponent = () => {
         >
           Customize Your Categories
         </h2>
+        {successMessage && (
+          <Alert
+            variant="success"
+            className="mt-3 text-center m-auto w-100"
+            style={{ maxWidth: "300px" }}
+          >
+            {successMessage}
+          </Alert>
+        )}
         <FormGroup className="mt-5 d-flex flex-column align-content-center flex-wrap p-3 bg">
           <div>
             <input
