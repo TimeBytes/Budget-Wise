@@ -26,8 +26,9 @@ const BudgetComponent = () => {
   const categoriesList = queryCategoryList?.data?.categoryByType || [];
 
   // Queries the Budgets for the list
-  const { loading, error, data } = useQuery(QUERY_ALL_BUDGET);
+  const { loading, error, data, refetch } = useQuery(QUERY_ALL_BUDGET);
   const budgetList = data?.allBudgets || [];
+
   const [editingBudget, setEditingBudget] = useState(null);
   const [selectedCategory, setSelectedCategory] = useState("");
   const [newBudgetAmount, setNewBudgetAmount] = useState("");
@@ -36,6 +37,7 @@ const BudgetComponent = () => {
     variables: { category: selectedCategory, amount: newBudgetAmount },
     refetchQueries: [{ query: QUERY_ALL_BUDGET }],
   });
+
   useEffect(() => {
     if (successMessage) {
       const timer = setTimeout(() => {
@@ -50,6 +52,10 @@ const BudgetComponent = () => {
 
   useEffect(() => {
     queryCategoryList.refetch();
+  }, []);
+
+  useEffect(() => {
+    refetch();
   }, [successMessage]);
 
   const handleBudgetChange = (index, event) => {
