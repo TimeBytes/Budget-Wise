@@ -82,8 +82,8 @@ const BudgetComponent = () => {
   };
 
   const handleAddBudget = async () => {
-    if (selectedCategory && newBudgetAmount) {
-      try {
+    try {
+      if (selectedCategory && newBudgetAmount) {
         await addBudget();
         const updatedBudgets = [...budgets];
         updatedBudgets.push({
@@ -94,7 +94,7 @@ const BudgetComponent = () => {
         setSelectedCategory("");
         setNewBudgetAmount("");
         setSuccessMessage("Budget added successfully!");
-      } catch (error) {
+      }} catch (error) {
         console.error(error);
         setSuccessMessage("An error occurred. Please try again later.");
       }
