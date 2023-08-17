@@ -94,10 +94,10 @@ const BudgetComponent = () => {
         setSelectedCategory("");
         setNewBudgetAmount("");
         setSuccessMessage("Budget added successfully!");
-      }} catch (error) {
-        console.error(error);
-        setSuccessMessage("An error occurred. Please try again later.");
       }
+    } catch (error) {
+      console.error(error);
+      setSuccessMessage("An error occurred. Please try again later.");
     }
   };
 
