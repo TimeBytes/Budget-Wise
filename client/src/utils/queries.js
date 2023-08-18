@@ -28,10 +28,6 @@ export const QUERY_USER = gql`
         description
         category {
           _id
-          name
-          isIncome
-          isExpense
-          isBudget
         }
         amount
         date
