@@ -6,47 +6,66 @@ import Card from "react-bootstrap/Card";
 import { Container, Row, Col } from "react-bootstrap";
 import { from } from "@apollo/client";
 import { useQuery } from "@apollo/client";
-import { QUERY_USER } from "../utils/queries";
+import {
+  QUERY_USER,
+  QUERY_INCOME_BY_CATEGORY,
+  QUERY_EXPENSE_BY_CATEGORY,
+  QUERY_ALL_INCOME,
+} from "../utils/queries";
 
-const OverviewComponent = () => {
-  const user = useQuery(QUERY_USER);
-  const userData = user?.data || [];
-  console.log(userData);
-
-  useEffect(() => {
-    user.refetch();
-  }, []);
-
-  const sampleIncomeData = [10, 20, 30, 40, 50, 60];
-  const sampleExpenseData = [12, 13, 14, 16, 18, 17];
-  const sampleNetIncome = [3, 7, 4, 8, 7, 4];
-
+const OverviewComponent = (props) => {
+  console.log(props);
   const chartData = {
-    labels: ["January", "February", "March", "April", "May", "June"],
     datasets: [
       {
         label: "Income",
-        data: sampleIncomeData,
+        data: props.props.income,
         backgroundColor: "rgba(75, 192, 192, 0.2)",
         borderColor: "rgba(75, 192, 192, 1)",
         borderWidth: 1,
       },
       {
         label: "Expenses",
-        data: sampleExpenseData,
+        data: props.props.expense,
         backgroundColor: "rgba(255, 99, 132, 0.2)",
         borderColor: "rgba(255, 99, 132, 1)",
         borderWidth: 1,
       },
       {
         label: "Net Income",
-        data: sampleNetIncome,
+        data: props.props.difference,
         backgroundColor: "rgba(255, 206, 86, 0.2)",
         borderColor: "rgba(255, 206, 86, 1)",
         borderWidth: 1,
       },
     ],
   };
+
+  // const allIncomeRaw = useQuery(QUERY_ALL_INCOME);
+  // const allIncomeData = allIncomeRaw?.data || [];
+  // const allIncomeList = allIncomeData?.allIncomes || [];
+  // console.log(allIncomeList);
+  // const listOfCategoryIDs = allIncomeList.map((income) => {
+  //   return income.category._id;
+  // });
+
+  // console.log(userData?.user?.incomes);
+  // const incomeCategory = useQuery(QUERY_INCOME_BY_CATEGORY, {
+  //   variables: { categoryID: "60f9b0b0f0f0f0f0f0f0f0f0" },
+  // });
+  // const incomeCategoryData = incomeCategory?.data || [];
+  // const expenseCategory = useQuery(QUERY_EXPENSE_BY_CATEGORY);
+  // const expenseCategoryData = expenseCategory?.data || [];
+  // console.log(incomeCategoryData);
+  // console.log(expenseCategoryData);
+
+  // useEffect(() => {
+  //   incomeCategory.refetch();
+  // });
+
+  // useEffect(() => {
+  //   expenseCategory.refetch();
+  // });
 
   const incomeCategories = ["Salary", "Freelance", "Investments", "Other"];
   const expenseCategories = ["Rent", "Groceries", "Utilities", "Entertainment"];
@@ -55,7 +74,7 @@ const OverviewComponent = () => {
     labels: incomeCategories,
     datasets: [
       {
-        data: [40, 20, 15, 25], // Sample data for income categories
+        data: [30, 25, 15, 20], // Sample data for income categories
         backgroundColor: ["#FF6384", "#36A2EB", "#FFCE56", "#33cc33"],
       },
     ],

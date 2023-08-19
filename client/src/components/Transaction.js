@@ -12,7 +12,7 @@ import { QUERY_CATEGORY_BY_TYPE } from "../utils/queries";
 import { ADD_INCOME, ADD_EXPENSE } from "../utils/mutations";
 import { Button } from "@chakra-ui/react";
 
-const TransactionComponent = ({ type }) => {
+const TransactionComponent = ({ type, check }) => {
   const { loading, error, data } = useQuery(QUERY_CATEGORY_BY_TYPE, {
     variables: { type },
   });
@@ -75,6 +75,7 @@ const TransactionComponent = ({ type }) => {
       date: dateOfTransaction,
       isRecurring: recurring || false,
     };
+    console.log(transactionVariables);
 
     try {
       if (type === "Income") {
@@ -164,7 +165,10 @@ const TransactionComponent = ({ type }) => {
 
       <Button
         className="btn btn-primary"
-        onClick={handleTransactionSubmit}
+        onClick={() => {
+          handleTransactionSubmit();
+          check();
+        }}
         bg={"blue.600"}
         color={"white"}
         _hover={{
