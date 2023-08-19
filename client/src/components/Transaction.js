@@ -80,7 +80,6 @@ const TransactionComponent = ({ type, refetchQueries }) => {
       date: dateOfTransaction,
       isRecurring: recurring || false,
     };
-    console.log(transactionVariables);
 
     try {
       if (type === "Income") {

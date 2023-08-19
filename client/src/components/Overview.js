@@ -14,7 +14,6 @@ import {
 } from "../utils/queries";
 
 const OverviewComponent = (props) => {
-  console.log(props);
   const chartData = {
     datasets: [
       {

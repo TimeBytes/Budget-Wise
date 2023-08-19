@@ -20,7 +20,6 @@ const Dashboard = () => {
   if (user.loading) {
     return <div className="text-center display-5 vh-100">Loading...</div>;
   }
-  console.log(user);
   const userData = user?.data || [];
   const monthNames = [
     "January",
@@ -89,7 +88,7 @@ const Dashboard = () => {
 
   return (
     <div className="d-flex flex-column justify-content-around">
-      <Overview />
+      <Overview props={{ incomeData, expenseData, differenceData }} />
       <div className="border col-10 col-md-8 col-xlg-7 p-3 m-auto my-3 d-flex flex-column flex-lg-row justify-content-between">
         <div className="col-12 col-lg-6 ">
           <h3 className="text-center display-3 my-2 border border rounded-3 pb-2 bg-gradient ">
