@@ -1,18 +1,16 @@
-import React, { useState, useEffect } from "react";
-import {
-  FormGroup,
-  FormLabel,
-  FormSelect,
-  FormCheck,
-  ListGroup,
-  InputGroup,
-  FormControl,
-  Alert,
-} from "react-bootstrap";
+import { useMutation, useQuery } from "@apollo/client";
 import { Button } from "@chakra-ui/react";
-import { useLazyQuery, useQuery, useMutation } from "@apollo/client";
-import { QUERY_ALL_BUDGET, QUERY_CATEGORY_BY_TYPE } from "../utils/queries";
+import React, { useEffect, useState } from "react";
+import {
+  Alert,
+  FormControl,
+  FormGroup,
+  FormSelect,
+  InputGroup,
+  ListGroup,
+} from "react-bootstrap";
 import { ADD_BUDGET } from "../utils/mutations";
+import { QUERY_ALL_BUDGET, QUERY_CATEGORY_BY_TYPE } from "../utils/queries";
 
 const BudgetComponent = () => {
   const [budgets, setBudgets] = useState([]);
@@ -117,7 +115,7 @@ const BudgetComponent = () => {
               </option>
             ))}
           </FormSelect>
-          <input
+          <FormControl
             type="number"
             placeholder="Budget Amount"
             value={newBudgetAmount}
@@ -147,11 +145,11 @@ const BudgetComponent = () => {
           </Alert>
         )}
       </div>
-      <ListGroup className="list-unstyled bg rounded-2 px-2 my-2 py-2">
+      <ListGroup className="list-unstyled px-2 my-2 py-2">
         {budgetList.map((budget, index) => (
           <ListGroup.Item
             key={index}
-            className="my-4 d-flex justify-content-between"
+            className="my-4 d-flex justify-content-center"
           >
             {editingBudget === index ? (
               <InputGroup>
@@ -165,18 +163,6 @@ const BudgetComponent = () => {
               <span className="m-2">
                 Budget for {budget.name} is currently set to ${budget.amount}
               </span>
-            )}
-            {editingBudget !== index ? (
-              <Button
-                variant="secondary"
-                onClick={() => handleEditBudget(index)}
-              >
-                Edit
-              </Button>
-            ) : (
-              <Button variant="primary" onClick={() => handleSaveBudget(index)}>
-                Save
-              </Button>
             )}
           </ListGroup.Item>
         ))}

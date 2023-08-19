@@ -17,11 +17,11 @@ const Dashboard = () => {
   return (
     <div className="d-flex flex-column justify-content-around">
       <Overview />
-      <div className="border col-10 col-lg-7 p-3 m-auto my-3 d-flex flex-column flex-lg-row justify-content-between">
-        <div className="col-4.5">
-          <h1 className="text-center display-1 my-2 border border rounded-3 pb-2 bg-gradient ">
+      <div className="border col-10 col-md-8 col-xlg-7 p-3 m-auto my-3 d-flex flex-column flex-lg-row justify-content-between">
+        <div className="col-12 col-lg-6 ">
+          <h3 className="text-center display-3 my-2 border border rounded-3 pb-2 bg-gradient ">
             Transactions
-          </h1>
+          </h3>
           <nav className="d-flex justify-content-around">
             <Button
               className="btn"
@@ -48,10 +48,11 @@ const Dashboard = () => {
           </nav>
           <Transaction type={transaction} />
         </div>
-        <section className="col-4.5">
-          <h1 className="text-center display-1 my-2 border border rounded-3 pb-2 bg-gradient">
+        <span className="border-top border-black my-5 d-lg-none"></span>
+        <section className="col-12 col-lg-6">
+          <h3 className="text-center display-3 my-2 border border rounded-3 pb-2 bg-gradient">
             Budgets
-          </h1>
+          </h3>
           <Budget />
         </section>
       </div>

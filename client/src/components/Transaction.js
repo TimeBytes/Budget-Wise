@@ -87,8 +87,6 @@ const TransactionComponent = ({ type }) => {
       setSuccessMessage(
         `${type === "Income" ? "Income" : "Expense"} added successfully!`
       );
-
-      // ... your other code ...
     } catch (error) {
       console.error(error);
       // Handle error and show appropriate message to the user
