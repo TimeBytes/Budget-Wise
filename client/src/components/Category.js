@@ -59,10 +59,6 @@ const CategoryComponent = () => {
     }
   }, [successMessage]);
 
-  useEffect(() => {
-    refetch();
-  }, [successMessage]);
-
   const handleAddCategory = () => {
     if (newCategory) {
       addCategory({
@@ -74,6 +70,7 @@ const CategoryComponent = () => {
         },
         refetchQueries: [{ query: QUERY_ALL_CATEGORIES }],
       });
+      refetch();
       setCategories([
         ...categories,
         {
@@ -96,13 +93,7 @@ const CategoryComponent = () => {
       variables: {
         category: categoryId,
       },
-    });
-  };
-  const handleEditCategory = (categoryId) => {
-    editCategory({
-      variables: {
-        id: categoryId,
-      },
+      refetchQueries: [{ query: QUERY_ALL_CATEGORIES }],
     });
   };
 
