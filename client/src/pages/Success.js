@@ -22,7 +22,7 @@ function Success() {
         <h1 className="display-1">Success!</h1>
         <h2 className="display-3">Thank you for your donation!</h2>
         <h4 className="display-4">
-          You will now be redirected to the home page
+          You will now be redirected to your Dashboard
         </h4>
       </Jumbotron>
     </div>
