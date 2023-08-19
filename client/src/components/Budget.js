@@ -1,18 +1,16 @@
-import React, { useState, useEffect } from "react";
-import {
-  FormGroup,
-  FormLabel,
-  FormSelect,
-  FormCheck,
-  ListGroup,
-  InputGroup,
-  FormControl,
-  Alert,
-} from "react-bootstrap";
+import { useMutation, useQuery } from "@apollo/client";
 import { Button } from "@chakra-ui/react";
-import { useLazyQuery, useQuery, useMutation } from "@apollo/client";
-import { QUERY_ALL_BUDGET, QUERY_CATEGORY_BY_TYPE } from "../utils/queries";
+import React, { useEffect, useState } from "react";
+import {
+  Alert,
+  FormControl,
+  FormGroup,
+  FormSelect,
+  InputGroup,
+  ListGroup,
+} from "react-bootstrap";
 import { ADD_BUDGET } from "../utils/mutations";
+import { QUERY_ALL_BUDGET, QUERY_CATEGORY_BY_TYPE } from "../utils/queries";
 
 const BudgetComponent = () => {
   const [budgets, setBudgets] = useState([]);
@@ -21,21 +19,21 @@ const BudgetComponent = () => {
   // Queries the Categories for the dropdown
   const queryCategoryList = useQuery(QUERY_CATEGORY_BY_TYPE, {
     variables: { type: "Budget" },
-    refetchQueries: [{ query: QUERY_CATEGORY_BY_TYPE }],
   });
   const categoriesList = queryCategoryList?.data?.categoryByType || [];
 
   // Queries the Budgets for the list
-  const { loading, error, data } = useQuery(QUERY_ALL_BUDGET);
+  const { loading, error, data, refetch } = useQuery(QUERY_ALL_BUDGET);
   const budgetList = data?.allBudgets || [];
+
   const [editingBudget, setEditingBudget] = useState(null);
   const [selectedCategory, setSelectedCategory] = useState("");
   const [newBudgetAmount, setNewBudgetAmount] = useState("");
-
   const [addBudget] = useMutation(ADD_BUDGET, {
     variables: { category: selectedCategory, amount: newBudgetAmount },
     refetchQueries: [{ query: QUERY_ALL_BUDGET }],
   });
+
   useEffect(() => {
     if (successMessage) {
       const timer = setTimeout(() => {
@@ -49,22 +47,19 @@ const BudgetComponent = () => {
   }, [successMessage]);
 
   useEffect(() => {
-    queryCategoryList.refetch();
-  });
+    queryCategoryList.refetch({
+      variables: { type: "Budget" },
+    });
+  }, []);
+
+  useEffect(() => {
+    refetch();
+  }, [successMessage]);
 
   const handleBudgetChange = (index, event) => {
     const updatedBudgets = [...budgets];
     updatedBudgets[index].amount = event.target.value;
     setBudgets(updatedBudgets);
-  };
-
-  const handleEditBudget = (index) => {
-    setEditingBudget(index);
-  };
-
-  const handleSaveBudget = (index) => {
-    setEditingBudget(null);
-    // Implement API call to update the budget for a specific category
   };
 
   const handleCategoryChange = (event) => {
@@ -76,22 +71,16 @@ const BudgetComponent = () => {
   };
 
   const handleAddBudget = async () => {
-    if (selectedCategory && newBudgetAmount) {
-      try {
+    try {
+      if (selectedCategory && newBudgetAmount) {
         await addBudget();
-        const updatedBudgets = [...budgets];
-        updatedBudgets.push({
-          name: selectedCategory,
-          amount: newBudgetAmount,
-        });
-        setBudgets(updatedBudgets);
         setSelectedCategory("");
         setNewBudgetAmount("");
         setSuccessMessage("Budget added successfully!");
-      } catch (error) {
-        console.error(error);
-        setSuccessMessage("An error occurred. Please try again later.");
       }
+    } catch (error) {
+      console.error(error);
+      setSuccessMessage("An error occurred. Please try again later.");
     }
   };
 
@@ -111,7 +100,7 @@ const BudgetComponent = () => {
               </option>
             ))}
           </FormSelect>
-          <input
+          <FormControl
             type="number"
             placeholder="Budget Amount"
             value={newBudgetAmount}
@@ -119,12 +108,13 @@ const BudgetComponent = () => {
           />
           <Button
             onClick={handleAddBudget}
-            className="mx-3"
+            className="m-auto"
             bg={"blue.600"}
             color={"white"}
             _hover={{
               bg: "blue.700",
             }}
+            minWidth="200px"
           >
             Add Budget
           </Button>
@@ -141,11 +131,11 @@ const BudgetComponent = () => {
           </Alert>
         )}
       </div>
-      <ListGroup className="list-unstyled bg rounded-2 px-2 my-2 py-2">
+      <ListGroup className="list-unstyled px-2 my-2 py-2">
         {budgetList.map((budget, index) => (
-          <ListGroup.Item
+          <li
             key={index}
-            className="my-4 d-flex justify-content-between"
+            className="my-4 d-flex justify-content-center border border rounded-2 p-3 bg"
           >
             {editingBudget === index ? (
               <InputGroup>
@@ -160,19 +150,7 @@ const BudgetComponent = () => {
                 Budget for {budget.name} is currently set to ${budget.amount}
               </span>
             )}
-            {editingBudget !== index ? (
-              <Button
-                variant="secondary"
-                onClick={() => handleEditBudget(index)}
-              >
-                Edit
-              </Button>
-            ) : (
-              <Button variant="primary" onClick={() => handleSaveBudget(index)}>
-                Save
-              </Button>
-            )}
-          </ListGroup.Item>
+          </li>
         ))}
       </ListGroup>
     </div>

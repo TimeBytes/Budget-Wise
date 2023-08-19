@@ -35,9 +35,6 @@ const DonationForm = () => {
   }, [data]);
 
   const submitCheckout = async (event) => {
-    event.preventDefault();
-    // const amount = document.querySelector("input").value;
-
     if (!amount) {
       alert("Please enter an amount");
     } else {
