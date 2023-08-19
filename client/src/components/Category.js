@@ -129,7 +129,7 @@ const CategoryComponent = () => {
               Add Category
             </Button>
           </div>
-          <div>
+          <div className="m-auto">
             <FormGroup className="m-3">
               <FormCheck
                 type="checkbox"

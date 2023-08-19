@@ -108,6 +108,7 @@ const OverviewComponent = (props) => {
               </div>
             </Col>
             <span className="border-top pt-5 d-lg-none"></span>
+            <span className="d-none d-lg-block border"></span>
             <Col className="mb-4 col-12 col-lg-6 ">
               <div className=" m-1">
                 <h3 className="display-5 text-center mb-3">
