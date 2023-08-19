@@ -12,8 +12,12 @@ import {
   QUERY_EXPENSE_BY_CATEGORY,
   QUERY_ALL_INCOME,
 } from "../utils/queries";
+import { Tooltip } from "react-tippy";
+import "../index.css";
 
 const OverviewComponent = (props) => {
+  const [showIncomeOverlay, setShowIncomeOverlay] = useState(false);
+  const [showExpenseOverlay, setShowExpenseOverlay] = useState(false);
   const chartData = {
     datasets: [
       {
@@ -49,6 +53,8 @@ const OverviewComponent = (props) => {
       {
         data: [30, 25, 15, 20], // Sample data for income categories
         backgroundColor: ["#FF6384", "#36A2EB", "#FFCE56", "#33cc33"],
+        onMouseEnter: () => setShowIncomeOverlay(true),
+        onMouseLeave: () => setShowIncomeOverlay(false),
       },
     ],
   };
@@ -59,6 +65,8 @@ const OverviewComponent = (props) => {
       {
         data: [30, 25, 15, 20], // Sample data for expense categories
         backgroundColor: ["#FF6384", "#36A2EB", "#FFCE56", "#33cc33"],
+        onMouseEnter: () => setShowExpenseOverlay(true),
+        onMouseLeave: () => setShowExpenseOverlay(false),
       },
     ],
   };
@@ -95,21 +103,36 @@ const OverviewComponent = (props) => {
               <Bar data={chartData} options={chartOptions} />
             </div>
           </Col>
-          <Container className=" d-flex border-top pt-3">
-            <Col className="mb-4 col-6" style={borderRight}>
-              <div className=" m-1 ">
+          <Container className=" d-flex flex-column flex-lg-row border-top pt-3 ">
+            <Col className="mb-4 col-12 col-lg-6">
+              <div className=" m-1">
                 <h3 className="display-5 text-center mb-3 ">
                   Income Distribution
                 </h3>
-                <Pie data={pieIncomeData} />
+                <Tooltip
+                  title="Coming Soon"
+                  position="top"
+                  trigger="mouseenter"
+                  size="big"
+                >
+                  <Pie data={pieIncomeData} className="m-auto" />
+                </Tooltip>
               </div>
             </Col>
-            <Col className="mb-4 col-6">
+            <span className="border-top pt-5 d-lg-none"></span>
+            <Col className="mb-4 col-12 col-lg-6 ">
               <div className=" m-1">
                 <h3 className="display-5 text-center mb-3">
                   Expense Distribution
                 </h3>
-                <Pie data={pieExpenseData} />
+                <Tooltip
+                  title="Coming Soon"
+                  position="top"
+                  trigger="mouseenter"
+                  size="big"
+                >
+                  <Pie data={pieExpenseData} className="m-auto" />
+                </Tooltip>
               </div>
             </Col>
           </Container>

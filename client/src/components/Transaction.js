@@ -187,7 +187,7 @@ const TransactionComponent = ({ type, refetchQueries }) => {
       </FormGroup>
 
       <Button
-        className="btn btn-primary"
+        className="m-auto"
         onClick={() => {
           handleTransactionSubmit();
         }}
@@ -196,6 +196,7 @@ const TransactionComponent = ({ type, refetchQueries }) => {
         _hover={{
           bg: "blue.700",
         }}
+        minWidth="200px"
       >
         Add {type === "Income" ? "Income" : "Expense"}
       </Button>

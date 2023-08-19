@@ -221,13 +221,6 @@ const resolvers = {
     ) => {
       if (context.user) {
         try {
-          const checkDuplicate = await User.findOne({
-            _id: context.user._id,
-            "income.description": name,
-          });
-          if (checkDuplicate) {
-            throw new Error("Income already exists.");
-          }
           const updatedUser = await User.findByIdAndUpdate(
             { _id: context.user._id },
             {
@@ -301,13 +294,6 @@ const resolvers = {
     ) => {
       if (context.user) {
         try {
-          const checkDuplicate = await User.findOne({
-            _id: context.user._id,
-            "expenses.description": name,
-          });
-          if (checkDuplicate) {
-            throw new Error("Expense already exists.");
-          }
           const updateUser = await User.findByIdAndUpdate(
             { _id: context.user._id },
             {

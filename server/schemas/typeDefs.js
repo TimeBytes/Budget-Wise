@@ -36,7 +36,7 @@ const typeDefs = gql`
   }
   type Expense {
     _id: ID!
-    description: String!
+    description: String
     category: Category
     amount: Float
     date: String

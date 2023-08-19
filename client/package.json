@@ -24,7 +24,8 @@
     "react-chartjs-2": "^5.2.0",
     "react-dom": "^16.13.1",
     "react-router-dom": "^6.2.1",
-    "react-scripts": "^5.0.1"
+    "react-scripts": "^5.0.1",
+    "react-tippy": "^1.4.0"
   },
   "scripts": {
     "start": "react-scripts start",

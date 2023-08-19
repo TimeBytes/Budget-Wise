@@ -42,8 +42,6 @@ const CategoryComponent = () => {
 
   const [deleteCategory] = useMutation(REMOVE_CATEGORY);
 
-  const [editCategory] = useMutation(EDIT_CATEGORY);
-
   const handleNewCategoryChange = (event) => {
     setNewCategory(event.target.value);
   };
@@ -70,7 +68,7 @@ const CategoryComponent = () => {
         },
         refetchQueries: [
           { query: QUERY_ALL_CATEGORIES },
-          { query: QUERY_CATEGORY_BY_TYPE },
+          { query: QUERY_CATEGORY_BY_TYPE, variables: { type: "Income" } },
         ],
       });
       setCategories([
@@ -146,7 +144,7 @@ const CategoryComponent = () => {
             <FormGroup className="m-3">
               <FormCheck
                 type="checkbox"
-                label="Add as income"
+                label="Add as Income"
                 checked={isIncome}
                 onChange={handleIsIncome}
               />

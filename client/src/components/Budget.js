@@ -19,7 +19,6 @@ const BudgetComponent = () => {
   // Queries the Categories for the dropdown
   const queryCategoryList = useQuery(QUERY_CATEGORY_BY_TYPE, {
     variables: { type: "Budget" },
-    refetchQueries: [{ query: QUERY_CATEGORY_BY_TYPE }],
   });
   const categoriesList = queryCategoryList?.data?.categoryByType || [];
 
@@ -30,7 +29,6 @@ const BudgetComponent = () => {
   const [editingBudget, setEditingBudget] = useState(null);
   const [selectedCategory, setSelectedCategory] = useState("");
   const [newBudgetAmount, setNewBudgetAmount] = useState("");
-
   const [addBudget] = useMutation(ADD_BUDGET, {
     variables: { category: selectedCategory, amount: newBudgetAmount },
     refetchQueries: [{ query: QUERY_ALL_BUDGET }],
@@ -49,7 +47,9 @@ const BudgetComponent = () => {
   }, [successMessage]);
 
   useEffect(() => {
-    queryCategoryList.refetch();
+    queryCategoryList.refetch({
+      variables: { type: "Budget" },
+    });
   }, []);
 
   useEffect(() => {
@@ -60,15 +60,6 @@ const BudgetComponent = () => {
     const updatedBudgets = [...budgets];
     updatedBudgets[index].amount = event.target.value;
     setBudgets(updatedBudgets);
-  };
-
-  const handleEditBudget = (index) => {
-    setEditingBudget(index);
-  };
-
-  const handleSaveBudget = (index) => {
-    setEditingBudget(null);
-    // Implement API call to update the budget for a specific category
   };
 
   const handleCategoryChange = (event) => {
@@ -83,12 +74,6 @@ const BudgetComponent = () => {
     try {
       if (selectedCategory && newBudgetAmount) {
         await addBudget();
-        const updatedBudgets = [...budgets];
-        updatedBudgets.push({
-          name: selectedCategory,
-          amount: newBudgetAmount,
-        });
-        setBudgets(updatedBudgets);
         setSelectedCategory("");
         setNewBudgetAmount("");
         setSuccessMessage("Budget added successfully!");
@@ -123,12 +108,13 @@ const BudgetComponent = () => {
           />
           <Button
             onClick={handleAddBudget}
-            className="mx-3"
+            className="m-auto"
             bg={"blue.600"}
             color={"white"}
             _hover={{
               bg: "blue.700",
             }}
+            minWidth="200px"
           >
             Add Budget
           </Button>
