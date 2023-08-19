@@ -70,7 +70,6 @@ const CategoryComponent = () => {
         },
         refetchQueries: [{ query: QUERY_ALL_CATEGORIES }],
       });
-      refetch();
       setCategories([
         ...categories,
         {
