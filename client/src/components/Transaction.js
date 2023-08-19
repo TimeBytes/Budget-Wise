@@ -8,13 +8,18 @@ import {
   FormSelect,
   Alert,
 } from "react-bootstrap";
-import { QUERY_CATEGORY_BY_TYPE } from "../utils/queries";
+import {
+  QUERY_CATEGORY_BY_TYPE,
+  QUERY_USER,
+  QUERY_ALL_BUDGET,
+} from "../utils/queries";
 import { ADD_INCOME, ADD_EXPENSE } from "../utils/mutations";
 import { Button } from "@chakra-ui/react";
 
-const TransactionComponent = ({ type }) => {
-  const { loading, error, data } = useQuery(QUERY_CATEGORY_BY_TYPE, {
+const TransactionComponent = ({ type, refetchQueries }) => {
+  const { loading, error, data, refetch } = useQuery(QUERY_CATEGORY_BY_TYPE, {
     variables: { type },
+    refetchQueries: [{ query: QUERY_CATEGORY_BY_TYPE }],
   });
   const categories = data?.categoryByType || [];
   const [successMessage, setSuccessMessage] = useState("");
@@ -75,24 +80,46 @@ const TransactionComponent = ({ type }) => {
       date: dateOfTransaction,
       isRecurring: recurring || false,
     };
+    console.log(transactionVariables);
 
     try {
       if (type === "Income") {
-        await addIncome({ variables: transactionVariables });
+        await addIncome(
+          { variables: transactionVariables },
+          {
+            refetchQueries: [
+              { query: QUERY_USER },
+              { query: QUERY_ALL_BUDGET },
+            ],
+          }
+        );
       } else {
-        await addExpense({ variables: transactionVariables });
+        await addExpense(
+          { variables: transactionVariables },
+          { refetchQueries: [{ query: QUERY_USER }] }
+        );
       }
 
       // Show success message
       setSuccessMessage(
         `${type === "Income" ? "Income" : "Expense"} added successfully!`
       );
+      refetchQueries.refetch();
+      setSelectedCategory("");
+      setAmount("");
+      setDescription("");
+      setDateOfTransaction("");
+      setRecurring(false);
     } catch (error) {
       console.error(error);
       // Handle error and show appropriate message to the user
       setSuccessMessage("An error occurred. Please try again later.");
     }
   };
+
+  useEffect(() => {
+    refetch();
+  }, [successMessage, type]);
 
   return (
     <div className="d-flex flex-column mt-4 ">
@@ -162,7 +189,9 @@ const TransactionComponent = ({ type }) => {
 
       <Button
         className="btn btn-primary"
-        onClick={handleTransactionSubmit}
+        onClick={() => {
+          handleTransactionSubmit();
+        }}
         bg={"blue.600"}
         color={"white"}
         _hover={{

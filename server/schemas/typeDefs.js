@@ -32,6 +32,7 @@ const typeDefs = gql`
     amount: Float
     date: String
     isRecurring: Boolean
+    name: String
   }
   type Expense {
     _id: ID!
@@ -40,6 +41,7 @@ const typeDefs = gql`
     amount: Float
     date: String
     isRecurring: Boolean
+    name: String
   }
 
   type SuccessMsg {

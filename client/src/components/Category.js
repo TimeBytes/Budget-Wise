@@ -15,7 +15,7 @@ import {
   REMOVE_CATEGORY,
   EDIT_CATEGORY,
 } from "../utils/mutations";
-import { QUERY_ALL_CATEGORIES } from "../utils/queries";
+import { QUERY_ALL_CATEGORIES, QUERY_CATEGORY_BY_TYPE } from "../utils/queries";
 
 const CategoryComponent = () => {
   const [categories, setCategories] = useState([]);
@@ -68,7 +68,10 @@ const CategoryComponent = () => {
           isExpense: isExpense,
           isBudget: isBudget,
         },
-        refetchQueries: [{ query: QUERY_ALL_CATEGORIES }],
+        refetchQueries: [
+          { query: QUERY_ALL_CATEGORIES },
+          { query: QUERY_CATEGORY_BY_TYPE },
+        ],
       });
       setCategories([
         ...categories,
