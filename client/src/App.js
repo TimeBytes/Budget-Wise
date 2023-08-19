@@ -47,7 +47,7 @@ function App() {
   return (
     <ApolloProvider client={client}>
       <Router basename={process.env.PUBLIC_URL}>
-        <div>
+        <div d-flex flex-column justify-content-between>
           <AppNavbar />
           <Routes>
             <Route path="/" element={<Home />} />
@@ -62,7 +62,7 @@ function App() {
             <Route path="/donate" element={<DonationForm />} />
             <Route path="/success" element={<Success />} />
           </Routes>
-          <Footer />
+          <Footer className="justify-self-end" />
         </div>
       </Router>
     </ApolloProvider>
