@@ -147,9 +147,9 @@ const BudgetComponent = () => {
       </div>
       <ListGroup className="list-unstyled px-2 my-2 py-2">
         {budgetList.map((budget, index) => (
-          <ListGroup.Item
+          <li
             key={index}
-            className="my-4 d-flex justify-content-center"
+            className="my-4 d-flex justify-content-center border border rounded-2 p-3 bg"
           >
             {editingBudget === index ? (
               <InputGroup>
@@ -164,7 +164,7 @@ const BudgetComponent = () => {
                 Budget for {budget.name} is currently set to ${budget.amount}
               </span>
             )}
-          </ListGroup.Item>
+          </li>
         ))}
       </ListGroup>
     </div>
