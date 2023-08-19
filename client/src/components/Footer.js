@@ -12,13 +12,11 @@ const Footer = () => {
     backgroundColor: "#037390",
     justifyContent: "center",
     fontWeight: "bolder",
-
-    // Add other styling properties here if needed
   };
   return (
     <Container
       fluid
-      className="d-flex flex-column align-items-center footer-container text-center py-5 "
+      className="d-flex flex-column align-items-center footer-container text-center py-5 sticky-footer"
       style={footerStyle}
     >
       <Col md={4}>

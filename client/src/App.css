@@ -6,6 +6,22 @@
   height: 40vmin;
   pointer-events: none;
 }
+body,
+html {
+  height: 100%;
+  margin: 0;
+}
+
+.main-container {
+  min-height: 100vh !important;
+  position: relative;
+}
+
+.sticky-footer {
+  position: absolute;
+  height: fit-content;
+  bottom: 100%;
+}
 
 @media (prefers-reduced-motion: no-preference) {
   .App-logo {
@@ -36,6 +52,6 @@
     transform: rotate(360deg);
   }
 }
-*{
-  font-family: 'fira code';
+* {
+  font-family: "fira code";
 }

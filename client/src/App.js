@@ -18,7 +18,7 @@ import Success from "./pages/Success";
 import Category from "./components/Category";
 import Footer from "./components/Footer";
 import "bootstrap/dist/css/bootstrap.min.css";
-// import { Donation } from "./utils/mutations";
+import "./index.css";
 
 const httpLink = createHttpLink({
   uri: "/graphql",
@@ -47,7 +47,7 @@ function App() {
   return (
     <ApolloProvider client={client}>
       <Router basename={process.env.PUBLIC_URL}>
-        <div d-flex flex-column justify-content-between>
+        <div className="main-container">
           <AppNavbar />
           <Routes>
             <Route path="/" element={<Home />} />
@@ -62,7 +62,7 @@ function App() {
             <Route path="/donate" element={<DonationForm />} />
             <Route path="/success" element={<Success />} />
           </Routes>
-          <Footer className="justify-self-end" />
+          <Footer />
         </div>
       </Router>
     </ApolloProvider>
