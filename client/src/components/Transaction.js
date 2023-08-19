@@ -17,7 +17,7 @@ import { ADD_INCOME, ADD_EXPENSE } from "../utils/mutations";
 import { Button } from "@chakra-ui/react";
 
 const TransactionComponent = ({ type, refetchQueries }) => {
-  const { loading, error, data, refetch } = useQuery(QUERY_CATEGORY_BY_TYPE, {
+  const { data, refetch } = useQuery(QUERY_CATEGORY_BY_TYPE, {
     variables: { type },
     refetchQueries: [{ query: QUERY_CATEGORY_BY_TYPE }],
   });
@@ -30,8 +30,8 @@ const TransactionComponent = ({ type, refetchQueries }) => {
   const [dateOfTransaction, setDateOfTransaction] = useState("");
   const [recurring, setRecurring] = useState(false);
   const [showWarning, setShowWarning] = useState(false);
-  const [addIncome, { error: errorIncome }] = useMutation(ADD_INCOME);
-  const [addExpense, { error: errorExpense }] = useMutation(ADD_EXPENSE);
+  const [addIncome] = useMutation(ADD_INCOME);
+  const [addExpense] = useMutation(ADD_EXPENSE);
 
   useEffect(() => {
     if (successMessage) {

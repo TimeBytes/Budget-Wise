@@ -1,16 +1,13 @@
-import React, { useState, useEffect } from "react";
-import Budget from "../components/Budget";
-import Transaction from "../components/Transaction";
-import Overview from "../components/Overview";
-import Category from "../components/Category";
-import { Container } from "react-bootstrap";
-import { Button } from "@chakra-ui/react";
 import { useQuery } from "@apollo/client";
-import { QUERY_USER, QUERY_ALL_BUDGET } from "../utils/queries";
+import { Button } from "@chakra-ui/react";
 import "bootstrap/dist/css/bootstrap.css";
+import React, { useState } from "react";
+import Budget from "../components/Budget";
+import Overview from "../components/Overview";
+import Transaction from "../components/Transaction";
+import { QUERY_USER } from "../utils/queries";
 
 const Dashboard = () => {
-  const [checkMessage, setCheckMessage] = useState(false);
   const [transaction, setTransaction] = useState("Income");
   const handleTransactionTab = (event) => {
     setTransaction(event.target.textContent);

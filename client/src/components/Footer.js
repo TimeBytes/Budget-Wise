@@ -1,12 +1,11 @@
 import React from "react";
-import { Container, Row, Col } from "react-bootstrap";
+import { Container, Col } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faFacebook,
   faTwitter,
   faInstagram,
 } from "@fortawesome/free-brands-svg-icons";
-// import "./Footer.css"; // You can create a separate CSS file for additional styling if needed
 
 const Footer = () => {
   const footerStyle = {

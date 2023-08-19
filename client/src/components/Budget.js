@@ -6,14 +6,12 @@ import {
   FormControl,
   FormGroup,
   FormSelect,
-  InputGroup,
   ListGroup,
 } from "react-bootstrap";
 import { ADD_BUDGET } from "../utils/mutations";
 import { QUERY_ALL_BUDGET, QUERY_CATEGORY_BY_TYPE } from "../utils/queries";
 
 const BudgetComponent = () => {
-  const [budgets, setBudgets] = useState([]);
   const [successMessage, setSuccessMessage] = useState("");
   const successMessageDuration = 3000; // Duration in milliseconds (3 seconds)
   // Queries the Categories for the dropdown
@@ -23,10 +21,8 @@ const BudgetComponent = () => {
   const categoriesList = queryCategoryList?.data?.categoryByType || [];
 
   // Queries the Budgets for the list
-  const { loading, error, data, refetch } = useQuery(QUERY_ALL_BUDGET);
+  const { data, refetch } = useQuery(QUERY_ALL_BUDGET);
   const budgetList = data?.allBudgets || [];
-
-  const [editingBudget, setEditingBudget] = useState(null);
   const [selectedCategory, setSelectedCategory] = useState("");
   const [newBudgetAmount, setNewBudgetAmount] = useState("");
   const [addBudget] = useMutation(ADD_BUDGET, {
@@ -55,12 +51,6 @@ const BudgetComponent = () => {
   useEffect(() => {
     refetch();
   }, [successMessage]);
-
-  const handleBudgetChange = (index, event) => {
-    const updatedBudgets = [...budgets];
-    updatedBudgets[index].amount = event.target.value;
-    setBudgets(updatedBudgets);
-  };
 
   const handleCategoryChange = (event) => {
     setSelectedCategory(event.target.value);
@@ -137,19 +127,9 @@ const BudgetComponent = () => {
             key={index}
             className="my-4 d-flex justify-content-center border border rounded-2 p-3 bg"
           >
-            {editingBudget === index ? (
-              <InputGroup>
-                <FormControl
-                  type="number"
-                  value={editingBudget}
-                  onChange={(event) => handleBudgetChange(index, event)}
-                />
-              </InputGroup>
-            ) : (
-              <span className="m-2">
-                Budget for {budget.name} is currently set to ${budget.amount}
-              </span>
-            )}
+            <span className="m-2">
+              Budget for {budget.name} is currently set to ${budget.amount}
+            </span>
           </li>
         ))}
       </ListGroup>

@@ -1,17 +1,7 @@
-import React, { useState, useEffect } from "react";
-import { Bar, Pie } from "react-chartjs-2";
-import Chart from "chart.js/auto";
 import "bootstrap/dist/css/bootstrap.css";
-import Card from "react-bootstrap/Card";
-import { Container, Row, Col } from "react-bootstrap";
-import { from } from "@apollo/client";
-import { useQuery } from "@apollo/client";
-import {
-  QUERY_USER,
-  QUERY_INCOME_BY_CATEGORY,
-  QUERY_EXPENSE_BY_CATEGORY,
-  QUERY_ALL_INCOME,
-} from "../utils/queries";
+import React, { useState } from "react";
+import { Col, Container, Row } from "react-bootstrap";
+import { Bar, Pie } from "react-chartjs-2";
 import { Tooltip } from "react-tippy";
 import "../index.css";
 
@@ -71,9 +61,6 @@ const OverviewComponent = (props) => {
     ],
   };
 
-  const borderRight = {
-    borderRight: "1px solid rgb(222,226,230)",
-  };
   const chartOptions = {
     scales: {
       x: {

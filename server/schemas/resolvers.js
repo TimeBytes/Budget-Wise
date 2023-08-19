@@ -4,7 +4,6 @@ const mongoose = require("mongoose");
 
 require("dotenv").config();
 
-// const stripeSecretKey = process.env.STRIPE_SK;
 const stripe = require("stripe")(
   "sk_test_51NdeCcJJYT86npXC8Avw8l7TZLOZAcw07zfHSpQlECD9FMsyrv7d7u2b4kIHKzXpM0jz95vv8NBw1cXXKO41AHhZ009UuOCiP7"
 );

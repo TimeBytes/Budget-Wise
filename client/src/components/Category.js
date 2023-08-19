@@ -1,20 +1,9 @@
-import React, { useState, useEffect } from "react";
-import { gql } from "@apollo/client";
-import {
-  FormGroup,
-  FormSelect,
-  FormCheck,
-  ListGroup,
-  InputGroup,
-  Alert,
-} from "react-bootstrap";
-import { Button } from "@chakra-ui/react";
+import React, { useEffect, useState } from "react";
+
 import { useMutation, useQuery } from "@apollo/client";
-import {
-  ADD_CATEGORY,
-  REMOVE_CATEGORY,
-  EDIT_CATEGORY,
-} from "../utils/mutations";
+import { Button } from "@chakra-ui/react";
+import { Alert, FormCheck, FormGroup, ListGroup } from "react-bootstrap";
+import { ADD_CATEGORY, REMOVE_CATEGORY } from "../utils/mutations";
 import { QUERY_ALL_CATEGORIES, QUERY_CATEGORY_BY_TYPE } from "../utils/queries";
 
 const CategoryComponent = () => {
@@ -26,7 +15,7 @@ const CategoryComponent = () => {
   const [successMessage, setSuccessMessage] = useState("");
   const successMessageDuration = 3000;
   // Queries all existing categories
-  const { loading, error, data, refetch } = useQuery(QUERY_ALL_CATEGORIES);
+  const { data } = useQuery(QUERY_ALL_CATEGORIES);
   const categoryList = data?.allCategories || [];
 
   const handleIsIncome = () => {
