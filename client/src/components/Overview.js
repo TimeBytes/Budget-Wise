@@ -2,6 +2,7 @@ import "bootstrap/dist/css/bootstrap.css";
 import React, { useState } from "react";
 import { Col, Container, Row } from "react-bootstrap";
 import { Bar, Pie } from "react-chartjs-2";
+import Chart from "chart.js/auto";
 import { Tooltip } from "react-tippy";
 import "../index.css";
 
