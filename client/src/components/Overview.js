@@ -19,53 +19,27 @@ const OverviewComponent = (props) => {
     datasets: [
       {
         label: "Income",
-        data: props.props.income,
+        data: props.props.incomeData,
         backgroundColor: "rgba(75, 192, 192, 0.2)",
         borderColor: "rgba(75, 192, 192, 1)",
         borderWidth: 1,
       },
       {
         label: "Expenses",
-        data: props.props.expense,
+        data: props.props.expenseData,
         backgroundColor: "rgba(255, 99, 132, 0.2)",
         borderColor: "rgba(255, 99, 132, 1)",
         borderWidth: 1,
       },
       {
         label: "Net Income",
-        data: props.props.difference,
+        data: props.props.differenceData,
         backgroundColor: "rgba(255, 206, 86, 0.2)",
         borderColor: "rgba(255, 206, 86, 1)",
         borderWidth: 1,
       },
     ],
   };
-
-  // const allIncomeRaw = useQuery(QUERY_ALL_INCOME);
-  // const allIncomeData = allIncomeRaw?.data || [];
-  // const allIncomeList = allIncomeData?.allIncomes || [];
-  // console.log(allIncomeList);
-  // const listOfCategoryIDs = allIncomeList.map((income) => {
-  //   return income.category._id;
-  // });
-
-  // console.log(userData?.user?.incomes);
-  // const incomeCategory = useQuery(QUERY_INCOME_BY_CATEGORY, {
-  //   variables: { categoryID: "60f9b0b0f0f0f0f0f0f0f0f0" },
-  // });
-  // const incomeCategoryData = incomeCategory?.data || [];
-  // const expenseCategory = useQuery(QUERY_EXPENSE_BY_CATEGORY);
-  // const expenseCategoryData = expenseCategory?.data || [];
-  // console.log(incomeCategoryData);
-  // console.log(expenseCategoryData);
-
-  // useEffect(() => {
-  //   incomeCategory.refetch();
-  // });
-
-  // useEffect(() => {
-  //   expenseCategory.refetch();
-  // });
 
   const incomeCategories = ["Salary", "Freelance", "Investments", "Other"];
   const expenseCategories = ["Rent", "Groceries", "Utilities", "Entertainment"];

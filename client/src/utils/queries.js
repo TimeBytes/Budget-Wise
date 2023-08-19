@@ -139,22 +139,6 @@ export const QUERY_ALL_BUDGET = gql`
   }
 `;
 
-// export const QUERY_BUDGET_BY_CATEGORY = gql`
-//   query budgetByCategory($category: ID!) {
-//     budgetByCategory(category: $category) {
-//       _id
-//       category {
-//         _id
-//         name
-//         isIncome
-//         isExpense
-//         isBudget
-//       }
-//       amount
-//     }
-//   }
-// `;
-
 export const QUERY_ALL_CATEGORIES = gql`
   query allCategories {
     allCategories {
