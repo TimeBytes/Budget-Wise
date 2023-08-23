@@ -18,6 +18,7 @@ export const QUERY_USER = gql`
       username
       categories {
         _id
+        name
       }
       incomes {
         _id

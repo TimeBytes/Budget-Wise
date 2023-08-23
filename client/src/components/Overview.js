@@ -3,12 +3,9 @@ import React, { useState } from "react";
 import { Col, Container, Row } from "react-bootstrap";
 import { Bar, Pie } from "react-chartjs-2";
 import Chart from "chart.js/auto";
-import { Tooltip } from "react-tippy";
 import "../index.css";
 
 const OverviewComponent = (props) => {
-  const [showIncomeOverlay, setShowIncomeOverlay] = useState(false);
-  const [showExpenseOverlay, setShowExpenseOverlay] = useState(false);
   const chartData = {
     datasets: [
       {
@@ -34,30 +31,26 @@ const OverviewComponent = (props) => {
       },
     ],
   };
-
-  const incomeCategories = ["Salary", "Freelance", "Investments", "Other"];
-  const expenseCategories = ["Rent", "Groceries", "Utilities", "Entertainment"];
+  console.log(props.props.groupedIncome);
+  const incomeCategories = Object.keys(props.props.groupedIncome);
+  const expenseCategories = Object.keys(props.props.groupedExpense);
 
   const pieIncomeData = {
-    labels: incomeCategories,
+    labels: Object.keys(props.props.groupedIncome),
     datasets: [
       {
-        data: [30, 25, 15, 20], // Sample data for income categories
+        data: Object.values(props.props.groupedIncome), // Sample data for income categories
         backgroundColor: ["#FF6384", "#36A2EB", "#FFCE56", "#33cc33"],
-        onMouseEnter: () => setShowIncomeOverlay(true),
-        onMouseLeave: () => setShowIncomeOverlay(false),
       },
     ],
   };
 
   const pieExpenseData = {
-    labels: expenseCategories,
+    labels: Object.keys(props.props.groupedExpense),
     datasets: [
       {
-        data: [30, 25, 15, 20], // Sample data for expense categories
+        data: Object.values(props.props.groupedExpense), // Sample data for expense categories
         backgroundColor: ["#FF6384", "#36A2EB", "#FFCE56", "#33cc33"],
-        onMouseEnter: () => setShowExpenseOverlay(true),
-        onMouseLeave: () => setShowExpenseOverlay(false),
       },
     ],
   };
@@ -97,14 +90,7 @@ const OverviewComponent = (props) => {
                 <h3 className="display-5 text-center mb-3 ">
                   Income Distribution
                 </h3>
-                <Tooltip
-                  title="Coming Soon"
-                  position="top"
-                  trigger="mouseenter"
-                  size="big"
-                >
-                  <Pie data={pieIncomeData} className="m-auto" />
-                </Tooltip>
+                <Pie data={pieIncomeData} className="m-auto" />
               </div>
             </Col>
             <span className="border-top pt-5 d-lg-none"></span>
@@ -114,14 +100,7 @@ const OverviewComponent = (props) => {
                 <h3 className="display-5 text-center mb-3">
                   Expense Distribution
                 </h3>
-                <Tooltip
-                  title="Coming Soon"
-                  position="top"
-                  trigger="mouseenter"
-                  size="big"
-                >
-                  <Pie data={pieExpenseData} className="m-auto" />
-                </Tooltip>
+                <Pie data={pieExpenseData} className="m-auto" />
               </div>
             </Col>
           </Container>

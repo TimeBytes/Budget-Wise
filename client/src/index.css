@@ -52,18 +52,6 @@ code {
   box-shadow: 0 8;
 }
 
-.tippy-tooltip {
-  background-color: rgba(0, 0, 0, 0.7);
-  color: white;
-  padding: 6px 12px;
-  border-radius: 4px;
-  font-size: 16px;
-}
-body {
-  min-height: 100vh !important;
-  background-color: black;
-}
-
 .sticky-footer {
   position: sticky;
   top: 100%;
