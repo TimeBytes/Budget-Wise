@@ -17,6 +17,42 @@ const Dashboard = () => {
   if (user.loading) {
     return <div className="text-center display-5 vh-100">Loading...</div>;
   }
+
+  const categoryData = user.data?.user?.categories;
+  const incomes = user.data?.user?.incomes;
+  const Expenses = user.data?.user?.expenses;
+  const groupedIncome = {};
+  const categoryMap = {};
+
+  categoryData.forEach((category) => {
+    categoryMap[category._id] = category.name;
+  });
+  // Iterate through each income item
+  incomes.forEach((income) => {
+    const categoryID = income.category._id;
+    const categoryName = categoryMap[categoryID];
+
+    if (!groupedIncome[categoryName]) {
+      groupedIncome[categoryName] = 0;
+    }
+
+    groupedIncome[categoryName] += income.amount;
+  });
+  const groupedExpense = {};
+  // Iterate through each income item
+  Expenses.forEach((expense) => {
+    const categoryID = expense.category._id;
+    const categoryName = categoryMap[categoryID];
+
+    if (!groupedExpense[categoryName]) {
+      groupedExpense[categoryName] = 0;
+    }
+
+    groupedExpense[categoryName] += expense.amount;
+  });
+
+  // console.log(user.data?.user?.expenses);
+
   const userData = user?.data || [];
   const monthNames = [
     "January",
@@ -85,7 +121,15 @@ const Dashboard = () => {
 
   return (
     <div className="d-flex flex-column justify-content-around">
-      <Overview props={{ incomeData, expenseData, differenceData }} />
+      <Overview
+        props={{
+          incomeData,
+          expenseData,
+          differenceData,
+          groupedIncome,
+          groupedExpense,
+        }}
+      />
       <div className="border col-10 col-md-8 col-xlg-7 p-3 m-auto my-3 d-flex flex-column flex-lg-row justify-content-between">
         <div className="col-12 col-lg-6 ">
           <h3 className="text-center display-3 my-2 border border rounded-3 pb-2 bg-gradient ">
@@ -118,6 +162,7 @@ const Dashboard = () => {
           <Transaction type={transaction} refetchQueries={user} />
         </div>
         <span className="border-top border-black my-5 d-lg-none"></span>
+        <span className="border-start border-black my-5 d-none d-lg-block"></span>
         <section className="col-12 col-lg-6">
           <h3 className="text-center display-3 my-2 border border rounded-3 pb-2 bg-gradient">
             Budgets

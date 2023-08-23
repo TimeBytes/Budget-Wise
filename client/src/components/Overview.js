@@ -34,15 +34,15 @@ const OverviewComponent = (props) => {
       },
     ],
   };
-
-  const incomeCategories = ["Salary", "Freelance", "Investments", "Other"];
-  const expenseCategories = ["Rent", "Groceries", "Utilities", "Entertainment"];
+  console.log(props.props.groupedIncome);
+  const incomeCategories = Object.keys(props.props.groupedIncome);
+  const expenseCategories = Object.keys(props.props.groupedExpense);
 
   const pieIncomeData = {
-    labels: incomeCategories,
+    labels: Object.keys(props.props.groupedIncome),
     datasets: [
       {
-        data: [30, 25, 15, 20], // Sample data for income categories
+        data: Object.values(props.props.groupedIncome), // Sample data for income categories
         backgroundColor: ["#FF6384", "#36A2EB", "#FFCE56", "#33cc33"],
         onMouseEnter: () => setShowIncomeOverlay(true),
         onMouseLeave: () => setShowIncomeOverlay(false),
@@ -51,10 +51,10 @@ const OverviewComponent = (props) => {
   };
 
   const pieExpenseData = {
-    labels: expenseCategories,
+    labels: Object.keys(props.props.groupedExpense),
     datasets: [
       {
-        data: [30, 25, 15, 20], // Sample data for expense categories
+        data: Object.values(props.props.groupedExpense), // Sample data for expense categories
         backgroundColor: ["#FF6384", "#36A2EB", "#FFCE56", "#33cc33"],
         onMouseEnter: () => setShowExpenseOverlay(true),
         onMouseLeave: () => setShowExpenseOverlay(false),
