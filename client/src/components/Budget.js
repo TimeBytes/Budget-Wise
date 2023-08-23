@@ -77,7 +77,7 @@ const BudgetComponent = () => {
   return (
     <div className="m-auto">
       <div>
-        <FormGroup className="d-flex flex-wrap justify-content-center border border rounded-2 p-3 bg">
+        <FormGroup className="d-flex flex-wrap justify-content-center border rounded-2 p-3">
           <FormSelect
             value={selectedCategory}
             onChange={handleCategoryChange}
@@ -95,10 +95,11 @@ const BudgetComponent = () => {
             placeholder="Budget Amount"
             value={newBudgetAmount}
             onChange={handleNewBudgetAmountChange}
+            className="m-auto"
           />
           <Button
             onClick={handleAddBudget}
-            className="m-auto"
+            className="m-auto mt-3"
             bg={"blue.600"}
             color={"white"}
             _hover={{

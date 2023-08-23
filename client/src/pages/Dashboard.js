@@ -162,7 +162,7 @@ const Dashboard = () => {
           <Transaction type={transaction} refetchQueries={user} />
         </div>
         <span className="border-top border-black my-5 d-lg-none"></span>
-        <span className="border-start border-black my-5 d-none d-lg-block"></span>
+        <span className="border-start my-5 d-none d-lg-block"></span>
         <section className="col-12 col-lg-6">
           <h3 className="text-center display-3 my-2 border border rounded-3 pb-2 bg-gradient">
             Budgets
