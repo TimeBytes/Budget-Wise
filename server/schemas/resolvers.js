@@ -262,7 +262,7 @@ const resolvers = {
             { _id: context.user._id, "incomes._id": incomeID },
             { $set: { "incomes.$": newIncome } },
             { new: true }
-          );
+          );          
           return updatedUser;
         } catch (error) {
           throw new Error(error);
@@ -343,7 +343,7 @@ const resolvers = {
           throw new Error(error);
         }
       }
-    },
+    },    
     removeExpense: async (parent, { expenseID }, context) => {
       if (context.user) {
         try {
@@ -408,7 +408,7 @@ const resolvers = {
           };
           const updatedUser = await User.findOneAndUpdate(
             { _id: context.user._id, "categories._id": id },
-            { $set: { categories: newCategory } },
+            { $set: { "categories.$": newCategory } },
             { new: true }
           );
           return updatedUser;
@@ -467,22 +467,23 @@ const resolvers = {
         }
       }
     },
-    editBudget: async (parent, { budgetID, budgetData }, context) => {
+    editBudget: async (parent, { id, budgetData }, context) => {
       if (context.user) {
         try {
           const userData = await User.findOne({
             _id: context.user._id,
-            "budgets._id": budgetID,
+            "budgets._id": id,
           });
           const existingBudget = userData.budgets.find(
-            (budget) => budget._id == budgetID
+            (budget) => budget._id == id
           );
           const newBudgetData = {
             category: budgetData.category || existingBudget.category,
             amount: budgetData.amount || existingBudget.amount,
+            name: budgetData.name || existingBudget.name,
           };
           const updatedUser = await User.findOneAndUpdate(
-            { _id: context.user._id, "budgets._id": budgetID },
+            { _id: context.user._id, "budgets._id": id },
             { $set: { "budgets.$": newBudgetData } },
             { new: true }
           );
